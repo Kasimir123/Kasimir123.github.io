@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-01-ShadowCTF - Thirsty-Cow</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="shadowctf-thirsty-cow-write-up">ShadowCTF thirsty cow Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 300</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Reversing</p>
+<h2 id="write-up">Write up:</h2>
+<p>The challenge gave us an ELF 64 bit LSB shared object. I tried running strings and found nothing useful so I opened the file in IDA and got the following pseudocode.</p>
+<div class="lang-c++ editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  __int64 v3; <span style="color:Green;">// rax</span>
+  __int64 v4; <span style="color:Green;">// rax</span>
+  __int64 v5; <span style="color:Green;">// rax</span>
+  __int64 v6; <span style="color:Green;">// rax</span>
+  __int64 v7; <span style="color:Green;">// rax</span>
+  __int64 v8; <span style="color:Green;">// rax</span>
+  __int64 v9; <span style="color:Green;">// rax</span>
+  __int64 v10; <span style="color:Green;">// rax</span>
+  <span style="color:Blue;">char</span> v12[36]; <span style="color:Green;">// [rsp+0h] [rbp-170h] BYREF</span>
+  <span style="color:Blue;">char</span> v13[9]; <span style="color:Green;">// [rsp+24h] [rbp-14Ch] BYREF</span>
+  <span style="color:Blue;">char</span> v14[3]; <span style="color:Green;">// [rsp+2Dh] [rbp-143h] BYREF</span>
+  <span style="color:Blue;">char</span> v15[4]; <span style="color:Green;">// [rsp+30h] [rbp-140h] BYREF</span>
+  <span style="color:Blue;">char</span> v16[10]; <span style="color:Green;">// [rsp+34h] [rbp-13Ch] BYREF</span>
+  <span style="color:Blue;">char</span> v17[11]; <span style="color:Green;">// [rsp+3Eh] [rbp-132h] BYREF</span>
+  <span style="color:Blue;">char</span> v18[4]; <span style="color:Green;">// [rsp+49h] [rbp-127h] BYREF</span>
+  <span style="color:Blue;">char</span> v19[3]; <span style="color:Green;">// [rsp+4Dh] [rbp-123h] BYREF</span>
+  <span style="color:Blue;">char</span> v20[4]; <span style="color:Green;">// [rsp+50h] [rbp-120h] BYREF</span>
+  <span style="color:Blue;">char</span> v21[4]; <span style="color:Green;">// [rsp+54h] [rbp-11Ch] BYREF</span>
+  <span style="color:Blue;">char</span> v22[4]; <span style="color:Green;">// [rsp+58h] [rbp-118h] BYREF</span>
+  <span style="color:Blue;">char</span> v23[4]; <span style="color:Green;">// [rsp+5Ch] [rbp-114h] BYREF</span>
+  <span style="color:Blue;">char</span> v24[268]; <span style="color:Green;">// [rsp+60h] [rbp-110h] BYREF</span>
+
+  strcpy(v23, <span style="color:#A31515;">&quot;_si&quot;</span>);
+  strcpy(v22, <span style="color:#A31515;">&quot;sin&quot;</span>);
+  strcpy(v21, <span style="color:#A31515;">&quot;_5i&quot;</span>);
+  strcpy(v20, <span style="color:#A31515;">&quot;rty&quot;</span>);
+  strcpy(v19, <span style="color:#A31515;">&quot;th&quot;</span>);
+  strcpy(v18, <span style="color:#A31515;">&quot;x_r&quot;</span>);
+  strcpy(&amp;v17[7], <span style="color:#A31515;">&quot;_th&quot;</span>);
+  strcpy(&amp;v17[5], <span style="color:#A31515;">&quot;x&quot;</span>);
+  strcpy(v17, <span style="color:#A31515;">&quot;irty&quot;</span>);
+  strcpy(v16, v19);
+  strcat(v16, v17);
+  v3 = std::<span style="color:Blue;">operator</span>&lt;&lt;&lt;std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;(
+         &amp;std::cout,
+         <span style="color:#A31515;">&quot; The crow is thirsty and he needs your help to gather stones to fill the pot&quot;</span>);
+  v4 = std::ostream::<span style="color:Blue;">operator</span>&lt;&lt;(v3, &amp;std::endl&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;);
+  std::<span style="color:Blue;">operator</span>&lt;&lt;&lt;std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;(v4, <span style="color:#A31515;">&quot; &gt; &quot;</span>);
+  std::<span style="color:Blue;">operator</span>&gt;&gt;&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;(&amp;std::cin, v24);
+  strcat(v16, v23);
+  strcat(v16, &amp;v17[5]);
+  <span style="color:Blue;">if</span> ( strcmp(v24, v16) )
+  {
+    v10 = std::<span style="color:Blue;">operator</span>&lt;&lt;&lt;std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;(&amp;std::cout, <span style="color:#A31515;">&quot; Not enough stones :( &quot;</span>);
+    std::ostream::<span style="color:Blue;">operator</span>&lt;&lt;(v10, &amp;std::endl&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;);
+  }
+  <span style="color:Blue;">else</span>
+  {
+    strcpy(v15, <span style="color:#A31515;">&quot;Thi&quot;</span>);
+    strcpy(v14, <span style="color:#A31515;">&quot;e_&quot;</span>);
+    strcpy(&amp;v13[6], <span style="color:#A31515;">&quot;ck&quot;</span>);
+    strcpy(&amp;v13[4], <span style="color:#A31515;">&quot;0&quot;</span>);
+    strcpy(v13, <span style="color:#A31515;">&quot;p0t&quot;</span>);
+    strcpy(v12, v15);
+    strcat(v12, v20);
+    strcat(v12, v21);
+    strcat(v12, v18);
+    strcat(v12, &amp;v13[4]);
+    strcat(v12, &amp;v13[6]);
+    strcat(v12, v22);
+    strcat(v12, &amp;v17[7]);
+    strcat(v12, v14);
+    strcat(v12, v13);
+    v5 = std::ostream::<span style="color:Blue;">operator</span>&lt;&lt;(&amp;std::cout, &amp;std::endl&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;);
+    v6 = std::<span style="color:Blue;">operator</span>&lt;&lt;&lt;std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;(v5, <span style="color:#A31515;">&quot;shadowCTF{&quot;</span>);
+    v7 = std::<span style="color:Blue;">operator</span>&lt;&lt;&lt;std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;(v6, v12);
+    v8 = std::<span style="color:Blue;">operator</span>&lt;&lt;&lt;std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;(v7, <span style="color:#A31515;">&quot;} &quot;</span>);
+    v9 = std::ostream::<span style="color:Blue;">operator</span>&lt;&lt;(v8, &amp;std::endl&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;);
+    std::ostream::<span style="color:Blue;">operator</span>&lt;&lt;(v9, &amp;std::endl&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;&gt;);
+  }
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>Seeing this I knew that I would simply be able to run the file in the debugger and change the value of eax to make the code go into the else statement.</p>
+<p>I started my linux debugger and set a breakpoint on the if statement. When prompted for the keyphrase I put in a random string.</p>
+<pre><code>.text:00005572417C22BC mov     rsi, rdx                        ; src
+.text:00005572417C22BF mov     rdi, rax                        ; dest
+.text:00005572417C22C2 call    _strcat
+.text:00005572417C22C7 lea     rdx, [rbp+dest+7]
+.text:00005572417C22CE lea     rax, [rbp+s1]
+.text:00005572417C22D5 mov     rsi, rdx                        ; s2
+.text:00005572417C22D8 mov     rdi, rax                        ; s1
+.text:00005572417C22DB call    _strcmp
+.text:00005572417C22E0 mov     [rbp+var_4], eax
+.text:00005572417C22E3 cmp     [rbp+var_4], 0
+.text:00005572417C22E7 jnz     loc_5572417C2499
+.text:00005572417C22ED mov     dword ptr [rbp+dest+3], 696854h
+.text:00005572417C22F7 mov     word ptr [rbp+dest], 5F65h
+.text:00005572417C2300 mov     [rbp+dest+2], 0
+</code></pre>
+<p>I noticed that after the strcmp call the value of eax was put into rbp+var_4 so I stepped to the mov instruction and changed the eax value to 0 and pressed continue. The flag was then printed.</p>
+<pre><code> The crow is thirsty and he needs your help to gather stones to fill the pot
+ &gt; sdffsd
+
+shadowCTF{Thirty_5ix_r0cksin_the_p0t} 
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

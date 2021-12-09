@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-dvCTF - rocca-pia</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="dvctf-rocca-pia-write-up">dvCTF rocca pia Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 50</p>
+<p>Jeopardy style CTF</p>
+<p>Category: reverse engineering</p>
+<h2 id="write-up">Write up:</h2>
+<p>First I checked what type of file this was, it was a 64 bit elf file, so I went and opened it in a decompiler.</p>
+<p>The main function was:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">int</span> result; <span style="color:Green;">// eax</span>
+
+  <span style="color:Blue;">if</span> ( argc == 2 )
+  {
+    <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)transform(argv[1], argv, envp) )
+      puts(<span style="color:#A31515;">&quot;Nice try&quot;</span>);
+    <span style="color:Blue;">else</span>
+      puts(<span style="color:#A31515;">&quot;Nice flag&quot;</span>);
+    result = 0;
+  }
+  <span style="color:Blue;">else</span>
+  {
+    printf(<span style="color:#A31515;">&quot;Usage: %s &lt;password&gt;\n&quot;</span>, *argv);
+    result = 1;
+  }
+  <span style="color:Blue;">return</span> result;
+}
+</pre></div>
+</div>
+<p>It was fairly obvious that I would need to look into the transform function so thats where I started off.</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __fastcall transform(__int64 a1)
+{
+  <span style="color:Blue;">int</span> i; <span style="color:Green;">// [rsp+14h] [rbp-1Ch]</span>
+  <span style="color:Blue;">char</span> *s2; <span style="color:Green;">// [rsp+18h] [rbp-18h]</span>
+
+  <span style="color:Blue;">for</span> ( i = 0; i &lt; strlen(PASSWD); ++i )
+  {
+    <span style="color:Blue;">if</span> ( (i &amp; 1) != 0 )
+      s2[i] = *(_BYTE *)(i + a1) ^ 0x37;
+    <span style="color:Blue;">else</span>
+      s2[i] = *(_BYTE *)(i + a1) ^ 0x13;
+  }
+  <span style="color:Blue;">return</span> strncmp(PASSWD, s2, 0x16uLL);
+}
+</pre></div>
+</div>
+<p>This function took the input and then xor'ed it to get a new string, that string was then compared against PASSWD. Looking into the file data I saw that the passwd string was:</p>
+<div class="lang-python editor-colors">[0x77, 0x41, 0x50, 0x63, 0x55, 0x4C, 0x5A, 0x68, 0x7F, 0x06, 0x78, 0x04, 0x4C, 0x44, 0x64, 0x06, 0x7E, 0x5A, 0x22, 0x59, 0x74, 0x4A]
+</div>
+<p>I then wrote a python script to work backwards from the passwd string to get the output:</p>
+<div class="lang-python editor-colors"># passwd string bytes
+passw = [0x77, 0x41, 0x50, 0x63, 0x55, 0x4C, 0x5A, 0x68, 0x7F, 0x06, 0x78, 0x04, 0x4C, 0x44, 0x64, 0x06, 0x7E, 0x5A, 0x22, 0x59, 0x74, 0x4A]
+
+# empty flag to write to
+flag = ""
+
+# loop through length of passwd
+for x in range(0, len(passw)):
+    # if the current int anded with 1 is not 0
+	if (x&1)!=0:
+        # xor with 0x37
+		flag += chr(passw[x]^0x37)
+	else:
+        # else xor with 0x13
+		flag += chr(passw[x]^0x13)
+
+# print the flag
+print(flag)
+</div>
+<p>Once run the script returned:</p>
+<pre><code>dvCTF{I_l1k3_sw1mm1ng}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

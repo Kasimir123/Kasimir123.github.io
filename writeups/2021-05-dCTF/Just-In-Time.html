@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-05-dCTF - Just-In-Time</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="dctf-just-in-time-write-up">dCTF Just In Time Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Points: 300</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments: Don't fall in (rabbit) holes</p>
+<h2 id="write-up">Write up:</h2>
+<p>I started by decompiling the main function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall main(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">char</span> **a2, <span style="color:Blue;">char</span> **a3)
+{
+  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *v3;
+  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *v4; 
+  <span style="color:Blue;">char</span> src[8]; 
+  <span style="color:Blue;">char</span> *v7;
+  <span style="color:Blue;">char</span> *v8; 
+  <span style="color:Blue;">char</span> *dest; 
+
+  dest = (<span style="color:Blue;">char</span> *)malloc(8uLL);
+  v3 = (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)sub_126A(*a2);
+  strncpy(dest, v3, 8uLL);
+  strcpy(src, <span style="color:#A31515;">&quot;\x1B&amp;8 yegHr($g1bKu{\&quot;f5`N}t#331Nv/%`11F#1&quot;</span>);
+  v8 = (<span style="color:Blue;">char</span> *)malloc(0x27uLL);
+  strncpy(v8, src, 0x27uLL);
+  sub_1372(v8);
+  puts(<span style="color:#A31515;">&quot;Decryption finished.&quot;</span>);
+  v7 = (<span style="color:Blue;">char</span> *)malloc(0x27uLL);
+  v4 = (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)sub_11C5(src, dest);
+  strncpy(v7, v4, 0x27uLL);
+  v7 = (<span style="color:Blue;">char</span> *)sub_11C5(v7, dest);
+  sub_1460(v7);
+  free(v8);
+  free(v7);
+  free(dest);
+  <span style="color:Blue;">return</span> 0LL;
+}
+</pre></div>
+</div>
+<p>Rather than trying to do their decryption I decided to see if I cuold get the flag with dynamic analysis which worked out. I set a breakpoint on the strncpy line and saw that the flag was:</p>
+<pre><code>dctf{df77dbe0c407dd4a188e12013ccb009f}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

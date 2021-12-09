@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-06-Circle-City-Con - Little-Mountain</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="circle-city-con-little-mountain-write-up">Circle City Con Little Mountain Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<h2 id="write-up">Write up:</h2>
+<p>I noticed that the binary was packed with UPX so I used upx to unpack it.</p>
+<p>The main function is:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl __noreturn main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">int</span> v3;
+  <span style="color:Blue;">int</span> v4;
+  <span style="color:Blue;">int</span> v5;
+  <span style="color:Blue;">int</span> v6; 
+  <span style="color:Blue;">char</span> v7;
+  <span style="color:Blue;">int</span> v8; 
+
+  setabuf(argc, argv, envp);
+  <span style="color:Blue;">while</span> ( 1 )
+  {
+    puts(<span style="color:#A31515;">&quot;Option 0: Guess the number&quot;</span>);
+    puts(<span style="color:#A31515;">&quot;Option 1: Change the number&quot;</span>);
+    puts(<span style="color:#A31515;">&quot;Option 2: Exit&quot;</span>);
+    _isoc99_scanf((<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)<span style="color:#A31515;">&quot;%d&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)&amp;v8, v3, v4, v5, v6, v7);
+    ((<span style="color:Blue;">void</span> (*)(<span style="color:Blue;">void</span>))funcs[v8])();
+  }
+}
+</pre></div>
+</div>
+<p>I followed the code into setabuf and saw:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">void</span> (__fastcall __noreturn *setabuf())()
+{
+  <span style="color:Blue;">void</span> (__fastcall __noreturn *result)();
+
+  srandom(1337LL);
+  magic = random();
+  funcs[0] = (__int64)a;
+  qword_4CC348 = (__int64)b;
+  qword_4CC350 = (__int64)c;
+  result = d;
+  qword_4CC358 = (__int64)d;
+  <span style="color:Blue;">return</span> result;
+}
+</pre></div>
+</div>
+<p>I followed the last function pointer to:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">void</span> __noreturn d()
+{
+  <span style="color:Blue;">char</span> v0; 
+  <span style="color:Blue;">int</span> v1; 
+  <span style="color:Blue;">int</span> v2;
+  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *v3;
+  _BYTE *v4; 
+  <span style="color:Blue;">int</span> v5;
+  <span style="color:Blue;">int</span> i; 
+
+  v4 = &amp;unk_49E022;
+  v3 = <span style="color:#A31515;">&quot;little_mountain&quot;</span>;
+  v2 = j_strlen_ifunc(&amp;unk_49E022);
+  v1 = j_strlen_ifunc(<span style="color:#A31515;">&quot;little_mountain&quot;</span>);
+  v5 = 0;
+  <span style="color:Blue;">if</span> ( modded == 20 )
+  {
+    <span style="color:Blue;">for</span> ( i = 0; i &lt; v2; ++i )
+    {
+      <span style="color:Blue;">if</span> ( v5 == v1 )
+        v5 = 0;
+      v0 = v4[i] ^ v3[v5++];
+      write(1LL, &amp;v0, 1LL);
+    }
+    puts(<span style="color:#A31515;">&quot;\n&quot;</span>);
+  }
+  exit(0LL);
+}
+</pre></div>
+</div>
+<p>This seemed like the function that prints out the flag so I wrote a little script to print it out:</p>
+<div class="lang-python editor-colors"># initialize variables
+v5 = 0
+v3 = "little_mountain"
+v4 = [0x0A, 0x05, 0x15, 0x13, 0x17, 0x07, 0x6B, 0x0F, 0x16, 0x06, 0x59, 0x47, 0x11, 0x5C, 0x1B, 0x1C, 0x1D, 0x47, 0x1C, 0x01, 0x55, 0x2A, 0x03, 0x58, 0x41, 0x5F, 0x1A, 0x1C]
+v1 = len(v3)
+v2 = len(v4)
+
+# string to store flag
+s = ""
+
+# loop through v2
+for i in range(0, v2):
+    # reset counter if it reaches the end
+	if v5 == v1:
+		v5 = 0
+
+    # do the xor
+	v0 = v4[i] ^ ord(v3[v5])
+	v5 += 1
+
+    # add the character
+	s += chr(v0)
+
+# print flag
+print(s)
+</div>
+<p>When run we get:</p>
+<pre><code>flag{b4bys73p5upt3hm0un741n}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

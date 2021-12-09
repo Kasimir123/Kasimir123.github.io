@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-picoCTF - play-nice</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="picoctf-play-nice-write-up">picoCTF Play Nice Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 110</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Cryptography</p>
+<p>Comments: Not all ancient ciphers were so bad... The flag is not in standard format. nc mercury.picoctf.net 30568 playfair.py</p>
+<h2 id="write-up">Write up:</h2>
+<p>Running the netcat command we get:</p>
+<pre><code>nc mercury.picoctf.net 30568
+
+Here is the alphabet: 0fkdwu6rp8zvsnlj3iytxmeh72ca9bg5o41q
+Here is the encrypted message: herfayo7oqxrz7jwxx15ie20p40u1i
+What is the plaintext message?
+</code></pre>
+<p>Looking into the python script provided I first generated the matrix using the provided alphabet so that I had it to look at:</p>
+<div class="lang-python editor-colors"># [['0', 'f', 'k', 'd', 'w', 'u'], 
+#  ['6', 'r', 'p', '8', 'z', 'v'], 
+#  ['s', 'n', 'l', 'j', '3', 'i'], 
+#  ['y', 't', 'x', 'm', 'e', 'h'], 
+#  ['7', '2', 'c', 'a', '9', 'b'], 
+#  ['g', '5', 'o', '4', '1', 'q']]
+</div>
+<p>I then started slowing reversing what the encryption did. From the encryption I saw that for each character one was added so the length would be the same. But that every pair relied on each other so I would need to iterate through two at a time:</p>
+<div class="lang-python editor-colors"># decrypt string function
+def decrypt_string(s, matrix):
+	# place to store result
+    result = ""
+    
+    # Iterate through string two at a time
+	for i in range(0, len(s), 2):
+
+        # pass the pairs to the decrypt_pair function
+		result += decrypt_pair(s[i:i+2], matrix)
+
+    # return result
+	return result
+</div>
+<p>Next I looked at the encrypt pair function. I then looked at how the different cases were encrypted, checked for those cases and then decrypted:</p>
+<div class="lang-python editor-colors"># decrypt each pair
+def decrypt_pair(pair, matrix):
+
+    # get the indices in the matrix
+	p1 = get_index(pair[0], matrix)
+	p2 = get_index(pair[1], matrix)
+
+    # if the first index is the same
+	if p1[0] == p2[0]:
+		return matrix[p1[0]][(p1[1]-1)%SQUARE_SIZE]+matrix[p2[0]][(p2[1]-1)%SQUARE_SIZE]
+
+    # if the second index is the same
+	if p1[1] == p2[1]:
+		return matrix[(p1[0] - 1)  % SQUARE_SIZE][p1[1]] + matrix[(p2[0] - 1)  % SQUARE_SIZE][p2[1]]
+
+    # else
+	return matrix[p1[0]][p2[1]] + matrix[p2[0]][p1[1]]
+</div>
+<p>This gave me the following script:</p>
+<div class="lang-python editor-colors"># alphabet for matrix
+alphabet = "0fkdwu6rp8zvsnlj3iytxmeh72ca9bg5o41q"
+
+# square size
+SQUARE_SIZE = 6
+
+def generate_square(alphabet):
+	assert len(alphabet) == pow(SQUARE_SIZE, 2)
+	matrix = []
+	for i, letter in enumerate(alphabet):
+		if i % SQUARE_SIZE == 0:
+			row = []
+		row.append(letter)
+		if i % SQUARE_SIZE == (SQUARE_SIZE - 1):
+			matrix.append(row)
+	return matrix
+
+def get_index(letter, matrix):
+	for row in range(SQUARE_SIZE):
+		for col in range(SQUARE_SIZE):
+			if matrix[row][col] == letter:
+				return (row, col)
+	print("letter not found in matrix.")
+	exit()
+
+
+# decrypt each pair
+def decrypt_pair(pair, matrix):
+
+	# get the indices in the matrix
+	p1 = get_index(pair[0], matrix)
+	p2 = get_index(pair[1], matrix)
+
+	# if the first index is the same
+	if p1[0] == p2[0]:
+		return matrix[p1[0]][(p1[1]-1)%SQUARE_SIZE]+matrix[p2[0]][(p2[1]-1)%SQUARE_SIZE]
+
+	# if the second index is the same
+	if p1[1] == p2[1]:
+		return matrix[(p1[0] - 1)  % SQUARE_SIZE][p1[1]] + matrix[(p2[0] - 1)  % SQUARE_SIZE][p2[1]]
+
+	# else
+	return matrix[p1[0]][p2[1]] + matrix[p2[0]][p1[1]]
+
+# decrypt string function
+def decrypt_string(s, matrix):
+	# place to store result
+	result = ""
+
+	# Iterate through string two at a time
+	for i in range(0, len(s), 2):
+
+		# pass the pairs to the decrypt_pair function
+		result += decrypt_pair(s[i:i+2], matrix)
+
+	# return result
+	return result
+
+# generate square
+m = generate_square(alphabet)
+
+# encrypted message
+enc_msg = "herfayo7oqxrz7jwxx15ie20p40u1i"
+
+# decrypt string
+print(decrypt_string(enc_msg, m))
+</div>
+<p>When run I got:</p>
+<pre><code>emf57mgc51tp693dtt4g3h7f8ouwq3
+</code></pre>
+<p>When put into the nc instance I got the flag:</p>
+<pre><code>nc mercury.picoctf.net 30568
+
+Here is the alphabet: 0fkdwu6rp8zvsnlj3iytxmeh72ca9bg5o41q
+Here is the encrypted message: herfayo7oqxrz7jwxx15ie20p40u1i
+What is the plaintext message? emf57mgc51tp693dtt4g3h7f8ouwq3
+Congratulations! Here's the flag: 007d0a696aaad7fb5ec21c7698e4f754
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

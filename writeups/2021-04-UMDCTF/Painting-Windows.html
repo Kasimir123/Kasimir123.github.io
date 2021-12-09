@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-04-UMDCTF - Painting-Windows</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="umdctf-painting-windows-write-up">UMDCTF Painting Windows Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<p>I am trying to paint these windows; however, there seems to be some sort of password blocking my way to them. Can you help me figure out what the password is?</p>
+<h2 id="write-up">Write up:</h2>
+<p>I started by decompiling the main function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">int</span> result; 
+  <span style="color:Blue;">int</span> v4; 
+  __int64 v5;
+  __int64 v6; 
+  __int64 v7;
+  <span style="color:Blue;">int</span> v8; 
+  <span style="color:Blue;">char</span> *v9;
+  <span style="color:Blue;">char</span> String[512];
+
+  <span style="color:Blue;">if</span> ( IsDebuggerPresent() )
+  {
+    sub_140001020(<span style="color:#A31515;">&quot;That is not allowed!\n&quot;</span>);
+    result = 1;
+  }
+  <span style="color:Blue;">else</span>
+  {
+    sub_140001020(<span style="color:#A31515;">&quot;What is the password?\n&quot;</span>);
+    sub_140001080(<span style="color:#A31515;">&quot;%s&quot;</span>);
+    v4 = strnlen(String, 0x100ui64);
+    v5 = 0i64;
+    v6 = v4;
+    <span style="color:Blue;">if</span> ( v4 &lt;= 0 )
+    {
+      v8 = 0;
+    }
+    <span style="color:Blue;">else</span>
+    {
+      v7 = 0i64;
+      <span style="color:Blue;">do</span>
+      {
+        String[v7 + 256] = 2 * (String[v7] ^ 0xF);
+        ++v7;
+      }
+      <span style="color:Blue;">while</span> ( v7 &lt; v6 );
+      v8 = 0;
+      <span style="color:Blue;">do</span>
+      {
+        <span style="color:Blue;">if</span> ( String[v5 + 256] != byte_1400022D0[v5] )
+          v8 = 1;
+        ++v5;
+      }
+      <span style="color:Blue;">while</span> ( v5 &lt; v6 );
+    }
+    v9 = <span style="color:#A31515;">&quot;Failed to unlock the Windows\n&quot;</span>;
+    <span style="color:Blue;">if</span> ( !v8 )
+      v9 = <span style="color:#A31515;">&quot;Successfully unlocked the Windows!\n&quot;</span>;
+    sub_140001020(v9);
+    result = 0;
+  }
+  <span style="color:Blue;">return</span> result;
+}
+</pre></div>
+</div>
+<p>I extracted byte_1400022D0 from the executable:</p>
+<div class="lang-python editor-colors">flag = [0xB4, 0x84, 0x96, 0x98, 0xB6, 0x92, 0x44, 0xE8, 0xAC, 0x7E, 0xB4, 0xA0, 0xB8, 0xF6, 0xDC, 0xFA, 0xF6, 0x78, 0x96, 0xA0, 0xEC, 0x80, 0xF4, 0xBA, 0xA0, 0xB0, 0x7C, 0xC2, 0xD6, 0x7E, 0xF0, 0xB8, 0xA0, 0x8A, 0x7E, 0xB4, 0xBA, 0x82, 0xD4, 0xAC, 0xE4, 0x00, 0x00, 0x00]
+</div>
+<p>Then I made a script to go through and xor everything by 0xF:</p>
+<div class="lang-python editor-colors"># flag
+flag = [0xB4, 0x84, 0x96, 0x98, 0xB6, 0x92, 0x44, 0xE8, 0xAC, 0x7E, 0xB4, 0xA0, 0xB8, 0xF6, 0xDC, 0xFA, 0xF6, 0x78, 0x96, 0xA0, 0xEC, 0x80, 0xF4, 0xBA, 0xA0, 0xB0, 0x7C, 0xC2, 0xD6, 0x7E, 0xF0, 0xB8, 0xA0, 0x8A, 0x7E, 0xB4, 0xBA, 0x82, 0xD4, 0xAC, 0xE4, 0x00, 0x00, 0x00]
+
+s = ""
+
+# decrypt
+for i in flag:
+	s += chr(int((i/2))^0xF)
+print(s)
+</div>
+<p>When run I got:</p>
+<pre><code>UMDCTF-{Y0U_Start3D_yOuR_W1nd0wS_J0URNeY}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

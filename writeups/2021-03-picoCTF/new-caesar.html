@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-picoCTF - new-caesar</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="picoctf-new-caesar-write-up">picoCTF New Caesar Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 60</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Cryptography</p>
+<p>Comments:</p>
+<p>We found a brand new type of encryption, can you break the secret code? (Wrap with picoCTF)</p>
+<pre><code>mlnklfnknljflfmhjimkmhjhmljhjomhmmjkjpmmjmjkjpjojgjmjpjojojnjojmmkmlmijimhjmmj
+</code></pre>
+<h2 id="write-up">Write up:</h2>
+<p>After looking through their code I found a few important facts:</p>
+<ul>
+<li>the key was one letter in the first 16 lowercase characters of the alphabet</li>
+<li>to decode I would need to unshift first and then decode</li>
+</ul>
+<p>So I started dissecting the shift function:</p>
+<div class="lang-python editor-colors">def shift(c, k):
+	t1 = ord(c) - LOWERCASE_OFFSET
+	t2 = ord(k) - LOWERCASE_OFFSET
+	return ALPHABET[(t1 + t2) % len(ALPHABET)]
+</div>
+<p>To undo this I would simply need to subtract t2 from t1 rather than adding to it, I created the new function and moved to the encode function:</p>
+<div class="lang-python editor-colors">def b16_encode(plain):
+	enc = ""
+	for c in plain:
+		binary = "{0:08b}".format(ord(c))
+		enc += ALPHABET[int(binary[:4], 2)]
+		enc += ALPHABET[int(binary[4:], 2)]
+	return enc
+</div>
+<p>This function takes the text and turns each character into binary, then turns the first 4 and last 4 bits into integers and then gets a letter for each of these from the alphabet list. To undo this we need to get the letter placement in ALPHABET and then convert them to binary, combine, and turn into a character.</p>
+<p>With this information I created a python script:</p>
+<div class="lang-python editor-colors"># import string
+import string
+
+# constants
+LOWERCASE_OFFSET = ord("a")
+ALPHABET = string.ascii_lowercase[:16]
+
+# decode function
+def b16_decode(cipher):
+	dec = ""
+    # loop through the cipher 2 characters at a time
+	for c in range(0, len(cipher), 2):
+        # turn the two characters into one binary string
+		b = ""
+		b += "{0:b}".format(ALPHABET.index(cipher[c])).zfill(4)
+		b += "{0:b}".format(ALPHABET.index(cipher[c+1])).zfill(4)
+        # turn the binary string to a character and add
+		dec += chr(int(b,2))
+    
+    # return
+	return dec
+
+# unshift the text
+def unshift(c, k):
+	t1 = ord(c) - LOWERCASE_OFFSET
+	t2 = ord(k) - LOWERCASE_OFFSET
+	return ALPHABET[(t1 - t2) % len(ALPHABET)]
+
+# encrypted flag
+enc = "mlnklfnknljflfmhjimkmhjhmljhjomhmmjkjpmmjmjkjpjojgjmjpjojojnjojmmkmlmijimhjmmj"
+
+# loop through all possible keys
+for key in ALPHABET:
+    # initialize string
+	s = ""
+
+    # loop through the encrypted text
+	for i,c in enumerate(enc):
+        # unshift it based on key
+		s += unshift(c, key[i % len(key)])
+
+    # decode
+	s = b16_decode(s)
+
+    # print key
+	print(s)	
+</div>
+<p>This gives us 16 different possible texts when run:</p>
+<pre><code>ËÚµÚÛµÇÊÇËÇÌÌÊËÈÇÉ
+ºÉ¤ÉÊ¤¶¹¶º¶»»¹º·¶¸
+©¸¸¹s¥v¨¥u©u|¥ªx}ªzx}|tz}||{|z¨©¦v¥z§
+§§¨beddkgliglkcilkkjkiei
+qQqTSSZV[XV[ZRX[ZZYZXTX
+v`@`rCurBvBIrwEJwGEJIAGJIIHIGuvsCrGt
+et_tu?_a2da1e18af49f649806988786deb2a6c
+TcNcd.NP!SP T 'PU#(U%#('/%(''&amp;'%STQ!P%R
+CR=RS=OBOCODDBC@OA
+2A,AB
+12?&gt;0,&gt;1&gt;2&gt;33
+!01ûþ -ý!ýô-&quot;ðõ&quot;òðõôüòõôôóôò !.þ-ò/
+/
+/ ê
+íììãïäáïäãëáäããâãáíá
+ùÙù
+   Ü
+    ÛÛÒ
+       ÞÓÐÞÓÒÚÐÓÒÒÑÒÐ
+                     Ü
+                      Ð
+ÈèúËýúÊþÊÁúÿÍÂÿÏÍÂÁÉÏÂÁÁÀÁÏýþûËúÏü
+íü×üý·×éºìé¹í¹°éî¼±î¾¼±°¸¾±°°¿°¾ìíêºé¾ë
+ÜëÆëì¦ÆØ©ÛØ¨Ü¨¯ØÝ« Ý­« ¯§­ ¯¯®¯­ÛÜÙ©Ø­Ú
+</code></pre>
+<p>Of all of these the only one that looks right, and is relevant to the title, is:</p>
+<pre><code>et_tu?_a2da1e18af49f649806988786deb2a6c
+</code></pre>
+<p>which gives us:</p>
+<pre><code>picoCTF{et_tu?_a2da1e18af49f649806988786deb2a6c}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

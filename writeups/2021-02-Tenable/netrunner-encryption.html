@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-02-Tenable - netrunner-encryption</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="tenable-netrunner-encryption-write-up">Tenable Netrunner Encryption Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 200</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Crypto</p>
+<p>Comment:</p>
+<p>Take a look at the new encryption tool out that netrunner gonk friends are using:</p>
+<p><a href="http://167.71.246.232:8080/crypto.php">http://167.71.246.232:8080/crypto.php</a></p>
+<h2 id="write-up">Write up:</h2>
+<p>Looking at the url I saw the following webpage:</p>
+<p><img src="./Photos/webpage.PNG" alt="" /></p>
+<p>Clicking on the source code I saw:</p>
+<div class="lang-php editor-colors"><div style="color:Black;background-color:White;"><pre>
+&lt;html&gt;
+&lt;body&gt;
+  &lt;h1&gt;Netrunner Encryption Tool&lt;/h1&gt;
+  &lt;a href=<span style="color:#A31515;">&quot;netrun.txt&quot;</span>&gt;Source Code&lt;/a&gt;
+  &lt;form method=post action=<span style="color:#A31515;">&quot;crypto.php&quot;</span>&gt;
+  &lt;input type=text name=<span style="color:#A31515;">&quot;text_to_encrypt&quot;</span>&gt;
+  &lt;input type=<span style="color:#A31515;">&quot;submit&quot;</span> name=<span style="color:#A31515;">&quot;do_encrypt&quot;</span> value=<span style="color:#A31515;">&quot;Encrypt&quot;</span>&gt;
+  &lt;/form&gt;
+
+&lt;?php
+
+<span style="color:Blue;">function</span> pad_data($data)
+{
+  $flag = <span style="color:#A31515;">&quot;flag{wouldnt_y0u_lik3_to_know}&quot;</span>; 
+
+  $pad_len = (16 - (strlen($data.$flag) % 16));
+  <span style="color:Blue;">return</span> $data . $flag . str_repeat(chr($pad_len), $pad_len);
+}
+
+<span style="color:Blue;">if</span>(<span style="color:Blue;">isset</span>($_POST[<span style="color:#A31515;">&quot;do_encrypt&quot;</span>]))
+{
+  $cipher = <span style="color:#A31515;">&quot;aes-128-ecb&quot;</span>;
+  $iv  = hex2bin(<span style="color:#A31515;">&#39;00000000000000000000000000000000&#39;</span>);
+  $key = hex2bin(<span style="color:#A31515;">&#39;74657374696E676B6579313233343536&#39;</span>);
+  <span style="color:Blue;">echo</span> <span style="color:#A31515;">&quot;&lt;/br&gt;&lt;br&gt;&lt;h2&gt;Encrypted Data:&lt;/h2&gt;&quot;</span>;
+  $ciphertext = openssl_encrypt(pad_data($_POST[<span style="color:#A31515;">&#39;text_to_encrypt&#39;</span>]), $cipher, $key, 0, $iv); 
+
+  <span style="color:Blue;">echo</span> <span style="color:#A31515;">&quot;&lt;br/&gt;&quot;</span>;
+  <span style="color:Blue;">echo</span> <span style="color:#A31515;">&quot;&lt;b&gt;$ciphertext&lt;/b&gt;&quot;</span>;
+}
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>I noticed that any text you input got encrypted and then the encrypted flag and padding were appended to it afterwards. My teammate and I then made the following script to decrypt one letter at a time by block width. This works because we could set the first block to anything we wanted and thus knew what it was:</p>
+<p>OURDATA|FLAG|PADDING</p>
+<div class="lang-python editor-colors">from Crypto.Cipher import AES
+import threading
+import requests
+import base64
+
+# url to try
+url = "http://167.71.246.232:8080/crypto.php"
+
+# all possible characters
+chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_!@#{} '
+
+# decoded flag
+FLAG = ''
+
+# length of a's to send
+i_len = 15-len(FLAG)
+
+# Checks if the character properly encodes the data
+# expected = expected block
+# d = data to send in post
+# c = character to test
+def func(expected, d, c):
+    x = {'text_to_encrypt': d+FLAG+c, 'do_encrypt': 'Encrypt'}
+    res = requests.post(url, data=x)
+    z = res.text.split('Encrypted Data:</h2><br/><b>')[-1].split('</b>')[0]
+    z = base64.b64decode(z).hex()[:32]
+    if expected == z:
+        print(c)
+
+# data to send
+data = 'a'*i_len
+
+# post payload, send our data to be encrypted
+payload = {'text_to_encrypt': data, 'do_encrypt': 'Encrypt'}
+
+# post request, webpage with encrypted data
+response = requests.post(url, data=payload)
+
+# gets encrypted data
+x = response.text.split('Encrypted Data:</h2><br/><b>')[-1].split('</b>')[0]
+
+# gets first 2 blocks
+x = base64.b64decode(x).hex()[:32]
+
+threads = []
+for i in chars:
+    t = threading.Thread(target=func, args=(x, data, i,))
+    t.start()
+    threads.append(t)
+for i in threads:
+    i.join()
+</div>
+<p>Each time this was run we got one more letter which we then added to the FLAG variable. We kept doing this until we had the entire first block of the flag, however the flag was split out over two blocks so we had to update the script to check the second block:</p>
+<div class="lang-python editor-colors">FLAG = 'flag{b4d_bl0cks_'
+i_len = 15+16-len(FLAG)
+
+
+def func(expected, d, c):
+    x = {'text_to_encrypt': d+FLAG+c, 'do_encrypt': 'Encrypt'}
+    res = requests.post(url, data=x)
+    z = res.text.split('Encrypted Data:</h2><br/><b>')[-1].split('</b>')[0]
+    z = base64.b64decode(z).hex()[32:64]
+    if expected == z:
+        print(c)
+
+
+data = 'a'*i_len
+payload = {'text_to_encrypt': data, 'do_encrypt': 'Encrypt'}
+response = requests.post(url, data=payload)
+x = response.text.split('Encrypted Data:</h2><br/><b>')[-1].split('</b>')[0]
+x = base64.b64decode(x).hex()[32:64]
+threads = []
+for i in chars:
+    t = threading.Thread(target=func, args=(x, data, i,))
+    t.start()
+    threads.append(t)
+for i in threads:
+    i.join()
+</div>
+<p>Once fully decrypted we got:</p>
+<pre><code>flag{b4d_bl0cks_for_g0nks}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

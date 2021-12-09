@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-07-ImaginaryCTF - Jumprope</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="imaginaryctf-jumprope-write-up">ImaginaryCTF Jumprope Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Points: 200</p>
+<p>Comments:</p>
+<p>CENSORED and CENSORED Sitting in a tree, H-A-C-K-I-N-G! First comes pwn, Then comes rev, Then comes a flag And a happy dev!</p>
+<h2 id="write-up">Write up:</h2>
+<p>Opening the main function I saw:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  puts(<span style="color:#A31515;">&quot;Ice cream!&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;Soda Pop!&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;Cherry on top!&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;Is your flag exact?&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;Well, let&#39;s find out!&quot;</span>);
+  sleep(1u);
+  puts(<span style="color:#A31515;">&quot;\nEighty-eight characters!&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;A secret well kept!&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;If you get it right,&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;I&#39;ll shout CORRECT!\n&quot;</span>);
+  <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)checkFlag(<span style="color:#A31515;">&quot;I&#39;ll shout CORRECT!\n&quot;</span>, argv) )
+    printf(<span style="color:#A31515;">&quot;Nope!&quot;</span>);
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>I then looked into the checkFlag function and saw:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 checkFlag()
+{
+  <span style="color:Blue;">char</span> vars0[8]; 
+  <span style="color:Blue;">void</span> *retaddr; 
+
+  printf(<span style="color:#A31515;">&quot;&gt;&gt;&gt; &quot;</span>);
+  __isoc99_scanf(<span style="color:#A31515;">&quot;%88s%c&quot;</span>, &amp;retaddr, &amp;dead);
+  <span style="color:Blue;">for</span> ( count = 8; count &lt;= 95; ++count )
+  {
+    val = next(val);
+    vars0[count] ^= x[count - 8] ^ val;
+  }
+  <span style="color:Blue;">return</span> 0LL;
+}
+</pre></div>
+</div>
+<p>From here I can see that the code reads our input and then we xor that data with some other xor'ed data.</p>
+<p>From here I extracted the next function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">unsigned</span> __int64 __fastcall next(<span style="color:Blue;">unsigned</span> __int64 a1)
+{
+  <span style="color:Blue;">int</span> j; 
+  <span style="color:Blue;">unsigned</span> __int64 v4; 
+  __int64 v5; 
+  <span style="color:Blue;">int</span> i; 
+
+  <span style="color:Blue;">for</span> ( i = 0; i &lt;= 7; ++i )
+  {
+    v5 = 0LL;
+    v4 = a1;
+    <span style="color:Blue;">for</span> ( j = 0; j &lt;= 7; ++j )
+    {
+      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)test((<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(j + 1)) )
+        v5 ^= v4 &amp; 1;
+      v4 &gt;&gt;= 1;
+    }
+    a1 = (v5 &lt;&lt; 7) + (a1 &gt;&gt; 1);
+  }
+  <span style="color:Blue;">return</span> a1;
+}
+</pre></div>
+</div>
+<p>The test function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall test(<span style="color:Blue;">int</span> a1)
+{
+  <span style="color:Blue;">int</span> i; <span style="color:Green;">// [rsp+10h] [rbp-4h]</span>
+
+  <span style="color:Blue;">if</span> ( a1 == 1 )
+    <span style="color:Blue;">return</span> 0LL;
+  <span style="color:Blue;">for</span> ( i = 2; i &lt; a1 - 1; ++i )
+  {
+    <span style="color:Blue;">if</span> ( !(a1 % i) )
+      <span style="color:Blue;">return</span> 0LL;
+  }
+  <span style="color:Blue;">return</span> 1LL;
+}
+</pre></div>
+</div>
+<p>And the x array:</p>
+<div class="lang-py editor-colors">[0x00000000000000FD, 0x000000000000003C, 0x00000000000000C4, 0x000000000000000E, 0x0000000000000076, 0x00000000000000FF, 0x000000000000004B, 0x0000000000000045, 0x000000000000001F, 0x0000000000000040, 0x00000000000000F4, 0x00000000000000E6, 0x0000000000000080, 0x00000000000000B8, 0x00000000000000B5, 0x00000000000000E8, 0x0000000000000076, 0x000000000000008E, 0x000000000000003B, 0x00000000000000F8, 0x00000000000000E4, 0x00000000000000BD, 0x00000000000000C9, 0x00000000000000C7, 0x000000000000003F, 0x00000000000000E6, 0x00000000000000CF, 0x0000000000000015, 0x0000000000000094, 0x000000000000009A, 0x000000000000008A, 0x0000000000000028, 0x000000000000004E, 0x000000000000005E, 0x000000000000001E, 0x000000000000003F, 0x0000000000000025, 0x00000000000000D4, 0x000000000000002C, 0x00000000000000A9, 0x0000000000000036, 0x0000000000000028, 0x0000000000000042, 0x0000000000000040, 0x0000000000000093, 0x000000000000008D, 0x000000000000000F, 0x00000000000000FF, 0x00000000000000AE, 0x000000000000002B, 0x000000000000002B, 0x00000000000000DF, 0x000000000000007E, 0x000000000000001A, 0x000000000000004E, 0x0000000000000005, 0x0000000000000063, 0x00000000000000D0, 0x0000000000000088, 0x00000000000000E1, 0x00000000000000A1, 0x000000000000001F, 0x000000000000005A, 0x000000000000003D, 0x0000000000000036, 0x000000000000004F, 0x00000000000000AE, 0x0000000000000089, 0x000000000000007B, 0x00000000000000D7, 0x0000000000000027, 0x00000000000000D0, 0x0000000000000029, 0x00000000000000C0, 0x000000000000009E, 0x00000000000000F0, 0x0000000000000020, 0x00000000000000DF, 0x0000000000000069, 0x0000000000000077, 0x0000000000000094, 0x00000000000000E9, 0x0000000000000058, 0x000000000000000F, 0x00000000000000B8, 0x00000000000000EC, 0x00000000000000F9, 0x0000000000000024]
+</div>
+<p>I then made a python script to find everything but the input key:</p>
+<div class="lang-py editor-colors">x = [0x00000000000000FD, 0x000000000000003C, 0x00000000000000C4, 0x000000000000000E, 0x0000000000000076, 0x00000000000000FF, 0x000000000000004B, 0x0000000000000045, 0x000000000000001F, 0x0000000000000040, 0x00000000000000F4, 0x00000000000000E6, 0x0000000000000080, 0x00000000000000B8, 0x00000000000000B5, 0x00000000000000E8, 0x0000000000000076, 0x000000000000008E, 0x000000000000003B, 0x00000000000000F8, 0x00000000000000E4, 0x00000000000000BD, 0x00000000000000C9, 0x00000000000000C7, 0x000000000000003F, 0x00000000000000E6, 0x00000000000000CF, 0x0000000000000015, 0x0000000000000094, 0x000000000000009A, 0x000000000000008A, 0x0000000000000028, 0x000000000000004E, 0x000000000000005E, 0x000000000000001E, 0x000000000000003F, 0x0000000000000025, 0x00000000000000D4, 0x000000000000002C, 0x00000000000000A9, 0x0000000000000036, 0x0000000000000028, 0x0000000000000042, 0x0000000000000040, 0x0000000000000093, 0x000000000000008D, 0x000000000000000F, 0x00000000000000FF, 0x00000000000000AE, 0x000000000000002B, 0x000000000000002B, 0x00000000000000DF, 0x000000000000007E, 0x000000000000001A, 0x000000000000004E, 0x0000000000000005, 0x0000000000000063, 0x00000000000000D0, 0x0000000000000088, 0x00000000000000E1, 0x00000000000000A1, 0x000000000000001F, 0x000000000000005A, 0x000000000000003D, 0x0000000000000036, 0x000000000000004F, 0x00000000000000AE, 0x0000000000000089, 0x000000000000007B, 0x00000000000000D7, 0x0000000000000027, 0x00000000000000D0, 0x0000000000000029, 0x00000000000000C0, 0x000000000000009E, 0x00000000000000F0, 0x0000000000000020, 0x00000000000000DF, 0x0000000000000069, 0x0000000000000077, 0x0000000000000094, 0x00000000000000E9, 0x0000000000000058, 0x000000000000000F, 0x00000000000000B8, 0x00000000000000EC, 0x00000000000000F9, 0x0000000000000024]
+
+val = 2
+
+def test(b):
+	if b == 1:
+		return 0
+	for i in range(2, b-1):
+		if not (b%i):
+			return 0
+	return 1
+
+def next(a):
+	for i in range(0, 8):
+		v5 = 0
+		v4 = a
+		for j in range(0, 8):
+			if test(j+1):
+				v5 ^= v4 & 1
+			v4 >>= 1
+		a = (v5 << 7) + (a >> 1)
+	return a
+
+def printA(s):
+	n = ""
+	for i in s:
+		n+=i
+	print(n)
+
+s = []
+
+for i in range(8, 96):
+	val = next(val)
+	s.append(chr(x[i-8] ^ val))
+printA(s)
+</div>
+<p>This then output:</p>
+<pre><code>xq4f{n0tÔx!st_ni´¨CLbut_Zz%_nigh/M&quot;ef0ref7enty_&quot;5r_haczw2s_camîK!_kn0c¥Ã¹_at_økd00r}
+</code></pre>
+<p>From here it was a mix or bruteforcing a guessing but we were able to find that the flag was:</p>
+<pre><code>ictf{n0t_last_night_but_the_night_bef0re_twenty_f0ur_hackers_came_a_kn0cking_at_my_d00r}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

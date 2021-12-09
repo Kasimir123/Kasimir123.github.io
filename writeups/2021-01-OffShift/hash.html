@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-01-OffShift - hash</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="offshift-hash-write-up">Offshift hash Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 500</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Reversing</p>
+<p>Comment: I received a corrupted program the keys are probably lost within the game can you just find it for me to get the flag?.</p>
+<p>Flag format : flag{key1+key2}</p>
+<h2 id="write-up">Write up:</h2>
+<p>Using strings on the file I noticed that this file had been packed with UPX so the first thing I did was unpack the file. After unpacking I ran the file to see what it would output:</p>
+<pre><code>$ ./keyjoinfile      
+Oops wrong path
+Oops wrong path
+</code></pre>
+<p>I then loaded the file into IDA and looked at the code:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  vinit(argc, argv);
+  main__main();
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> main__main()
+{
+  println(<span style="color:#A31515;">&quot;Oops wrong path&quot;</span>, 15);
+  <span style="color:Blue;">return</span> println(<span style="color:#A31515;">&quot;Oops wrong path&quot;</span>, 15);
+}
+</pre></div>
+</div>
+<p>I then looked at the graphical view of the main function:</p>
+<p><img src="./Photos/branches.PNG" alt="main one" /></p>
+<p>The code moves 17h into ebp+var_28 and then compares it to 2Dh. If these values are not equal, which they never are in this case, it never calls main_one. After the main_one call there is another compare, this time with ebp+var_24 to 4Ch. In order to make the code follow the right path I needed to patch the program so the cmp's had the same value.</p>
+<p>To do this I first rebased the program to 0.</p>
+<pre><code>edit-&gt;segments-&gt;rebase program
+</code></pre>
+<p><img src="./Photos/rebase.PNG" alt="rebase" /></p>
+<p>Now I have the hex offset to the opcodes I want to change:</p>
+<pre><code>.text:00019F82 C7 45 D8 17 00 00 00                 mov     [ebp+var_28], 17h
+.text:00019F89 C7 45 DC 8C 09 00 00                 mov     [ebp+var_24], 98Ch
+</code></pre>
+<p>I opened the program in a hex editor and patched the bytes so that it would move 2Dh and 4Ch into the values. After patching the program I ran it again and got the following response this time:</p>
+<pre><code>$ ./keyjoinfile
+
+You don't have the first part of key yet
+</code></pre>
+<p>I then went back to IDA and checked out the main_one function. The main_one branch also had a jump that would never be reached:</p>
+<p><img src="./Photos/main_one_branch.PNG" alt="main one" /></p>
+<pre><code>.text:0001A037 83 7D A8 1F                          cmp     [ebp+var_58], 1Fh
+.text:0001A03B 0F 8F 93 00 00 00                    jg      loc_1A0D4
+</code></pre>
+<p>I needed to patch the comparison here so that the new value would always be greater, I decided to compare with 7Fh rather than 1Fh. After patching the program and running it again I got the following output:</p>
+<pre><code>$ ./keyjoinfile  
+
+[4, 5, 6, 7, 8, 9]
+</code></pre>
+<p>The file seemed to output the first part of the key and then exit. I then went back and edited the original patch so that the file wouldn't go into the first branch. Added the patch and running the file output:</p>
+<pre><code>$ ./keyjoinfile
+
+Oops wrong path
+</code></pre>
+<p>I then went to main_two and looked at the code. I noticed that there were two deadends:</p>
+<pre><code>.text:0001A16E C7 85 18 FF FF FF 5A 00 00 00    mov     [ebp+var_E8], 5Ah ; 'Z'
+.text:0001A178 83 BD 18 FF FF FF 2C             cmp     [ebp+var_E8], 2Ch ; ','
+</code></pre>
+<p>and</p>
+<pre><code>.text:0001A233 C7 85 1C FF FF FF 4D 00 00 00   mov     [ebp+var_E4], 4Dh ; 'M'
+.text:0001A23D 83 BD 1C FF FF FF 4B            cmp     [ebp+var_E4], 4Bh ; 'K'
+</code></pre>
+<p>After patching these two sections I ran the program again and it output:</p>
+<pre><code>$ ./keyjoinfile
+
+Oops wrong path
+['J', 'K', 'L', 'q', '5', '9', 'U', '1', '3', '3', '7']
+</code></pre>
+<p>After adding the keys together like the comment says I got that the flag was:</p>
+<pre><code>flag{456789+JKLq59U1337}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

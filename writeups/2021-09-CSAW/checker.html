@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-09-CSAW - checker</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="csaw-checker-write-up">CSAW checker Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<p>What's up with all the zeros and ones? Where are my letters and numbers? (This is a reversing challenge.)</p>
+<h2 id="write-up">Write up:</h2>
+<p>The first thing I did was look at the encode function:</p>
+<div class="lang-py editor-colors">def encode(plain):
+    d = 24
+    x = up(plain)
+    x = right(x,d)
+    x = down(x)
+    x = left(x,d)
+    return x
+</div>
+<p>I saw that I would have to do these function calls in reverse to decode the string. So I then started looking into the individual functions to see which ones I could just call and which ones I would have to rewrite.</p>
+<div class="lang-py editor-colors">def right(x,d):
+    x = x[d:] + x[0:d]
+    return x
+
+def left(x,d):
+    x = right(x,len(x)-d)
+    return x[::-1]
+</div>
+<p>The functions left and right just reorganized the flag based on the length and the d value so these would not need to be rewritten.</p>
+<div class="lang-py editor-colors">def down(x):
+    x = ''.join(['1' if x[i] == '0' else '0' for i in range(len(x))])
+    return x
+</div>
+<p>The down function just reversed the bits so that also would not need to be rewritten.</p>
+<div class="lang-py editor-colors">def up(x):
+    x = [f"{ord(x[i]) << 1:08b}" for i in range(len(x))]
+    return ''.join(x)
+</div>
+<p>The up function however converted the flag to bits so I would need to rewrite that. I then added the decode function to the script:</p>
+<div class="lang-py editor-colors">def up(x):
+    x = [f"{ord(x[i]) << 1:08b}" for i in range(len(x))]
+    return ''.join(x)
+
+def down(x):
+    x = ''.join(['1' if x[i] == '0' else '0' for i in range(len(x))])
+    return x
+
+def right(x,d):
+    x = x[d:] + x[0:d]
+    return x
+
+def left(x,d):
+    x = right(x,len(x)-d)
+    return x[::-1]
+
+def encode(plain):
+    d = 24
+    x = up(plain)
+    x = right(x,d)
+    x = down(x)
+    x = left(x,d)
+    return x
+
+
+def decode(enc):
+	d = 24
+	enc = left(enc,d)
+	enc = down(enc)
+	enc = right(enc,d)
+	
+    # go 8 bits at a time and turn them into characters
+	print(''.join([chr(int(''.join(enc[i:i+7]), 2)) for i in range(0, len(enc), 8)]))
+
+def main():
+    flag = "redacted"
+    encoded = encode(flag)
+    
+    print("What does this mean?")
+    encoded = "1010000011111000101010101000001010100100110110001111111010001000100000101000111011000100101111011001100011011000101011001100100010011001110110001001000010001100101111001110010011001100"
+    decode(encoded)
+
+
+if __name__ == "__main__":
+  main()
+</div>
+<p>When run this printed out:</p>
+<pre><code>What does this mean?
+3vers!nG_w@rm_Up}flag{r
+</code></pre>
+<p>The flag was:</p>
+<pre><code>flag{r3vers!nG_w@rm_Up}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

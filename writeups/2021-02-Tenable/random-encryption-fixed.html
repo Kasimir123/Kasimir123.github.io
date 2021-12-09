@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-02-Tenable - random-encryption-fixed</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="tenable-random-encryption-fixed-write-up">Tenable Random Encryption Fixed Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 100</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Code</p>
+<p>Comment:</p>
+<p>We found the following file on a hacked terminal:</p>
+<div class="lang-python editor-colors">import random
+flag = "flag{not_the_flag}"
+seeds = []
+for i in range(0,len(flag)):
+    seeds.append(random.randint(0,10000))
+
+res = []
+for i in range(0, len(flag)):
+    random.seed(seeds[i])
+    rands = []
+    for j in range(0,4):
+        rands.append(random.randint(0,255))
+
+    res.append(ord(flag[i]) ^ rands[i%4])
+    del rands[i%4]
+    print(str(rands))
+
+print(res)
+print(seeds)
+</div>
+<p>We also found sample output from a previous run:</p>
+<pre><code>[249, 182, 79]
+[136, 198, 95]
+[159, 167, 6]
+[223, 136, 101]
+[66, 27, 77]
+[213, 234, 239]
+[25, 36, 53]
+[89, 113, 149]
+[65, 127, 119]
+[50, 63, 147]
+[204, 189, 228]
+[228, 229, 4]
+[64, 12, 191]
+[65, 176, 96]
+[185, 52, 207]
+[37, 24, 110]
+[62, 213, 244]
+[141, 59, 81]
+[166, 50, 189]
+[228, 5, 16]
+[59, 42, 251]
+[180, 239, 144]
+[13, 209, 132]
+[184, 161, 235, 97, 140, 111, 84, 182, 162, 135, 76, 10, 69, 246, 195, 152, 133, 88, 229, 104, 111, 22, 39]
+[9925, 8861, 5738, 1649, 2696, 6926, 1839, 7825, 6434, 9699, 227, 7379, 9024, 817, 4022, 7129, 1096, 4149, 6147, 2966, 1027, 4350, 4272]
+</code></pre>
+<h2 id="write-up">Write up:</h2>
+<p>This challenge was python 3. The challenge may look a bit confusing at first but once you look at it it is fairly simple. We are given the &quot;encrypted&quot; values, the seeds for random, and then some other information that is meant to confuse us. I extracted the &quot;encrypted&quot; characters and the seeds and then set random and use those values to xor the right flag.</p>
+<div class="lang-python editor-colors">import random
+
+x = [184, 161, 235, 97, 140, 111, 84, 182, 162, 135, 76, 10, 69, 246, 195, 152, 133, 88, 229, 104, 111, 22, 39]
+
+flag = []
+
+seeds = [9925, 8861, 5738, 1649, 2696, 6926, 1839, 7825, 6434, 9699, 227, 7379, 9024, 817, 4022, 7129, 1096, 4149, 6147, 2966, 1027, 4350, 4272]
+
+for i in range(0, len(x)):
+    random.seed(seeds[i])
+    rands = []
+    for j in range(0,4):
+        rands.append(random.randint(0,255))
+
+    flag.append(x[i]^rands[i%4])
+
+print(flag)
+
+st=""
+for i in range(0, len(flag)):
+    st += chr(flag[i])
+print(st)
+</div>
+<p>After running I got:</p>
+<pre><code>flag{Oppsire_LULZ_fixed}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

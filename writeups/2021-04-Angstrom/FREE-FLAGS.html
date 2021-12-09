@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-04-Angstrom - FREE-FLAGS</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="angstrom-free-flags-write-up">Angstrom FREE FLAGS Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 50</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<p>Clam was browsing armstrongctf.com when suddenly a popup appeared saying &quot;GET YOUR FREE FLAGS HERE!!!&quot; along with a download. Can you fill out the survey for free flags?</p>
+<p>Find it on the shell server at /problems/2021/free_flags or over netcat at nc shell.actf.co 21703.</p>
+<h2 id="write-up">Write up:</h2>
+<p>Decompiling the main function we get:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">int</span> v4; 
+  <span style="color:Blue;">int</span> v5;
+  <span style="color:Blue;">int</span> v6; 
+  <span style="color:Blue;">int</span> v7;
+  <span style="color:Blue;">char</span> s[264]; 
+  <span style="color:Blue;">unsigned</span> __int64 v9; 
+
+  v9 = __readfsqword(0x28u);
+  puts(<span style="color:#A31515;">&quot;Congratulations! You are the 1000th CTFer!!! Fill out this short survey to get FREE FLAGS!!!&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;What number am I thinking of???&quot;</span>);
+  __isoc99_scanf(<span style="color:#A31515;">&quot;%d&quot;</span>, &amp;v7);
+  <span style="color:Blue;">if</span> ( v7 == 31337 )
+  {
+    puts(<span style="color:#A31515;">&quot;What two numbers am I thinking of???&quot;</span>);
+    __isoc99_scanf(<span style="color:#A31515;">&quot;%d %d&quot;</span>, &amp;v6, &amp;v5);
+    <span style="color:Blue;">if</span> ( v5 + v6 == 1142
+      &amp;&amp; v5 * v6 == 302937
+      &amp;&amp; (puts(<span style="color:#A31515;">&quot;What animal am I thinking of???&quot;</span>),
+          __isoc99_scanf(<span style="color:#A31515;">&quot; %256s&quot;</span>, s),
+          s[strcspn(s, <span style="color:#A31515;">&quot;\n&quot;</span>)] = 0,
+          !strcmp(s, <span style="color:#A31515;">&quot;banana&quot;</span>)) )
+    {
+      puts(<span style="color:#A31515;">&quot;Wow!!! Now I can sell your information to the Russian government!!!&quot;</span>);
+      puts(<span style="color:#A31515;">&quot;Oh yeah, here&#39;s the FREE FLAG:&quot;</span>);
+      print_flag();
+      v4 = 0;
+    }
+    <span style="color:Blue;">else</span>
+    {
+      puts(<span style="color:#A31515;">&quot;Wrong &gt;:((((&quot;</span>);
+      v4 = 1;
+    }
+  }
+  <span style="color:Blue;">else</span>
+  {
+    puts(<span style="color:#A31515;">&quot;Wrong &gt;:((((&quot;</span>);
+    v4 = 1;
+  }
+  <span style="color:Blue;">return</span> v4;
+}
+</pre></div>
+</div>
+<p>We can see that we need to answer a few questions. The first one we need to answer 31337, the second one we need to find two numbers that match the equation, I chose 723 and 419, and for the last one we need to answer banana. When I ran the server and entered the answers I got:</p>
+<pre><code>Congratulations! You are the 1000th CTFer!!! Fill out this short survey to get FREE FLAGS!!!
+What number am I thinking of???
+31337
+What two numbers am I thinking of???
+723 419
+What animal am I thinking of???
+banana
+Wow!!! Now I can sell your information to the Russian government!!!
+Oh yeah, here's the FREE FLAG:
+actf{what_do_you_mean_bananas_arent_animals}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

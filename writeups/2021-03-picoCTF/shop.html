@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-picoCTF - shop</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="picoctf-shop-write-up">picoCTF Shop Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 50</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<p>Best Stuff - Cheap Stuff, Buy Buy Buy... Store Instance: source. The shop is open for business at nc mercury.picoctf.net 34938.</p>
+<h2 id="write-up">Write up:</h2>
+<p>When first running the program we see:</p>
+<pre><code>Welcome to the market!
+=====================
+You have 40 coins
+        Item            Price   Count
+(0) Quiet Quiches       10      12
+(1) Average Apple       15      8
+(2) Fruitful Flag       100     1
+(3) Sell an Item
+(4) Exit
+Choose an option: 
+</code></pre>
+<p>I then checked the file and saw that it was a 32 bit ELF file so I opening it up in a decompiler. There were a lot of function but I found one called main_get_flag:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">void</span> __noreturn main_get_flag()
+{
+...
+
+  <span style="color:Blue;">while</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)&amp;retaddr &lt;= *(_DWORD *)(*(_DWORD *)(__readgsdword(0) - 4) + 8) )
+    runtime_morestack_noctxt();
+  filename.str = (uint8 *)&amp;str.buf.cap;
+  filename.len = 8;
+  io_ioutil_ReadFile(filename, v3, e);
+  main_check(ea);
+  v9 = v4;
+  v10 = v6;
+  a.cap = 0;
+  v12 = 0;
+  a.<span style="color:Blue;">array</span> = (interface_{} *)&amp;::e;
+  a.len = (__int32)&amp;main_statictmp_14;
+  filenamea.str = (uint8 *)&amp;stru_80E2E20;
+  filenamea.len = (__int32)&amp;v9;
+  runtime_convT2Eslice((runtime_eface_0)filenamea, v4, (runtime__type_0 *)v6.tab);
+  a.cap = v5;
+  v12 = v6.tab;
+  filenameb.<span style="color:Blue;">array</span> = (interface_{} *)&amp;a;
+  *(_QWORD *)&amp;filenameb.len = 0x200000002LL;
+  fmt_Println(filenameb, v6, (__int32)ea.tab);
+  os_Exit(0);
+}
+</pre></div>
+</div>
+<p>This seemed to read in a file on their system meaning that I would need to find a way to activate this function, looking at the xref's I found that it was called in the main_menu function, this is a fairly large function so I'm only going to include the important parts:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+...
+
+fmt_Scanf(ak, (error_0)0x100000001LL, *((string *)&amp;tc + 1), v53); 
+    v9 = *_num; <span style="color:Green;">// number we chose to buy</span>
+    v10 = _choice; <span style="color:Green;">// item we chose</span>
+    <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)*_choice &gt;= inv.len ) <span style="color:Green;">// if the choice isn&#39;t in the inventory then exit</span>
+      runtime_panicindex();
+    v11 = *_choice;
+    v12 = inv.<span style="color:Blue;">array</span>[v11].count;
+    <span style="color:Blue;">if</span> ( v9 &lt;= v12 ) <span style="color:Green;">// check that number wanted is less than number they have</span>
+    {
+      <span style="color:Blue;">if</span> ( wallet &lt; inv.<span style="color:Blue;">array</span>[v11].price )
+      {
+        v58.<span style="color:Blue;">array</span> = (interface_{} *)&amp;e;
+        v58.len = (__int32)&amp;main_statictmp_7;
+        an.<span style="color:Blue;">array</span> = (interface_{} *)&amp;v58;
+        *(_QWORD *)&amp;an.len = 0x100000001LL;
+        fmt_Println(an, (error_0)tc, SDWORD2(tc));
+        v15 = wallet;
+      }
+      <span style="color:Blue;">else</span>
+      {
+        inv.<span style="color:Blue;">array</span>[v11].count = v12 - v9;
+        <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)*v10 &gt;= inv.len )
+          runtime_panicindex();
+        v14 = *v10;
+        v15 = wallet - *_num * inv.<span style="color:Blue;">array</span>[v14].price; <span style="color:Green;">// vuln: doesn&#39;t check if the value is negative so we can buy a negative amount</span>
+        <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)*v10 &gt;= user.len )
+          runtime_panicindex();
+        user.<span style="color:Blue;">array</span>[v14].count += *_num;
+        <span style="color:Blue;">if</span> ( inv.len &lt;= 2u )
+          runtime_panicindex();
+        <span style="color:Blue;">if</span> ( inv.<span style="color:Blue;">array</span>[2].count != 1 )          <span style="color:Green;">// if fruitful flag is not 1 count</span>
+          main_get_flag();
+      }
+      v13 = v15;
+
+...
+</pre></div>
+</div>
+<p>So I then went into the shop and started buying negative amounts of items to get money. Once I had 100+ coins I bought the flag:</p>
+<pre><code>How many do you want to buy?
+-10
+You have 190 coins
+        Item            Price   Count
+(0) Quiet Quiches       10      27
+(1) Average Apple       15      8
+(2) Fruitful Flag       100     1
+(3) Sell an Item
+(4) Exit
+Choose an option: 
+2
+How many do you want to buy?
+1
+Flag is:  [112 105 99 111 67 84 70 123 98 52 100 95 98 114 111 103 114 97 109 109 101 114 95 98 97 54 98 56 99 100 102 125]
+</code></pre>
+<p>These were decimal ascii values, once translated I got that the flag was:</p>
+<pre><code>picoCTF{b4d_brogrammer_ba6b8cdf}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

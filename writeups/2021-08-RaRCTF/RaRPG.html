@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-08-RaRCTF - RaRPG</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="rarctf-rarpg-write-up">RaRCTF RaRPG Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Points: 200</p>
+<p>Comments:</p>
+<p>Challenge instance ready at 193.57.159.27:40052. Click here to request a new instance.
+I've been building a brand new Massively(?) Multiplayer(?) Online Role-Playing(?) Game(?) - try it out! Just don't try and visit the secret dev room...</p>
+<p>If you do not have the linked libraries, download rarpg-libs.zip and extract the libraries into your working directory. Then use
+LD_LIBRARY_PATH=$(pwd) ./client <ip> <port></p>
+<h2 id="write-up">Write up:</h2>
+<p>Opening up the game and walking around a bit I saw that there was a door behind some walls:</p>
+<pre><code>│                X                                                                                  │
+│                                                                                                   │
+│         ~~~~~~~~~~~~~~~      WWWWWW                                                               │
+│X        ~~~~~~~~~~~~~~~   *  W   XW                                                               │
+│         ~~~~~~~~~~~~~~~      WWWWWW                                                               │
+│                                                                                                   │
+│                X                                                                                            
+</code></pre>
+<p>From this I knew that I would most likely need to overwrite some sort of move check so I looked into the function names for something along the lines of move and found the following function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+_BOOL8 __fastcall move_okay(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">int</span> a2)
+{
+  <span style="color:Blue;">bool</span> v3; 
+  <span style="color:Blue;">int</span> v4; 
+
+  <span style="color:Blue;">if</span> ( wmove(stdscr__NCURSES6_TINFO_5_0_19991023, a1, a2) == -1 )
+    v4 = -1;
+  <span style="color:Blue;">else</span>
+    v4 = winch(stdscr__NCURSES6_TINFO_5_0_19991023);
+  v3 = 1; <span style="color:Green;">// set move to ok</span>
+  <span style="color:Blue;">if</span> ( v4 != 32 ) <span style="color:Green;">// if not an empty space we check if its a door or wall</span>
+    v3 = v4 == 88; <span style="color:Green;">// set move to not ok</span>
+  <span style="color:Blue;">return</span> v3;
+}
+</pre></div>
+</div>
+<p>While running a dynamic analysis I edited the registers so that it wouldn't set the check to false however that took too much time so the server locked me out. I then decided to edit the binary to remove the check for if we hit a wall. For this I took a look at the assembly:</p>
+<pre><code>.text:0000000000004970 55                                            push    rbp
+.text:0000000000004971 48 89 E5                                      mov     rbp, rsp
+.text:0000000000004974 48 83 EC 20                                   sub     rsp, 20h
+.text:0000000000004978 89 7D FC                                      mov     [rbp+var_4], edi
+.text:000000000000497B 89 75 F8                                      mov     [rbp+var_8], esi
+.text:000000000000497E 48 8B 3C 25 A0 D4 41 00                       mov     rdi, 41D4A0h    ; WINDOW *
+.text:0000000000004986 8B 75 FC                                      mov     esi, [rbp+var_4] ; int
+.text:0000000000004989 8B 55 F8                                      mov     edx, [rbp+var_8] ; int
+.text:000000000000498C E8 5F FA FF FF                                call    _wmove
+.text:0000000000004991 83 F8 FF                                      cmp     eax, 0FFFFFFFFh
+.text:0000000000004994 0F 85 0D 00 00 00                             jnz     loc_49A7
+.text:000000000000499A B8 FF FF FF FF                                mov     eax, 0FFFFFFFFh
+.text:000000000000499F 89 45 F0                                      mov     [rbp+var_10], eax
+.text:00000000000049A2 E9 10 00 00 00                                jmp     loc_49B7
+.text:00000000000049A7                               ; ---------------------------------------------------------------------------
+.text:00000000000049A7
+.text:00000000000049A7                               loc_49A7:                               ; CODE XREF: move_okay(int,int)+24↑j
+.text:00000000000049A7 48 8B 3C 25 A0 D4 41 00                       mov     rdi, 41D4A0h    ; WINDOW *
+.text:00000000000049AF E8 3C F7 FF FF                                call    _winch
+.text:00000000000049B4 89 45 F0                                      mov     [rbp+var_10], eax
+.text:00000000000049B7
+.text:00000000000049B7                               loc_49B7:                               ; CODE XREF: move_okay(int,int)+32↑j
+.text:00000000000049B7 8B 45 F0                                      mov     eax, [rbp+var_10]
+.text:00000000000049BA 89 45 F4                                      mov     [rbp+var_C], eax
+.text:00000000000049BD 83 7D F4 20                                   cmp     [rbp+var_C], 20h ; ' '
+.text:00000000000049C1 B1 01                                         mov     cl, 1
+.text:00000000000049C3 88 4D EF                                      mov     [rbp+var_11], cl
+.text:00000000000049C6 0F 84 0A 00 00 00                             jz      loc_49D6
+.text:00000000000049CC 83 7D F4 58                                   cmp     [rbp+var_C], 58h ; 'X'
+.text:00000000000049D0 0F 94 C0                                      setz    al
+.text:00000000000049D3 88 45 EF                                      mov     [rbp+var_11], al
+.text:00000000000049D6
+.text:00000000000049D6                               loc_49D6:                               ; CODE XREF: move_okay(int,int)+56↑j
+.text:00000000000049D6 8A 45 EF                                      mov     al, [rbp+var_11]
+.text:00000000000049D9 24 01                                         and     al, 1
+.text:00000000000049DB 0F B6 C0                                      movzx   eax, al
+.text:00000000000049DE 48 83 C4 20                                   add     rsp, 20h
+.text:00000000000049E2 5D                                            pop     rbp
+.text:00000000000049E3 C3                                            retn
+</code></pre>
+<p>I then used a hex editor and changed the follow bytes to all be 0x90:</p>
+<pre><code>.text:00000000000049CC 83 7D F4 58                                   cmp     [rbp+var_C], 58h ; 'X'
+.text:00000000000049D0 0F 94 C0                                      setz    al
+.text:00000000000049D3 88 45 EF                                      mov     [rbp+var_11], al
+</code></pre>
+<p>When I ran the game I was able to go through the wall and go to the flag which was:</p>
+<pre><code>rarctf{g4m3_h4ck1ng_f0r_n00b5!-75f8b0}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

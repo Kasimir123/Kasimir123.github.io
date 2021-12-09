@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-07-RedPwn - dimensionality</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="redpwn-dimensionality-write-up">RedPwn Dimensionality Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<h2 id="write-up">Write up:</h2>
+<p>Looking into the main function I saw:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall main(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">char</span> **a2, <span style="color:Blue;">char</span> **a3)
+{
+  <span style="color:Blue;">int</span> v3;
+  <span style="color:Blue;">int</span> v4; 
+  _BYTE *v5;
+  <span style="color:Blue;">char</span> v6; 
+  <span style="color:Blue;">int</span> v7; 
+  __int8 v8;
+  __int64 result; 
+  __m128i v10; 
+  <span style="color:Blue;">char</span> v11;
+  <span style="color:Blue;">unsigned</span> __int8 v12; 
+  <span style="color:Blue;">char</span> input[40];
+  <span style="color:Blue;">unsigned</span> __int64 v14; 
+
+  v14 = __readfsqword(0x28u);
+
+  fgets(input, 29, stdin);                      <span style="color:Green;">// Read in data, with a length of 29</span>
+  <span style="color:Blue;">if</span> ( checkInputFunction(input, 29LL, v3) )    <span style="color:Green;">// check function</span>
+  {
+    puts(<span style="color:#A31515;">&quot;:)&quot;</span>);
+    createCharMatrix(&amp;v10, (__int64)input, 28uLL);
+    v4 = v12;                                   <span style="color:Green;">// set v4 to 0</span>
+    v5 = &amp;flag;                                 <span style="color:Green;">// set v5 to the address of the flag (points at first char)</span>
+    v6 = v11 + 1 - (<span style="color:Blue;">unsigned</span> __int8)&amp;flag;      <span style="color:Green;">// sets v6 to 0xA1 (161)</span>
+    <span style="color:Blue;">do</span>
+    {
+      v7 = v10.m128i_u8[(<span style="color:Blue;">unsigned</span> __int8)(v6 + (_BYTE)v5)];<span style="color:Green;">// gets the value from the matrix</span>
+                                                <span style="color:Green;">// uses 0xA1 and the current character</span>
+      v4 += v7;                                 <span style="color:Green;">// adds the number we just got to v4</span>
+      v8 = v10.m128i_i8[(<span style="color:Blue;">unsigned</span> __int8)v4];   <span style="color:Green;">// using v4 look up the value for v8</span>
+      v10.m128i_i8[(<span style="color:Blue;">unsigned</span> __int8)(v6 + (_BYTE)v5)] = v8;<span style="color:Green;">// sets the value at the first look up index to the value of the second look up</span>
+      v10.m128i_i8[(<span style="color:Blue;">unsigned</span> __int8)v4] = v7;   <span style="color:Green;">// sets the value of the second lookup to the first lookup</span>
+      *v5++ ^= v10.m128i_u8[(<span style="color:Blue;">unsigned</span> __int8)(v8 + v7)];<span style="color:Green;">// xors the flags current value with the value at index v7+v8, then increments the flag pointer</span>
+    }
+    <span style="color:Blue;">while</span> ( (<span style="color:Blue;">char</span> *)&amp;flag + 41 != v5 );         <span style="color:Green;">// for the length of the flag</span>
+    fwrite(&amp;flag, 1uLL, 41uLL, stdout);         <span style="color:Green;">// writes the flag, length of 41</span>
+    putc(&#39;\n&#39;, stdout);                         <span style="color:Green;">// print new line</span>
+    result = 0LL;                               <span style="color:Green;">// set result to 0</span>
+  }
+  <span style="color:Blue;">else</span>                                          <span style="color:Green;">// not the right flag</span>
+  {
+    puts(<span style="color:#A31515;">&quot;:(&quot;</span>);
+    result = 1LL;                               <span style="color:Green;">// set result to 1</span>
+  }
+  <span style="color:Blue;">return</span> result;
+}
+</pre></div>
+</div>
+<p>I then saw that the checkInputFunction (which I renamed to this) was the following:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">bool</span> __fastcall checkInputFunction(<span style="color:Blue;">char</span> *inputString, __int64 a2, <span style="color:Blue;">int</span> a3)
+{
+  <span style="color:Blue;">int</span> v3; 
+  __int64 v4;
+  <span style="color:Blue;">int</span> v5; 
+  <span style="color:Blue;">char</span> v6;
+  <span style="color:Blue;">char</span> *v7; 
+  <span style="color:Blue;">int</span> v8; 
+  <span style="color:Blue;">bool</span> result;
+  <span style="color:Blue;">char</span> v10;
+
+  v3 = dword_55B4ED0E508C * dword_55B4ED0E508C * dword_55B4ED0E508C;<span style="color:Green;">// dword_564ED4C3608C seems to always be 0Bh (will be 0x533)</span>
+  <span style="color:Blue;">if</span> ( v3 &gt; 0 )                                 <span style="color:Green;">// this should always be hit since 0x0B*0x0B*0x0B will always be greater than 0</span>
+  {
+    v4 = 1LL;
+    <span style="color:Blue;">while</span> ( 1 )
+    {
+      v5 = v4;
+      <span style="color:Blue;">if</span> ( v3 == v4 )
+        <span style="color:Blue;">break</span>;
+      <span style="color:Blue;">if</span> ( *((_BYTE *)&amp;unk_55B4ED0E307F + ++v4) == 2 )
+      {
+        a3 = v5;
+        <span style="color:Blue;">break</span>;
+      }
+    }
+  }
+  v6 = *inputString;                            <span style="color:Green;">// set v6 to the first character of the input string</span>
+  v7 = inputString + 1;                         <span style="color:Green;">// set to the input minus the first character</span>
+  v8 = dword_55B4ED0E508C * dword_55B4ED0E508C; <span style="color:Green;">// sets v8 to 121 (11*11)</span>
+  <span style="color:Blue;">if</span> ( *inputString )
+  {
+    <span style="color:Blue;">while</span> ( 1 )                                 <span style="color:Green;">// current character in input string</span>
+    {
+      <span style="color:Blue;">switch</span> ( v6 )
+      {
+        <span style="color:Blue;">case</span> &#39;b&#39;:                               <span style="color:Green;">// if character is b</span>
+          v8 = -(dword_55B4ED0E508C * dword_55B4ED0E508C);<span style="color:Green;">// set v8 to -121</span>
+          <span style="color:Blue;">break</span>;
+        <span style="color:Blue;">case</span> &#39;d&#39;:                               <span style="color:Green;">// if character is d</span>
+          v8 = dword_55B4ED0E508C;              <span style="color:Green;">// st v8 to 11</span>
+          <span style="color:Blue;">break</span>;
+        <span style="color:Blue;">case</span> &#39;f&#39;:                               <span style="color:Green;">// if character is f</span>
+          v8 = dword_55B4ED0E508C * dword_55B4ED0E508C;<span style="color:Green;">// set v8 to 121</span>
+          <span style="color:Blue;">break</span>;
+        <span style="color:Blue;">case</span> &#39;l&#39;:                               <span style="color:Green;">// if character is l</span>
+          v8 = -1;                              <span style="color:Green;">// set v8 to -1</span>
+          <span style="color:Blue;">break</span>;
+        <span style="color:Blue;">case</span> &#39;r&#39;:                               <span style="color:Green;">// if character is r</span>
+          v8 = 1;                               <span style="color:Green;">// set v8 to 1</span>
+          <span style="color:Blue;">break</span>;
+        <span style="color:Blue;">case</span> &#39;u&#39;:                               <span style="color:Green;">// if character is u</span>
+          v8 = -dword_55B4ED0E508C;             <span style="color:Green;">// set v8 to -11</span>
+          <span style="color:Blue;">break</span>;
+        <span style="color:Blue;">default</span>:                                <span style="color:Green;">// if character is none of the above</span>
+          <span style="color:Blue;">break</span>;
+      }
+      a3 += v8;                                 <span style="color:Green;">// adds the value of v8 to a3 (a3 starts at 0)</span>
+      result = a3 &lt; 0 || a3 &gt; v3;               <span style="color:Green;">// if a3 is less than 0 or greater than 1331 set to true</span>
+      <span style="color:Blue;">if</span> ( result )                             <span style="color:Green;">// if true then exit the loop and sets return to false</span>
+        <span style="color:Blue;">break</span>;
+      v10 = byte_55B4ED0E3080[a3];              <span style="color:Green;">// use a3 to look up an array and set v10 to that value</span>
+      <span style="color:Blue;">if</span> ( !v10 )                               <span style="color:Green;">// if v10 is false (0) then return the last result (will be false), need to make sure not to hit this</span>
+        <span style="color:Blue;">return</span> result;
+      v6 = *v7++;                               <span style="color:Green;">// increment v6 to the next character</span>
+      <span style="color:Blue;">if</span> ( !v6 )                                <span style="color:Green;">// if v6 is no longer a character jump to the end and see if v10 is 3</span>
+        <span style="color:Blue;">goto</span> LABEL_12;
+    }
+    result = 0;
+  }
+  <span style="color:Blue;">else</span>
+  {
+    v10 = byte_55B4ED0E3080[a3];                <span style="color:Green;">// get v10 from the array again</span>
+LABEL_12:
+    result = v10 == 3;                          <span style="color:Green;">// set result to whether v10 equals 3</span>
+  }
+  <span style="color:Blue;">return</span> result;
+}
+</pre></div>
+</div>
+<p>After commenting the two functions I started getting to work. The first thing I did was extract the byte_55B4ED0E3080 array.</p>
+<p>This array was used for making the &quot;path&quot; to the final check where the value in the array was 3 when the index was the sum of the characters.</p>
+<p>From this we extracted an array of all the indices that we could access (any that were not 0):</p>
+<div class="lang-python editor-colors">v10Arr = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+
+newArr = []
+
+for i in range(0, len(v10Arr)-1):
+	if v10Arr[i] != 0:
+		newArr.append(i)
+
+print(newArr)
+</div>
+<p>This printed out:</p>
+<div class="lang-python editor-colors">[84, 133, 134, 135, 136, 137, 141, 146, 152, 155, 156, 157, 159, 160, 161, 162, 163, 166, 168, 174, 177, 178, 179, 180, 181, 185, 188, 190, 192, 199, 200, 201, 203, 204, 205, 206, 207, 210, 212, 214, 216, 221, 223, 224, 225, 226, 227, 254, 262, 276, 278, 282, 320, 322, 328, 344, 375, 377, 379, 380, 381, 383, 386, 388, 392, 397, 398, 399, 400, 401, 403, 404, 405, 408, 410, 414, 419, 421, 423, 424, 425, 432, 434, 441, 442, 443, 444, 445, 446, 447, 448, 449, 452, 454, 463, 464, 465, 466, 467, 469, 496, 498, 502, 518, 520, 524, 540, 542, 546, 562, 564, 566, 568, 586, 588, 590, 617, 619, 621, 622, 623, 628, 630, 632, 639, 640, 641, 642, 643, 645, 646, 647, 650, 652, 658, 661, 663, 667, 669, 683, 685, 686, 687, 688, 689, 694, 698, 700, 705, 707, 709, 710, 711, 712, 713, 738, 742, 760, 764, 782, 804, 806, 826, 830, 859, 860, 861, 862, 863, 864, 865, 866, 867, 870, 872, 874, 881, 883, 885, 886, 887, 889, 894, 896, 898, 900, 903, 904, 905, 906, 907, 909, 911, 914, 918, 920, 922, 925, 927, 928, 929, 931, 932, 933, 936, 938, 940, 944, 947, 949, 950, 951, 952, 953, 955, 982, 1002, 1006, 1028, 1052, 1054, 1068, 1074, 1103, 1114, 1123, 1124, 1125, 1127, 1128, 1129, 1149, 1150, 1151, 1167, 1168, 1169, 1171, 1172, 1173, 1175, 1178, 1184, 1189, 1190, 1191, 1195, 1296]
+</div>
+<p>One of my teammates (Polymero) and I then made a script to print out all the possible paths that would pass the check since there were multiple paths that fit the criteria and could produce a flag. From the main function we knew the input would need to be 28 characters long:</p>
+<div class="lang-python editor-colors">import random
+
+# possible sums
+possum = [84, 133, 134, 135, 136, 137, 141, 146, 152, 155, 156, 157, 159, 160, 161, 162, 163, 166, 168, 174, 177, 178, 179, 180, 181, 185, 188, 190, 192, 199, 200, 201, 203, 204, 205, 206, 207, 210, 212, 214, 216, 221, 223, 224, 225, 226, 227, 254, 262, 276, 278, 282, 320, 322, 328, 344, 375, 377, 379, 380, 381, 383, 386, 388, 392, 397, 398, 399, 400, 401, 403, 404, 405, 408, 410, 414, 419, 421, 423, 424, 425, 432, 434, 441, 442, 443, 444, 445, 446, 447, 448, 449, 452, 454, 463, 464, 465, 466, 467, 469, 496, 498, 502, 518, 520, 524, 540, 542, 546, 562, 564, 566, 568, 586, 588, 590, 617, 619, 621, 622, 623, 628, 630, 632, 639, 640, 641, 642, 643, 645, 646, 647, 650, 652, 658, 661, 663, 667, 669, 683, 685, 686, 687, 688, 689, 694, 698, 700, 705, 707, 709, 710, 711, 712, 713, 738, 742, 760, 764, 782, 804, 806, 826, 830, 859, 860, 861, 862, 863, 864, 865, 866, 867, 870, 872, 874, 881, 883, 885, 886, 887, 889, 894, 896, 898, 900, 903, 904, 905, 906, 907, 909, 911, 914, 918, 920, 922, 925, 927, 928, 929, 931, 932, 933, 936, 938, 940, 944, 947, 949, 950, 951, 952, 953, 955, 982, 1002, 1006, 1028, 1052, 1054, 1068, 1074, 1103, 1114, 1123, 1124, 1125, 1127, 1128, 1129, 1149, 1150, 1151, 1167, 1168, 1169, 1171, 1172, 1173, 1175, 1178, 1184, 1189, 1190, 1191, 1195, 1296]
+
+start = 84
+goal = 1296
+
+# possible steps
+def posstep(x):
+    return [i for i in [x-1,x-11,x-121,x+1,x+11,x+121] if i in possum]
+    
+# walking function
+def walk(length=None):
+    
+    WON = False
+    dead_ends = 0
+    starvations = 0
+    
+    while True:
+        
+        locat = [start]
+        steps = []
+        
+        while True:
+            
+            posmoves = posstep(locat[-1])
+            
+            try:
+                posmoves.remove(locat[-2])
+            except:
+                pass
+            
+            if not posmoves:
+                dead_ends += 1
+                break
+            
+            r_locat = random.choice(posmoves)
+            
+            steps += [r_locat - locat[-1]]
+            locat += [r_locat]
+            
+            if len(steps) > 29:
+                starvations += 1
+                break
+            
+            if locat[-1] == goal:
+                
+                if length:
+                    if len(steps) == length:
+                        WON = True
+                else:
+                    WON = True
+                    
+                break
+        
+        if WON:
+            break
+    
+    return steps
+
+# translation dictionary (numbers to letters)
+translate = { -121:'b', 11:'d', 121:'f', -1:'l', 1:'r', -11:'u'}
+
+solutions = []
+
+# walk the path 100 times
+for k in range(100):
+    
+    sol = walk()
+    wrd = ''.join([translate[i] for i in sol])
+    
+    if wrd not in solutions:
+        solutions += [wrd]
+        
+# print all the found solutions
+for s in solutions:
+    print(s)
+</div>
+<p>When run the script output:</p>
+<pre><code>frrffllffddllffrrffuubbrrfff
+frrffllffllddffrrffuubbrrfff
+fddllllffrrffffrrffuubbrrfff
+frrffllllffddffrrffuubbrrfff
+fllddllffrrffffrrffuubbrrfff
+</code></pre>
+<p>When tested against the binary we got that the correct input was:</p>
+<pre><code>frrffllffddllffrrffuubbrrfff
+</code></pre>
+<p>When put into the binary I got:</p>
+<pre><code>./chall
+
+frrffllffddllffrrffuubbrrfff
+:)
+flag{star_/_so_bright_/_car_/_site_-ppsu}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

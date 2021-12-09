@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-04-UMDCTF - FeistyCrypt</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="umdctf-feistycrypt-write-up">UMDCTF FeistyCrypt Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<p>We've created a Feisty new cipher called FeistyCrypt that we're quite proud of! Before we release it to the world we would like you to try out our encyption program. Can you decrypt the flag?</p>
+<h2 id="write-up">Write up:</h2>
+<p>This was really the only really nice challenge in this CTF in my opinion. But anyways, I started by decompiling the main function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">int</span> v3; 
+  <span style="color:Blue;">int</span> v4; 
+  ssize_t v5; 
+  <span style="color:Blue;">int</span> v6; 
+  <span style="color:Blue;">unsigned</span> __int64 v7;
+  <span style="color:Blue;">int</span> i; 
+  __int64 v9; 
+  <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> v10;
+  <span style="color:Blue;">unsigned</span> __int32 ptr; 
+  <span style="color:Blue;">struct</span> timeval timeout; 
+  fd_set readfds;
+  <span style="color:Blue;">int</span> v15[256]; 
+  <span style="color:Blue;">int</span> buf[66]; 
+  <span style="color:Blue;">unsigned</span> __int64 v17; 
+
+  v17 = __readfsqword(0x28u);
+  timeout.tv_sec = 0LL;
+  timeout.tv_usec = 0LL;
+  memset(&amp;readfds, 0, <span style="color:Blue;">sizeof</span>(readfds));
+  readfds.fds_bits[0] |= 1uLL;
+  memset(buf, 0, 0x100uLL);
+  sync();
+  v3 = select(1024, &amp;readfds, 0LL, 0LL, &amp;timeout);
+  <span style="color:Blue;">if</span> ( v3 &gt; 0 )
+  {
+    v5 = read(0, buf, 0x100uLL);
+    <span style="color:Blue;">if</span> ( (v5 &amp; 7) != 0 )
+      fwrite(
+        <span style="color:#A31515;">&quot;I like 8 byte blocks.\n&quot;</span>
+        <span style="color:#A31515;">&quot;The number of bytes you gave me wasn&#39;t a multiple of 8 so I padded your input with NULL bytes.\n&quot;</span>
+        <span style="color:#A31515;">&quot;It&#39;s cool, but I just wanted to let you know.  Mkay.\n&quot;</span>
+        <span style="color:#A31515;">&quot;\n&quot;</span>,
+        1uLL,
+        0xABuLL,
+        stderr);
+    v6 = 0;
+    v7 = 31337LL;
+    <span style="color:Blue;">while</span> ( v6 &lt;= 255 )
+    {
+      v7 = 0x5851F42D4C957F2DLL * v7 + 1;
+      v15[v6++] = v7 &gt;&gt; 33;
+    }
+    <span style="color:Blue;">for</span> ( i = 0; i &lt; v5; i += 8 )
+    {
+      v9 = encrypt(_byteswap_ulong(buf[i / 4u + 1]) | ((<span style="color:Blue;">unsigned</span> __int64)_byteswap_ulong(buf[i / 4u]) &lt;&lt; 32), v15);
+      v10 = v9;
+      ptr = _byteswap_ulong(HIDWORD(v9));
+      fwrite(&amp;ptr, 4uLL, 1uLL, stdout);
+      ptr = _byteswap_ulong(v10);
+      fwrite(&amp;ptr, 4uLL, 1uLL, stdout);
+    }
+    v4 = 0;
+  }
+  <span style="color:Blue;">else</span>
+  {
+    v4 = v3;
+    <span style="color:Blue;">if</span> ( v3 )
+    {
+      puts(<span style="color:#A31515;">&quot;shrug emoji&quot;</span>);
+      v4 = 1;
+    }
+    <span style="color:Blue;">else</span>
+    {
+      puts(
+        <span style="color:#A31515;">&quot;If you give me plaintext via stdin I will give you ciphertext via stdout.\n&quot;</span>
+        <span style="color:#A31515;">&quot;\n&quot;</span>
+        <span style="color:#A31515;">&quot;Maybe try running me like this...\n&quot;</span>
+        <span style="color:#A31515;">&quot;\n&quot;</span>
+        <span style="color:#A31515;">&quot;echo -n &#39;Hello, plaintext&#39; | ./feisty_crypt_encrypt | hexdump -C\n&quot;</span>
+        <span style="color:#A31515;">&quot;\n&quot;</span>
+        <span style="color:#A31515;">&quot;echo -n &#39;Hello, plaintext&#39; | ./feisty_crypt_encrypt &gt; ciphertext.bin\n&quot;</span>
+        <span style="color:#A31515;">&quot;\n&quot;</span>
+        <span style="color:#A31515;">&quot;cat plaintext.bin | ./feisty_crypt_encrypt | hexdump -C\n&quot;</span>
+        <span style="color:#A31515;">&quot;\n&quot;</span>
+        <span style="color:#A31515;">&quot;The ciphertext bytes for &#39;baseball&#39; are: 70 09 36 2d 3a 75 45 7c\n&quot;</span>
+        <span style="color:#A31515;">&quot;\n&quot;</span>
+        <span style="color:#A31515;">&quot;Oh, you wanna decypt stuff?  Good luck with that! ;)\n&quot;</span>
+        <span style="color:#A31515;">&quot;\n&quot;</span>);
+    }
+  }
+  <span style="color:Blue;">return</span> v4;
+}
+</pre></div>
+</div>
+<p>The main function seemed to create some sort of array with length 256 and then seemed to encrypt 8 bytes at a time using the encryption function. Decompiling the encryption function I got:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall encrypt(<span style="color:Blue;">unsigned</span> __int64 a1, __int64 a2)
+{
+  <span style="color:Blue;">unsigned</span> __int64 v2;
+  <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> v3; 
+  <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> i;
+  <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> v5; 
+  <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> v6; 
+
+  v2 = HIDWORD(a1);
+  v3 = a1;
+  <span style="color:Blue;">for</span> ( i = 0; i &lt;= 0xFF; ++i )
+  {
+    v5 = v2 ^ f(v3, *(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> *)(a2 + 4LL * i));
+    <span style="color:Blue;">if</span> ( i == 255 )
+    {
+      v6 = v3;
+      v3 = v5;
+      v5 = v6;
+    }
+    v2 = v3;
+    v3 = v5;
+  }
+  <span style="color:Blue;">return</span> (v2 &lt;&lt; 32) | v3;
+}
+</pre></div>
+</div>
+<p>Our cryptography person recognized this as a feistel cipher which made the whole process a lot easier for me since for a feistel cipher you just need to run the decryption with the array run in reverse.</p>
+<p>The first thing I did was extract the key:</p>
+<div class="lang-python editor-colors">key = [0x23FD5E89, 0x5B2261AF, 0x2FE1BEFF, 0x5639C8B3, 0x055DB46F, 0x06C72EC1, 0x5C3075CA, 0x292DB8AB, 0x41198FF2, 0x64317860, 0x56B49DA4, 0x4184F32C, 0x62007C3B, 0x43DADC7C, 0x7522E0C0, 0x6D7F9573, 0x2A22ED32, 0x382E0D39, 0x71FC8B4F, 0x0261CE41, 0x136EDD56, 0x137A86CE, 0x407D887A, 0x2B90757D, 0x77B52F05, 0x676937CB, 0x26A3DC5E, 0x64B29390, 0x78C00DDB, 0x28DFACC6, 0x691C3744, 0x1B86B44F, 0x68C94ADA, 0x3FF7330D, 0x2086AD97, 0x4883547D, 0x71F066E7, 0x7394A4D9, 0x1BFA3CCF, 0x67E98CB6, 0x140971F5, 0x779C6FEE, 0x187D9E70, 0x6BFC76E9, 0x0DB407B6, 0x59B1A815, 0x21543363, 0x1AC7824E, 0x6EAD0FB1, 0x1653B8A9, 0x03DD45F6, 0x113E5EFF, 0x6D89001B, 0x68ABEA02, 0x78B81FEF, 0x666F2F50, 0x57AF0FC2, 0x6BFBEC39, 0x0DE762D8, 0x04F360C2, 0x2AD69155, 0x74326AF5, 0x43723F1A, 0x5DE93D42, 0x6D534483, 0x04CFACFA, 0x5BA32576, 0x0DBF4AC9, 0x505BD98D, 0x25E58465, 0x450E55DD, 0x0EDA33F4, 0x11EE20D8, 0x61340D9E, 0x1E72FD16, 0x29484E9B, 0x42A58FAB, 0x20941CB3, 0x680A4CA1, 0x2950AB13, 0x52D1A096, 0x3774533B, 0x3B9987FB, 0x74F739DA, 0x4625D2A5, 0x3CD379D0, 0x3D80B811, 0x7013C78B, 0x0A68AD9B, 0x74DFCB56, 0x56762842, 0x12405E6A, 0x0477F8A6, 0x336C4FE0, 0x7A5A3B66, 0x3A0246BD, 0x765D0F54, 0x7B9AF87D, 0x7405CDE8, 0x61BEAE87, 0x32223FF4, 0x43D86AFD, 0x1304E42C, 0x4CA72E7E, 0x23C87D96, 0x15E67802, 0x4D4740B2, 0x6B0AF4B1, 0x21C5C4BA, 0x7EF7B118, 0x0C023FE5, 0x4DF209AE, 0x79BD474F, 0x0DAB7F41, 0x70551B15, 0x68552E29, 0x4F4FAC4E, 0x20B8B2BF, 0x60B97860, 0x1C88E618, 0x1BEBA0B5, 0x393F26A7, 0x3FDC3997, 0x3BA169A1, 0x00C28FE7, 0x08A01788, 0x027BBBEB, 0x1FED911C, 0x3A039C20, 0x366A6CBA, 0x1C3D2083, 0x1557A297, 0x79225613, 0x724264BB, 0x6DD81AEB, 0x251955A8, 0x09168C1F, 0x7B346B10, 0x0103442D, 0x39BA64C8, 0x64AC5BA7, 0x02B46AAA, 0x7F3254C0, 0x7D9E3EC0, 0x3B3A9491, 0x3D76232C, 0x53FFB65F, 0x27E611E8, 0x3ABF8A2F, 0x58EF8F13, 0x2EB74A4A, 0x0C161EC1, 0x21D6041F, 0x7E1B1105, 0x567EFDEB, 0x7C35EECF, 0x65C94361, 0x38D7B0C4, 0x6D9B74B3, 0x0CE9D485, 0x7B332EA6, 0x6AC6D4DD, 0x2DB54BC0, 0x0A48240D, 0x33825E57, 0x16180294, 0x60155387, 0x4F71FC30, 0x55766CA3, 0x4E7E45E8, 0x083A5B37, 0x453A20C9, 0x604054CC, 0x0DFA79A8, 0x6278C591, 0x4D38EAA5, 0x1D1C1AF9, 0x52709B38, 0x0D9891B5, 0x5DEECDB1, 0x76C7ABF0, 0x61B1C4E3, 0x58A22C33, 0x40C7FF21, 0x134979D7, 0x580B9029, 0x428AE425, 0x06033889, 0x7FC31DC1, 0x3AB7B92C, 0x129A917D, 0x0EE37FB2, 0x002E98EB, 0x528AFD7B, 0x7C3C2714, 0x6F3857EB, 0x40D48D39, 0x2DC13029, 0x2BD24D7D, 0x7553D9E9, 0x2D5E9A50, 0x2408D01D, 0x3C1238BC, 0x332CB98B, 0x745EE111, 0x28AC04E4, 0x43F757B3, 0x2D34C20D, 0x2573FD2F, 0x60FD1290, 0x21596A8F, 0x20DADC3E, 0x2117FE1E, 0x1273A3B4, 0x5C710DFF, 0x7905C80E, 0x5DD5D44E, 0x4FD665B0, 0x1942323B, 0x46F421ED, 0x60C5C3C4, 0x10D40898, 0x5FC642AB, 0x7C201248, 0x61764C25, 0x6401497D, 0x1E85F88E, 0x64502C64, 0x090DA24D, 0x0C718924, 0x0B2D579F, 0x6A6D82EC, 0x72902F96, 0x05EF7679, 0x10D156E8, 0x36A89AEE, 0x69F1A459, 0x662CE4F8, 0x5D7A8D28, 0x3FE21E01, 0x4C95B18E, 0x327FC3F5, 0x5093BA58, 0x320CFD69, 0x7CA511FA, 0x4E3E518B, 0x2B77F722, 0x63D49291, 0x57B42564, 0x64022FA5, 0x238FB5E9, 0x7725EC84, 0x312BAD71, 0x10B70C12, 0x430643A8, 0x5861D29E]
+</div>
+<p>Then I started creating the script, I noticed the f function in the encryption and decompiled that too:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall f(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">int</span> a2)
+{
+  <span style="color:Blue;">return</span> a2 &amp; a1 ^ 0xBA5EBA11;
+}
+</pre></div>
+</div>
+<p>I then wrote the following script:</p>
+<div class="lang-python editor-colors"># key used
+key = [0x23FD5E89, 0x5B2261AF, 0x2FE1BEFF, 0x5639C8B3, 0x055DB46F, 0x06C72EC1, 0x5C3075CA, 0x292DB8AB, 0x41198FF2, 0x64317860, 0x56B49DA4, 0x4184F32C, 0x62007C3B, 0x43DADC7C, 0x7522E0C0, 0x6D7F9573, 0x2A22ED32, 0x382E0D39, 0x71FC8B4F, 0x0261CE41, 0x136EDD56, 0x137A86CE, 0x407D887A, 0x2B90757D, 0x77B52F05, 0x676937CB, 0x26A3DC5E, 0x64B29390, 0x78C00DDB, 0x28DFACC6, 0x691C3744, 0x1B86B44F, 0x68C94ADA, 0x3FF7330D, 0x2086AD97, 0x4883547D, 0x71F066E7, 0x7394A4D9, 0x1BFA3CCF, 0x67E98CB6, 0x140971F5, 0x779C6FEE, 0x187D9E70, 0x6BFC76E9, 0x0DB407B6, 0x59B1A815, 0x21543363, 0x1AC7824E, 0x6EAD0FB1, 0x1653B8A9, 0x03DD45F6, 0x113E5EFF, 0x6D89001B, 0x68ABEA02, 0x78B81FEF, 0x666F2F50, 0x57AF0FC2, 0x6BFBEC39, 0x0DE762D8, 0x04F360C2, 0x2AD69155, 0x74326AF5, 0x43723F1A, 0x5DE93D42, 0x6D534483, 0x04CFACFA, 0x5BA32576, 0x0DBF4AC9, 0x505BD98D, 0x25E58465, 0x450E55DD, 0x0EDA33F4, 0x11EE20D8, 0x61340D9E, 0x1E72FD16, 0x29484E9B, 0x42A58FAB, 0x20941CB3, 0x680A4CA1, 0x2950AB13, 0x52D1A096, 0x3774533B, 0x3B9987FB, 0x74F739DA, 0x4625D2A5, 0x3CD379D0, 0x3D80B811, 0x7013C78B, 0x0A68AD9B, 0x74DFCB56, 0x56762842, 0x12405E6A, 0x0477F8A6, 0x336C4FE0, 0x7A5A3B66, 0x3A0246BD, 0x765D0F54, 0x7B9AF87D, 0x7405CDE8, 0x61BEAE87, 0x32223FF4, 0x43D86AFD, 0x1304E42C, 0x4CA72E7E, 0x23C87D96, 0x15E67802, 0x4D4740B2, 0x6B0AF4B1, 0x21C5C4BA, 0x7EF7B118, 0x0C023FE5, 0x4DF209AE, 0x79BD474F, 0x0DAB7F41, 0x70551B15, 0x68552E29, 0x4F4FAC4E, 0x20B8B2BF, 0x60B97860, 0x1C88E618, 0x1BEBA0B5, 0x393F26A7, 0x3FDC3997, 0x3BA169A1, 0x00C28FE7, 0x08A01788, 0x027BBBEB, 0x1FED911C, 0x3A039C20, 0x366A6CBA, 0x1C3D2083, 0x1557A297, 0x79225613, 0x724264BB, 0x6DD81AEB, 0x251955A8, 0x09168C1F, 0x7B346B10, 0x0103442D, 0x39BA64C8, 0x64AC5BA7, 0x02B46AAA, 0x7F3254C0, 0x7D9E3EC0, 0x3B3A9491, 0x3D76232C, 0x53FFB65F, 0x27E611E8, 0x3ABF8A2F, 0x58EF8F13, 0x2EB74A4A, 0x0C161EC1, 0x21D6041F, 0x7E1B1105, 0x567EFDEB, 0x7C35EECF, 0x65C94361, 0x38D7B0C4, 0x6D9B74B3, 0x0CE9D485, 0x7B332EA6, 0x6AC6D4DD, 0x2DB54BC0, 0x0A48240D, 0x33825E57, 0x16180294, 0x60155387, 0x4F71FC30, 0x55766CA3, 0x4E7E45E8, 0x083A5B37, 0x453A20C9, 0x604054CC, 0x0DFA79A8, 0x6278C591, 0x4D38EAA5, 0x1D1C1AF9, 0x52709B38, 0x0D9891B5, 0x5DEECDB1, 0x76C7ABF0, 0x61B1C4E3, 0x58A22C33, 0x40C7FF21, 0x134979D7, 0x580B9029, 0x428AE425, 0x06033889, 0x7FC31DC1, 0x3AB7B92C, 0x129A917D, 0x0EE37FB2, 0x002E98EB, 0x528AFD7B, 0x7C3C2714, 0x6F3857EB, 0x40D48D39, 0x2DC13029, 0x2BD24D7D, 0x7553D9E9, 0x2D5E9A50, 0x2408D01D, 0x3C1238BC, 0x332CB98B, 0x745EE111, 0x28AC04E4, 0x43F757B3, 0x2D34C20D, 0x2573FD2F, 0x60FD1290, 0x21596A8F, 0x20DADC3E, 0x2117FE1E, 0x1273A3B4, 0x5C710DFF, 0x7905C80E, 0x5DD5D44E, 0x4FD665B0, 0x1942323B, 0x46F421ED, 0x60C5C3C4, 0x10D40898, 0x5FC642AB, 0x7C201248, 0x61764C25, 0x6401497D, 0x1E85F88E, 0x64502C64, 0x090DA24D, 0x0C718924, 0x0B2D579F, 0x6A6D82EC, 0x72902F96, 0x05EF7679, 0x10D156E8, 0x36A89AEE, 0x69F1A459, 0x662CE4F8, 0x5D7A8D28, 0x3FE21E01, 0x4C95B18E, 0x327FC3F5, 0x5093BA58, 0x320CFD69, 0x7CA511FA, 0x4E3E518B, 0x2B77F722, 0x63D49291, 0x57B42564, 0x64022FA5, 0x238FB5E9, 0x7725EC84, 0x312BAD71, 0x10B70C12, 0x430643A8, 0x5861D29E]
+
+# f function
+def f(a1, a2):
+	return a2 & a1 ^ 0xBA5EBA11
+
+# encryption/decryption function
+def encrypt(a1, a2):
+	v2 = (a1 & 0xFFFFffFF00000000)>>32
+	v3 = a1
+	i = 0
+	while i <= 0xff:
+		v5 = v2 ^ f(v3, a2[i])
+		if i == 255:
+			v6 = v3
+			v3 = v5
+			v5 = v6
+		v2 = v3
+		v3 = v5
+		i += 1
+	return (v2 << 32) | v3
+
+# string to save to
+s = ""
+
+# read in the encrypted flag
+poc = bytearray(open('flag_ciphertext.bin', 'rb').read())
+
+# loop through 8 bytes at a time
+for i in range(0, len(poc), 8):
+    # decrypt
+	x = (encrypt(int(poc[i:i+8].hex(), 16), key[::-1]))& 0xFFFFFFFFFFFFFFFF
+	
+    # turn to characters
+    for j in range(0, len(hex(x)[2:]), 2):
+		s += chr(int(hex(x)[2+j]+hex(x)[2+j+1], 16))
+
+# print
+print(s)
+</div>
+<p>When run the following gets printed:</p>
+<pre><code>UMDCTF-{h0r57_f31573l_wuz_h3r3.}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-picoCTF - dachshund-attacks</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="picoctf-dachshund-attacks-write-up">picoCTF Dachshund Attacks Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 80</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Cryptography</p>
+<p>Comments: What if d is too small? Connect with nc mercury.picoctf.net 36463.</p>
+<h2 id="write-up">Write up:</h2>
+<p>Connecting to the server we get:</p>
+<pre><code>nc mercury.picoctf.net 36463
+Welcome to my RSA challenge!
+e: 91115567195027350895225560399455244362720021754899107756410074334209455892162811273825343686291841011648918176880342769765729513668499163473486857339763539838060477495323354934137888927423479933238497081902630135184078635654878144686759685155101198352568732023289130719032380197862222536684105144279675442123
+n: 103745413463880171120735871844529893326611534731306537975696763552267517976211171198935418209226935162191683483155845420301787200950820137296268894842430250495225801106132567393232466191857377595684772962407774444406729253116393583946162093641858398732784677896748429349711170746832765300751935575362719901499
+c: 61432015748898990762397713786644171621605190512404158076773779079915928413885901633130003528714781535347625246383330061936862779236084965211135628785315173575356052776533908234178749400706144156779485635554354769702513192886037227512966025741946251817568886524160073438429722451766947965385579027324642172865
+</code></pre>
+<p>Based on the hint about d being too small and the dachshund reference I assumed that this would be wiener's attack so I used RsaCtfTool.py:</p>
+<pre><code>python3.8 RsaCtfTool.py -e 91115567195027350895225560399455244362720021754899107756410074334209455892162811273825343686291841011648918176880342769765729513668499163473486857339763539838060477495323354934137888927423479933238497081902630135184078635654878144686759685155101198352568732023289130719032380197862222536684105144279675442123 -n 103745413463880171120735871844529893326611534731306537975696763552267517976211171198935418209226935162191683483155845420301787200950820137296268894842430250495225801106132567393232466191857377595684772962407774444406729253116393583946162093641858398732784677896748429349711170746832765300751935575362719901499 --uncipher 61432015748898990762397713786644171621605190512404158076773779079915928413885901633130003528714781535347625246383330061936862779236084965211135628785315173575356052776533908234178749400706144156779485635554354769702513192886037227512966025741946251817568886524160073438429722451766947965385579027324642172865 --attack wiener
+private argument is not set, the private key will not be displayed, even if recovered.                                                                    
+
+[*] Testing key /tmp/tmpt_vylnmf.
+[*] Performing wiener attack on /tmp/tmpt_vylnmf.
+100%|████████████████████████████████████| 562/562 [00:00&lt;00:00, 2604.21it/s]
+ 26%|█████████▏                          | 144/562 [00:00&lt;00:00, 4326.16it/s]
+
+Results for /tmp/tmpt_vylnmf:
+
+Unciphered data :
+HEX : 0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007069636f4354467b70726f76696e675f7769656e65725f323633353435377d
+INT (big endian) : 198614235373674103788888306985643587194108045477674049828366797219789354877
+INT (little endian) : 87929423597352679385967218520166303991072976481688015390619332199393487159846427007656726002893661291688789949733998347484593955431421780017717645548309057720377739178319689349000771259261816797717335362676896926195097120075074880228214198840835344888918249631507726084030139901782753927540936914496464617472
+STR : b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00picoCTF{proving_wiener_2635457}'
+</code></pre>
+<p>Which gave me the flag:</p>
+<pre><code>picoCTF{proving_wiener_2635457}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

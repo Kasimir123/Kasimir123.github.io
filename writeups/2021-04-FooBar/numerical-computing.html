@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-04-FooBar - numerical-computing</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="foobar-numerical-computing-write-up">FooBar Numerical Computing Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineerings</p>
+<h2 id="write-up">Write up:</h2>
+<p>After some reversing I found the following code which checked the flag:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+  f = 0;
+  qmemcpy(enc, <span style="color:#A31515;">&quot;QWERTYUIOPASDFGHJK&quot;</span>, <span style="color:Blue;">sizeof</span>(enc));
+  *(_QWORD *)num = A_0_3887;
+  *(_QWORD *)&amp;num[2] = 0x5400000100LL;
+  *(_QWORD *)&amp;num[4] = 0xA0000002F0LL;
+  *(_QWORD *)&amp;num[6] = 0x1E000000670LL;
+  *(_QWORD *)&amp;num[8] = 0xCC000007B0LL;
+  *(_QWORD *)&amp;num[10] = 0x19400000250LL;
+  *(_QWORD *)&amp;num[12] = 0x1C800000700LL;
+  *(_QWORD *)&amp;num[14] = 0xA800000240LL;
+  *(_QWORD *)&amp;num[16] = 0xD8000007B0LL;
+  v3 = <span style="color:#A31515;">&quot;/home/abhi/try2/main.f90&quot;</span>;
+  v4 = 14;
+  v1 = 128;
+  v2 = 6;
+  _gfortran_st_write(&amp;v1);
+  _gfortran_transfer_character_write(&amp;v1, <span style="color:#A31515;">&quot;Enter the flag : you got itWrong&quot;</span>, 17LL);
+  _gfortran_st_write_done(&amp;v1);
+  v3 = <span style="color:#A31515;">&quot;/home/abhi/try2/main.f90&quot;</span>;
+  v4 = 15;
+  v1 = 128;
+  v2 = 5;
+  _gfortran_st_read(&amp;v1);
+  _gfortran_transfer_character(&amp;v1, inp, 18LL);
+  _gfortran_st_read_done(&amp;v1);
+  <span style="color:Blue;">for</span> ( n = 1; n &lt;= 18; ++n )
+  {
+    c1[0] = *(&amp;v10 + n);
+    c2[0] = *(&amp;v8 + n);
+    x1 = (<span style="color:Blue;">unsigned</span> __int8)c1[0];
+    x2 = (<span style="color:Blue;">unsigned</span> __int8)c2[0];
+    num2[n - 1] = (<span style="color:Blue;">unsigned</span> __int8)c2[0] ^ (<span style="color:Blue;">unsigned</span> __int8)c1[0];
+  }
+  <span style="color:Blue;">for</span> ( n = 1; n &lt;= 18; ++n )
+  {
+    <span style="color:Blue;">if</span> ( (n - 1) % 2 == 1 )
+      v0 = 4 * num2[n - 1];
+    <span style="color:Blue;">else</span>
+      v0 = 16 * num2[n - 1];
+    num1[n - 1] = v0;
+  }
+  <span style="color:Blue;">for</span> ( n = 1; n &lt;= 18; ++n )
+  {
+    <span style="color:Blue;">if</span> ( num1[n - 1] == num[n - 1] )
+      ++f;
+  }
+  v3 = <span style="color:#A31515;">&quot;/home/abhi/try2/main.f90&quot;</span>;
+  <span style="color:Blue;">if</span> ( f == 18 )
+</pre></div>
+</div>
+<p>C1 ends up being the encoding string that we copy at the beginning and C2 is the input we give. These get xored and added into an array which is then used to check against the num1 array which gets instantiated at the start. If all 18 are the same then it print out that we were right. I then wrote the following python script:</p>
+<div class="lang-python editor-colors"># num 1 array
+num = [0x00000160, 0x0000006C, 0x00000100, 0x00000054, 0x000002F0, 0x000000A0, 0x00000670, 0x000001E0, 0x000007B0, 0x000000CC, 0x00000250, 0x00000194, 0x00000700, 0x000001C8, 0x00000240, 0x000000A8, 0x000007B0, 0x000000D8]
+
+# c1 array
+c1 = [0x51, 0x57, 0x45, 0x52, 0x54, 0x59, 0x55, 0x49, 0x4F, 0x50, 0x41, 0x53, 0x44, 0x46, 0x47, 0x48, 0x4A, 0x4B]
+
+# string for results
+s = ""
+
+# loop through 18 times for the flag
+for i in range(0, 18):
+    # try each combination of characters for each character
+	for j in range(32, 128):
+        # set x
+		x = 0
+
+        # do the if/else that is done in the code
+		if i % 2 == 1:
+            # do the xor
+			x = 4 * (c1[i] ^ j)
+		else:
+            # do the xor
+			x = 16 * (c1[i] ^ j)
+
+        # if it matches then add and break
+		if x == num[i]:
+			s += chr(j)
+			print(s)
+            break
+</div>
+<p>This then output:</p>
+<pre><code>G
+GL
+GLU
+GLUG
+GLUG{
+GLUG{q
+GLUG{q2
+GLUG{q21
+GLUG{q214
+GLUG{q214c
+GLUG{q214cd
+GLUG{q214cd6
+GLUG{q214cd64
+GLUG{q214cd644
+GLUG{q214cd644c
+GLUG{q214cd644cb
+GLUG{q214cd644cb1
+GLUG{q214cd644cb1}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

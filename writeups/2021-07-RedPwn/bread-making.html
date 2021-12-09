@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-07-RedPwn - bread-making</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="redpwn-bread-making-write-up">RedPwn Bread Making Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<h2 id="write-up">Write up:</h2>
+<p>Looking at the main function I saw:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall main(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">char</span> **a2, <span style="color:Blue;">char</span> **a3)
+{
+  __int64 v3;
+  __int64 v4;
+  __int64 v5; 
+  __int64 v6; 
+  <span style="color:Blue;">int</span> v7; 
+  <span style="color:Blue;">char</span> v9[136];
+  <span style="color:Blue;">unsigned</span> __int64 v10;
+
+  v10 = __readfsqword(0x28u);
+  setbuf(stdin, 0LL);
+  setbuf(stdout, 0LL);
+  setbuf(stderr, 0LL);
+  signal(14, handler);
+  v3 = 0LL;
+  qword_6440 = 0LL;
+  <span style="color:Blue;">do</span>
+  {
+    alarm(*(_DWORD *)*(&amp;off_6020 + v3));
+    puts(*((<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **)*(&amp;off_6020 + qword_6440) + 1));
+    <span style="color:Blue;">do</span>
+    {
+      <span style="color:Blue;">if</span> ( fgets(v9, 128, stdin) )
+      {
+        v9[strcspn(v9, <span style="color:#A31515;">&quot;\n&quot;</span>)] = 0;
+        v4 = (__int64)*(&amp;off_6020 + qword_6440);
+        v5 = *(_QWORD *)(v4 + 24);
+        <span style="color:Blue;">if</span> ( v5 )
+        {
+          v6 = 0LL;
+          <span style="color:Blue;">while</span> ( strcmp(v9, *(<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **)(v4 + 16 * v6 + 32)) )
+          {
+            <span style="color:Blue;">if</span> ( v5 == ++v6 )
+              <span style="color:Blue;">goto</span> LABEL_17;
+          }
+          v7 = (*(__int64 (**)(<span style="color:Blue;">void</span>))(v4 + 16 * v6 + 40))();
+          <span style="color:Blue;">if</span> ( v7 != -1 )
+            <span style="color:Blue;">continue</span>;
+        }
+      }
+LABEL_17:
+      sub_24A0();
+    }
+    <span style="color:Blue;">while</span> ( v7 );
+    ++qword_6440;
+    puts(<span style="color:#A31515;">&quot;&quot;</span>);
+    v3 = qword_6440;
+  }
+  <span style="color:Blue;">while</span> ( (<span style="color:Blue;">unsigned</span> __int64)qword_6440 &lt;= 0xA );
+  alarm(0);
+  puts(<span style="color:#A31515;">&quot;it&#39;s the next morning&quot;</span>);
+  <span style="color:Blue;">if</span> ( dword_641C )
+  {
+    <span style="color:Blue;">if</span> ( dword_6418 )
+    {
+      <span style="color:Blue;">if</span> ( dword_6414 )
+      {
+        <span style="color:Blue;">if</span> ( dword_6410 )
+        {
+          <span style="color:Blue;">if</span> ( dword_640C )
+            sub_25C0();
+          <span style="color:Blue;">else</span>
+            puts(<span style="color:#A31515;">&quot;mom finds the fire alarm in the laundry room and accuses you of making bread&quot;</span>);
+        }
+        <span style="color:Blue;">else</span>
+        {
+          puts(<span style="color:#A31515;">&quot;mom finds the window opened and accuses you of making bread&quot;</span>);
+        }
+      }
+      <span style="color:Blue;">else</span>
+      {
+        puts(<span style="color:#A31515;">&quot;mom finds burnt bread on the counter and accuses you of making bread&quot;</span>);
+      }
+    }
+    <span style="color:Blue;">else</span>
+    {
+      puts(<span style="color:#A31515;">&quot;mom finds flour on the counter and accuses you of making bread&quot;</span>);
+    }
+  }
+  <span style="color:Blue;">else</span>
+  {
+    puts(<span style="color:#A31515;">&quot;mom finds flour in the sink and accuses you of making bread&quot;</span>);
+  }
+  <span style="color:Blue;">return</span> 0LL;
+}
+</pre></div>
+</div>
+<p>From this I could see that we had to enter several strings in order to pass the &quot;tests&quot; and make bread.</p>
+<p>The first thing I did here was look to see all the possible strings I could input and I found the following:</p>
+<pre><code>strings bread       
+
+/lib64/ld-linux-x86-64.so.2
+mfUa
+libc.so.6
+exit
+fopen
+signal
+puts
+__stack_chk_fail
+stdin
+fgets
+strcspn
+stdout
+stderr
+alarm
+__cxa_finalize
+setbuf
+strcmp
+__libc_start_main
+GLIBC_2.4
+GLIBC_2.2.5
+_ITM_deregisterTMCloneTable
+__gmon_start__
+_ITM_registerTMCloneTable
+ATUSH
+[]A\A]A^A_
+u+UH
+ATUSH
+tOE1
+[]A\A]
+[]A\A]A^A_
+flag.txt
+it's the next morning
+mom doesn't suspect a thing, but asks about some white dots on the bathroom floor
+couldn't open/read flag file, contact an admin if running on server
+mom finds flour in the sink and accuses you of making bread
+mom finds flour on the counter and accuses you of making bread
+mom finds burnt bread on the counter and accuses you of making bread
+mom finds the window opened and accuses you of making bread
+mom finds the fire alarm in the laundry room and accuses you of making bread
+the tray burns you and you drop the pan on the floor, waking up the entire house
+the flaming loaf sizzles in the sink
+the flaming loaf sets the kitchen on fire, setting off the fire alarm and waking up the entire house
+pull the tray out with a towel
+there's no time to waste
+pull the tray out
+the window is closed
+the fire alarm is replaced
+you sleep very well
+time to go to sleep
+close the window
+replace the fire alarm
+brush teeth and go to bed
+you've taken too long and fall asleep
+the dough has risen, but mom is still awake
+the dough has been forgotten, making an awful smell the next morning
+the dough has risen
+the bread needs to rise
+wait 2 hours
+wait 3 hours
+the oven makes too much noise, waking up the entire house
+the oven glows a soft red-orange
+the dough is done, and needs to be baked
+the dough wants to be baked
+preheat the oven
+preheat the toaster oven
+mom comes home and finds the bowl
+mom comes home and brings you food, then sees the bowl
+the ingredients are added and stirred into a lumpy dough
+mom comes home before you find a place to put the bowl
+the box is nice and warm
+leave the bowl on the counter
+put the bowl on the bookshelf
+hide the bowl inside a box
+the kitchen catches fire, setting off the fire alarm and waking up the entire house
+the bread has risen, touching the top of the oven and catching fire
+45 minutes is an awfully long time
+you've moved around too much and mom wakes up, seeing you bake bread
+return upstairs
+watch the bread bake
+the sink is cleaned
+the counters are cleaned
+everything appears to be okay
+the kitchen is a mess
+wash the sink
+clean the counters
+get ready to sleep
+the half-baked bread is disposed of
+flush the bread down the toilet
+the oven shuts off
+cold air rushes in
+there's smoke in the air
+unplug the oven
+unplug the fire alarm
+open the window
+you put the fire alarm in another room
+one of the fire alarms in the house triggers, waking up the entire house
+brother is still awake, and sees you making bread
+you bring a bottle of oil and a tray
+it is time to finish the dough
+you've shuffled around too long, mom wakes up and sees you making bread
+work in the kitchen
+work in the basement
+flour has been added
+yeast has been added
+salt has been added
+water has been added
+add ingredients to the bowl
+add flour
+add yeast
+add salt
+add water
+we don't have that ingredient at home!
+the timer makes too much noise, waking up the entire house
+the bread is in the oven, and bakes for 45 minutes
+you've forgotten how long the bread bakes
+the timer ticks down
+use the oven timer
+set a timer on your phone
+:*3$&quot;
+GCC: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
+.shstrtab
+.interp
+.note.gnu.property
+.note.gnu.build-id
+.note.ABI-tag
+.gnu.hash
+.dynsym
+.dynstr
+.gnu.version
+.gnu.version_r
+.rela.dyn
+.rela.plt
+.init
+.plt.got
+.plt.sec
+.text
+.fini
+.rodata
+.eh_frame_hdr
+.eh_frame
+.init_array
+.fini_array
+.dynamic
+.data
+.bss
+.comment
+</code></pre>
+<p>From here I then stated debugging and each time before inputting a string I was able to see which choices were possible for each item, I then got the following list:</p>
+<pre><code>add flour
+add yeast
+add salt
+add water
+hide the bowl inside a box
+wait 3 hours
+work in the basement
+preheat the toaster oven
+set a timer on your phone
+watch the bread bake
+pull the tray out with a towel
+unplug the fire alarm
+open the window
+unplug the oven
+clean the counters
+flush the bread down the toilet
+wash the sink
+get ready to sleep
+close the window
+replace the fire alarm
+brush teeth and go to bed
+</code></pre>
+<p>I then pasted this into the netcat and the program ran successfully:</p>
+<pre><code>nc mc.ax 31796   
+
+add ingredients to the bowl
+add flour
+add yeast
+add salt
+add water
+hide the bowl inside a box
+wait 3 hours
+work in the basement
+preheat the toaster oven
+set a timer on your phone
+watch the bread bake
+pull the tray out with a towel
+unplug the fire alarm
+open the window
+unplug the oven
+clean the counters
+flush the bread down the toilet
+wash the sink
+get ready to sleep
+close the window
+replace the fire alarm
+brush teeth and go to bedflour has been added
+yeast has been added
+salt has been added
+water has been added
+
+the ingredients are added and stirred into a lumpy dough
+the box is nice and warm
+
+the bread needs to rise
+the dough has risen
+
+it is time to finish the dough
+you bring a bottle of oil and a tray
+
+the dough is done, and needs to be baked
+the oven glows a soft red-orange
+
+the bread is in the oven, and bakes for 45 minutes
+the timer ticks down
+
+45 minutes is an awfully long time
+the bread has risen, touching the top of the oven and catching fire
+
+there's no time to waste
+the flaming loaf sizzles in the sink
+
+there's smoke in the air
+you put the fire alarm in another room
+cold air rushes in
+the oven shuts off
+
+the kitchen is a mess
+the counters are cleaned
+the half-baked bread is disposed of
+the sink is cleaned
+everything appears to be okay
+
+time to go to sleep
+the window is closed
+the fire alarm is replaced
+
+you sleep very well
+
+it's the next morning
+mom doesn't suspect a thing, but asks about some white dots on the bathroom floor
+flag{m4yb3_try_f0ccac1a_n3xt_t1m3???0r_dont_b4k3_br3ad_at_m1dnight}
+</code></pre>
+<p>The flag was:</p>
+<pre><code>flag{m4yb3_try_f0ccac1a_n3xt_t1m3???0r_dont_b4k3_br3ad_at_m1dnight}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

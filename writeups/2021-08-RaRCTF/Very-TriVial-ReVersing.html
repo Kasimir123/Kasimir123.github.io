@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-08-RaRCTF - Very-TriVial-ReVersing</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="rarctf-very-trivial-reversing-write-up">RaRCTF Very TriVial ReVersing Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Points: 300</p>
+<p>Comments: Hey, at least it's not Haskell!</p>
+<h2 id="write-up">Write up:</h2>
+<p>Looking into the main function of the program I saw a call to a function called main__main:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 main__main()
+{
+  __int64 v0;
+  __int64 result; 
+  __int64 v2[4]; 
+  __int64 v3[2]; 
+
+  v2[2] = (__int64)L_1252;
+  v2[3] = 0x10000000ELL;
+  v2[0] = os__input(L_1252, 0x10000000ELL);
+  v2[1] = v0;
+  memmove_plt(v3, v2, 16LL);
+  result = (<span style="color:Blue;">unsigned</span> __int8)main__check(v3[0], v3[1]);
+  <span style="color:Blue;">if</span> ( (_BYTE)result )
+    result = println(L_1254, 0x100000003LL);
+  <span style="color:Blue;">return</span> result;
+}
+</pre></div>
+</div>
+<p>This function read the user input into v2 as a pointer and then called main__check:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall main__check(__int64 a1, __int64 a2)
+{
+  <span style="color:Blue;">int</span> v2; 
+...
+  __int64 v57;
+
+  v56 = a1;
+  v57 = a2;
+  _new_array_with_default(v54, 0LL, 0LL, 1LL, 0LL);
+  memmove_plt(v55, v54, 32LL);
+  v51[0] = 19;
+  v51[1] = 55;
+  new_array_from_c_array(v52, 2LL, 2LL, 4LL, v51);
+  memmove_plt(v53, v52, 32LL);
+  <span style="color:Blue;">for</span> ( i = 0; i &lt; (<span style="color:Blue;">int</span>)v57; ++i ) <span style="color:Green;">// loop through the length of the input</span>
+  {
+    v49 = *(_BYTE *)(i + v56);
+    v47 = &amp;v29;
+    memmove_plt(&amp;v29, v53, 32LL);
+    v6 = (_DWORD *)array_get(0, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v53, v2, v3, v4, v5, v29, v30, v31); <span style="color:Green;">// get a value</span>
+    v46 = *v6 ^ v49; <span style="color:Green;">// xor that value</span>
+    v47 = &amp;v29;
+    memmove_plt(&amp;v29, v53, 32LL);
+    v11 = (_DWORD *)array_get(1, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v53, v7, v8, v9, v10, v29, v30, v31); <span style="color:Green;">// get another value</span>
+    v48 = *v11 + v46; <span style="color:Green;">// add that value</span>
+    array_push(v55, &amp;v48);
+    v47 = &amp;v29;
+    memmove_plt(&amp;v29, v53, 32LL);
+    v44[0] = *(_DWORD *)array_get(1, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v53, v12, v13, v14, v15, v29, v30, v31);
+    v47 = &amp;v29;
+    memmove_plt(&amp;v29, v53, 32LL);
+    v44[1] = *(_DWORD *)array_get(0, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v53, v16, v17, v18, v19, v29, v30, v31);
+    new_array_from_c_array(v45, 2LL, 2LL, 4LL, v44); <span style="color:Green;">// swap the locations of the two values</span>
+    memmove_plt(v53, v45, 32LL);
+  }
+  memmove_plt(v41, v55, 32LL);
+  v40 = v43;
+  _new_array(v38, 0LL, v43, 4LL);
+  memmove_plt(v39, v38, 32LL);
+  <span style="color:Blue;">for</span> ( j = 0; j &lt; v40; ++j )
+  {
+    v36 = *(_BYTE *)(j + v42);
+    v35 = anon_fn_e2d96d4126f6333f_byte__int_215(v36);
+    array_push(v39, &amp;v35);
+  }
+  v33[0] = 152; <span style="color:Green;">// create encrypted flag</span>
+  v33[1] = 105;
+  v33[2] = 152;
+  v33[3] = 103;
+  v33[4] = 158;
+  v33[5] = 100;
+  v33[6] = 159;
+  v33[7] = 119;
+  v33[8] = 173;
+  v33[9] = 101;
+  v33[10] = 118;
+  v33[11] = 118;
+  v33[12] = 178;
+  v33[13] = 105;
+  v33[14] = 158;
+  v33[15] = 115;
+  v33[16] = 169;
+  v33[17] = 87;
+  v33[18] = 180;
+  v33[19] = 35;
+  v33[20] = 158;
+  v33[21] = 119;
+  v33[22] = 179;
+  v33[23] = 146;
+  v33[24] = 169;
+  v33[25] = 88;
+  v33[26] = 174;
+  v33[27] = 45;
+  v33[28] = 89;
+  v33[29] = 101;
+  v33[30] = 168;
+  v33[31] = 21;
+  v33[32] = 89;
+  v33[33] = 33;
+  v33[34] = 173;
+  v33[35] = 102;
+  v33[36] = 165;
+  new_array_from_c_array(v34, 37LL, 37LL, 4LL, v33);
+  v47 = &amp;v29;
+  memmove_plt(&amp;v29, v34, 32LL);
+  v47 = &amp;v25;
+  memmove_plt(&amp;v25, v39, 32LL);
+  <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> __int8)Array_int_arr_eq(
+                           (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)&amp;v25,
+                           (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v39,
+                           v20,
+                           v21,
+                           v22,
+                           v23,
+                           v25,
+                           v26,
+                           v27,
+                           v28,
+                           v29,
+                           v30,
+                           v31) ) <span style="color:Green;">// check the flag</span>
+    <span style="color:Blue;">return</span> 0LL;
+  v32 = 1;
+  <span style="color:Blue;">return</span> 1LL;
+}
+</pre></div>
+</div>
+<p>The program went through the entire input we had and xor'ed it by a, then added by b, then swapped a and b for the next one. From this I made the following script:</p>
+<div class="lang-python editor-colors"># encrypted flag
+x = [152, 105, 152, 103, 158, 100, 159, 119, 173, 101, 118, 118, 178, 105, 158, 115, 169, 87, 180, 35, 158, 119, 179, 146, 169, 88, 174, 45, 89, 101, 168, 21, 89, 33, 173, 102, 165]
+
+# a and b
+a = 0x13
+b = 0x37
+
+s = ""
+
+# go through length of encrypted bytes
+for i in range(len(x)):
+
+    # subtract b and xor a
+	s += chr(0xFF & ((x[i] - b) ^ a))
+
+    # swap a and b
+	c = a
+	a = b
+	b = c
+
+# print flag
+print(s)
+</div>
+<p>Once run I got:</p>
+<pre><code>rarctf{See,ThatWasn'tSoHard-1eb519ed}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

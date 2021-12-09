@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-picoCTF - Mind-your-Ps-and-Qs</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="picoctf-mind-your-ps-and-qs-write-up">picoCTF Mind your Ps and Qs Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 20</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Cryptography</p>
+<p>Comments: In RSA, a small e value can be problematic, but what about N? Can you decrypt this?</p>
+<h2 id="write-up">Write up:</h2>
+<p>Using cat on the file I got:</p>
+<pre><code>cat values           
+
+Decrypt my super sick RSA:
+c: 62324783949134119159408816513334912534343517300880137691662780895409992760262021
+n: 1280678415822214057864524798453297819181910621573945477544758171055968245116423923
+e: 65537  
+</code></pre>
+<p>This was a pretty small n value so I decided to use alpertron to find the prime factors:</p>
+<p>1899107986527483535344517113948531328331 and 674357869540600933870145899564746495319033</p>
+<p>I then plugged these values and the c, n, and e into the rsa cracker script I wrote for dvCTF:</p>
+<div class="lang-python editor-colors"># all prime factors
+x = [1899107986527483535344517113948531328331, 674357869540600933870145899564746495319033]
+
+# n
+n = 1280678415822214057864524798453297819181910621573945477544758171055968245116423923
+
+# e
+e = 65537
+
+# cipher text
+ct = 62324783949134119159408816513334912534343517300880137691662780895409992760262021
+
+# start value for phi(n)
+i = 1
+
+# loop through prime factors and multiply them together with (factor-1)*(nextFactor-1)...
+for a in x:
+	i = i * (a-1)
+
+# inverse pow (3.8+ syntax, for previous versions of python use gmpy2.invert)
+d = pow(e, -1, i)
+
+# solve for the answer
+ans = pow(ct, d, n)
+
+# print the answer
+print(bytes.fromhex(hex(ans)[2:]).decode('ascii'))
+</div>
+<p>When run I got:</p>
+<pre><code>picoCTF{sma11_N_n0_g0od_05012767}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

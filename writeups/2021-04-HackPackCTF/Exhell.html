@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-04-HackPackCTF - Exhell</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="hackpack-exhell-write-up">HackPack Exhell Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<p>I'm tired of the IT department laughing at me when they see how much I spend on cans of effervescent water. That's why I've decided to secure my expences with password, so that nobody will laugh at me ever again! 😤</p>
+<h2 id="write-up">Write up:</h2>
+<p>I used binwalk to extract all the information from the .xlsx file. I was then able to get the xml for the two sheets. The important information was in sheet2.xml.</p>
+<p>At first I tried to use Z3 and making a python script to write the Z3 script, my teammate pointed out that was unecessary so he made a quick script to parse the xml, then we used sympy to solve for all of the B cell values. I then added a portion for converting the B values to ascii values:</p>
+<div class="lang-python editor-colors"># imports
+import xml.etree.ElementTree as ET
+import sympy
+import json
+import re
+
+# import sheet
+tree = ET.parse('sheet2.xml')
+root = tree.getroot()
+
+data = root[4]
+
+values = {"K1": True}
+
+op = {"OR": " | ", "AND": " & ", "NOT": "~", "FALSE": False, "TRUE": True}
+
+# process all the data
+def process_formula(formula):
+    if formula == "FALSE()" or formula == "TRUE()":
+        return op[formula[:-2]]
+    pos_open_bracket = formula.index('(')
+    new_formula = formula[pos_open_bracket:].replace('NOT', op["NOT"])
+    new_formula = new_formula.replace(",", op[formula[:pos_open_bracket]])
+    return new_formula
+
+def get_answer(formula, expected=False):
+    if not expected:
+        formula = '~{}'.format(formula)
+    if re.match(r".*E1[^0-9].*", formula):
+        formula = formula.replace("E1", "x")
+    p = sympy.satisfiable(sympy.parse_expr(formula, evaluate=False))
+    u = list(p.keys())
+    new_p = {i.name: p[i] for i in u}
+    if "x" in new_p:
+        new_p["E1"] = new_p["x"]
+        del new_p["x"]
+    return new_p
+
+
+def process_col(col):
+    global values
+    if 'A' not in col.attrib['r'] and 'B' not in col.attrib['r']:
+        _op = process_formula(col[0].text)
+        if _op in (True, False):
+            values[col.attrib['r']] = _op
+        else:
+            values.update(get_answer(_op, values[col.attrib['r']]))
+
+def process_row(row):
+    for col in row[::-1]:
+        process_col(col)
+
+
+for row in data:
+    process_row(row)
+
+values_b = list(filter(lambda x: 'B' in x, values.keys()))
+values_b = {i:values[i] for i in values_b}
+
+# create array for B values
+Bvals = [0 for i in range(0, len(values_b))]
+
+# turn to binary and then ascii
+for i in values_b:
+	Bvals[int(i.replace('B', ''))-1] = 1 if values_b[i] else 0
+
+s = ""
+
+for i in range(0, len(Bvals), 8):
+	curVal = ""
+	for j in range(0, 8):
+		curVal += str(Bvals[i+j])
+	s += chr(int(curVal, 2))
+
+print(s)
+</div>
+<p>Once run this output:</p>
+<pre><code>flag{0h_g33z_th4t5_a_l0t_sp3nt_0n_L3Cr0ix}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

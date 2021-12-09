@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-01-ShadowCTF - Vault</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="shadowctf-vault-write-up">ShadowCTF vault Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 400</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Reversing</p>
+<h2 id="write-up">Write up:</h2>
+<p>Since this was a 400 point challenge I assumed that the password wouldn't be visible in strings so I went ahead and opened it in Ida.</p>
+<div class="lang-c++ editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">char</span> v4[23]; <span style="color:Green;">// [rsp+12h] [rbp-AEh] BYREF</span>
+  <span style="color:Blue;">char</span> v5[5]; <span style="color:Green;">// [rsp+29h] [rbp-97h] BYREF</span>
+  __int16 v6; <span style="color:Green;">// [rsp+2Eh] [rbp-92h] BYREF</span>
+  <span style="color:Blue;">char</span> v7[50]; <span style="color:Green;">// [rsp+30h] [rbp-90h] BYREF</span>
+  <span style="color:Blue;">char</span> format[7]; <span style="color:Green;">// [rsp+69h] [rbp-57h] BYREF</span>
+  <span style="color:Blue;">char</span> s2[32]; <span style="color:Green;">// [rsp+70h] [rbp-50h] BYREF</span>
+  <span style="color:Blue;">char</span> v10[24]; <span style="color:Green;">// [rsp+90h] [rbp-30h] BYREF</span>
+  <span style="color:Blue;">char</span> s1[15]; <span style="color:Green;">// [rsp+ADh] [rbp-13h] BYREF</span>
+  <span style="color:Blue;">int</span> i; <span style="color:Green;">// [rsp+BCh] [rbp-4h]</span>
+
+  strcpy(s1, <span style="color:#A31515;">&quot;hackers_access&quot;</span>);
+  <span style="color:Blue;">for</span> ( i = 10; i &lt;= 19; ++i )
+    ;
+  strcpy(v10, <span style="color:#A31515;">&quot;no-cash_password&quot;</span>);
+  strcpy(format, <span style="color:#A31515;">&quot;sh@d0w&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;     .--------.&quot;</span>);
+  printf(<span style="color:#A31515;">&quot;    / .------. \\n&quot;</span>);
+  printf(<span style="color:#A31515;">&quot;   / /         \\n&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;   | |        | |&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;   | |        | |&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;  _| |________| |_&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;.&#39; |_|        |_| &#39;.&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;&#39;._____ ____ _____.&#39;&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;|     .&#39;____&#39;.     |&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;&#39;.__.&#39;.&#39;    &#39;.&#39;.__.&#39;&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;&#39;.__  Shad0w |  __.&#39;&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;|   &#39;.&#39;.____.&#39;.&#39;   |&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;&#39;.____&#39;.____.&#39;____.&#39;&quot;</span>);
+  printf(<span style="color:#A31515;">&quot;&#39;.________________.&#39;&quot;</span>);
+  strcpy(v7, <span style="color:#A31515;">&quot;Congrats, your flag is: {R3ver5e_chal1enge_pwned}&quot;</span>);
+  v6 = 123;
+  strcpy(v5, <span style="color:#A31515;">&quot;%16s&quot;</span>);
+  strcpy(&amp;v4[13], <span style="color:#A31515;">&quot;reversing&quot;</span>);
+  strcpy(&amp;v4[2], <span style="color:#A31515;">&quot;You Failed&quot;</span>);
+  strcpy(v4, <span style="color:#A31515;">&quot;}&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;secure vault&quot;</span>);
+  puts(<span style="color:#A31515;">&quot;Enter our password:&quot;</span>);
+  __isoc99_scanf(<span style="color:#A31515;">&quot;%16s&quot;</span>, s2);
+  <span style="color:Blue;">if</span> ( !strcmp(s1, s2) )
+  {
+    puts(<span style="color:#A31515;">&quot;You Win&quot;</span>);
+    printf(format);
+    printf((<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)&amp;v6);
+    printf(format);
+    putchar(95);
+    printf(&amp;v4[13]);
+    printf(<span style="color:#A31515;">&quot;_rul3s&quot;</span>);
+    printf(v4);
+  }
+  <span style="color:Blue;">else</span>
+  {
+    puts(<span style="color:#A31515;">&quot;You Failed&quot;</span>);
+  }
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>For this challenge I set up the debugger and set a breakpoint on the line where it asks for the password. Since s2 was the input I wanted to look at what s1 one so that I could just type the password.</p>
+<p><img src="./Photos/key.PNG" alt="key" /></p>
+<p>I then typed in hackers_access and the program spit out the flag.</p>
+<pre><code>     .--------.
+    / .------. \n   / /         \n   | |        | |
+   | |        | |
+  _| |________| |_
+.' |_|        |_| '.
+'._____ ____ _____.'
+|     .'____'.     |
+'.__.'.'    '.'.__.'
+'.__  Shad0w |  __.'
+|   '.'.____.'.'   |
+'.____'.____.'____.'
+'.________________.'secure vault
+Enter our password:
+hackers_access
+You Win
+sh@d0w{sh@d0w_reversing_rul3s}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

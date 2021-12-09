@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-04-FooBar - wargames</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="foobar-wargames-write-up">FooBar WarGames Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineerings</p>
+<h2 id="write-up">Write up:</h2>
+<p>I used uncompyle6 to decompile the wargames .pyc file and found the following:</p>
+<div class="lang-python editor-colors">game = ["FALKEN'S MAZE", 'TIC TAC TOE ', 'GLOBAL THERMONUCLEAR WAR']
+
+def validateLaunchcode(launchcode):
+    if len(launchcode[::-2]) != 12 or len(launchcode[15:]) != 9:
+        print(denied)
+        return False
+    clen = len(launchcode)
+    l1 = launchcode[:8]
+    cc = []
+    for i in range(0, len(l1), 2):
+        q = []
+        q.append(ord(l1[i]))
+        q.append(ord(l1[(i + 1)]))
+        cc.append(q)
+    else:
+        enc = []
+        for i in range(len(cc)):
+            val1 = cc[i][0] << 1
+            val1 ^= 69
+            val2 = cc[i][1] << 2
+            val2 ^= 10
+            enc.append(val1)
+            enc.append(val2)
+        else:
+            correct = [
+             159, 218, 153, 214, 45, 206, 153, 374]
+            if enc != correct:
+                print('ACCESS DENIED ok')
+                return False
+            l2 = launchcode[8:16]
+            key = 'PEACEOUT'
+            res = []
+            [res.append(ord(key[i]) - ord(l2[i])) if i & 1 == 1 else res.append(ord(key[i]) + ord(l2[i])) for i in range(len(l2))]
+            ok = [
+             192, 18, 117, -32, 120, -16, 173, -2]
+            if ok != res:
+                print('ACCESS DENIED')
+                return False
+            l3 = launchcode[int(2 * clen / 3):]
+            KEY = "There's no way to win"
+            I = 7
+            KARMA = [
+             123, 47, 86, 28, 74, 50, 32, 114]
+            MISSILE = []
+            for x in l3:
+                MISSILE.append((ord(x) + I ^ ord(KEY[I])) % 255)
+                I = (I + 1) % len(KEY)
+            else:
+                if KARMA == MISSILE:
+                    print(okk)
+                    exit()
+</div>
+<p>This split the key into 3 different components and checked each, this also told me that the game I wanted to get was 'GLOBAL THERMONUCLEAR WAR'.</p>
+<p>I then wrote the following:</p>
+<div class="lang-python editor-colors"># first encrypted key
+correct = [159, 218, 153, 214, 45, 206, 153, 374]
+
+# string to store result
+s = ""
+
+# decrypt the first key
+for i in range(0, len(correct), 2):
+            val1 = correct[i]^69
+            val2 = correct[i+1]^10
+            s += (chr(val1 >> 1))
+            s += (chr(val2 >> 2))
+
+# print what we have so far
+print(s)
+
+# second encrypted key
+ok = [192, 18, 117, -32, 120, -16, 173, -2]
+key = 'PEACEOUT'
+
+# decrypt the second key
+for i in range(0, len(ok)):
+    if i & 1 == 1:
+        s += chr(ord(key[i])-ok[i])
+    else:
+        s += chr(-ord(key[i])+ok[i])
+
+# print what we have so far
+print(s)
+
+# third encrypted key
+KARMA = [123, 47, 86, 28, 74, 50, 32, 114]
+KEY = "There's no way to win"
+I = 7
+
+# decrypt third key
+for i in range(0, len(KARMA)):
+    for j in range(32, 127):
+        if ((j + I ^ ord(KEY[I])) % 255) == KARMA[i]:
+            s += chr(j)
+
+    I = (I+1)%len(KEY)
+
+# print all
+print(s)
+</div>
+<p>This then output:</p>
+<pre><code>m4n741n_
+m4n741n_p34c3_XV
+m4n741n_p34c3_XVT9022GLD
+</code></pre>
+<p>When entered into the &quot;game&quot; we got:</p>
+<pre><code>GLUG{15_7h15_r34l_0r_15_17_g4m3??}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

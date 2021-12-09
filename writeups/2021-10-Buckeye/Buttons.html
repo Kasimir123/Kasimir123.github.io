@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-10-Buckeye - Buttons</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="buckeye-buttons-write-up">Buckeye Buttons Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<p>Anyone taken Software 1? Can you help me figure out what this weird Java program does?</p>
+<h2 id="write-up">Write up:</h2>
+<p>First thing I did when I noticed the .jar file was to decompile it back to java, when I did that I got the following:</p>
+<div class="lang-java editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">import</span> java.awt.event.ActionEvent;
+<span style="color:Blue;">import</span> javax.swing.JOptionPane;
+<span style="color:Blue;">import</span> java.nio.charset.StandardCharsets;
+<span style="color:Blue;">import</span> java.math.BigInteger;
+<span style="color:Blue;">import</span> java.util.Iterator;
+<span style="color:Blue;">import</span> java.awt.Dimension;
+<span style="color:Blue;">import</span> java.awt.Component;
+<span style="color:Blue;">import</span> java.awt.GridLayout;
+<span style="color:Blue;">import</span> java.awt.LayoutManager;
+<span style="color:Blue;">import</span> java.awt.Container;
+<span style="color:Blue;">import</span> javax.swing.BoxLayout;
+<span style="color:Blue;">import</span> javax.swing.JPanel;
+<span style="color:Blue;">import</span> java.util.ArrayList;
+<span style="color:Blue;">import</span> javax.swing.JButton;
+<span style="color:Blue;">import</span> javax.swing.JLabel;
+<span style="color:Blue;">import</span> java.awt.event.ActionListener;
+<span style="color:Blue;">import</span> javax.swing.JFrame;
+
+<span style="color:Green;">// </span>
+<span style="color:Green;">// Decompiled by Procyon v0.5.36</span>
+<span style="color:Green;">// </span>
+
+<span style="color:Blue;">public</span> <span style="color:Blue;">final</span> <span style="color:Blue;">class</span> Buttons <span style="color:Blue;">extends</span> JFrame <span style="color:Blue;">implements</span> ActionListener
+{
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span>[][] grid;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> rows;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> cols;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">final</span> JLabel movesLabel;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">final</span> JButton resetButton;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">final</span> JButton[][] buttons;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">int</span> posRow;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">int</span> posCol;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> endRow;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> endCol;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> MAX_MOVES = 139;
+    <span style="color:Blue;">private</span> ArrayList&lt;Integer&gt; moveHistory;
+    
+    <span style="color:Blue;">public</span> <span style="color:Blue;">static</span> <span style="color:Blue;">void</span> main(<span style="color:Blue;">final</span> String[] array) <span style="color:Blue;">throws</span> Exception {
+        <span style="color:Blue;">new</span> Buttons();
+    }
+    
+    <span style="color:Blue;">public</span> Buttons() {
+        <span style="color:Blue;">super</span>(<span style="color:#A31515;">&quot;Buttons!&quot;</span>);
+        <span style="color:Blue;">this</span>.resetValues();
+        <span style="color:Blue;">this</span>.rows = Buttons.grid.length;
+        <span style="color:Blue;">this</span>.cols = Buttons.grid[0].length;
+        <span style="color:Blue;">this</span>.endRow = <span style="color:Blue;">this</span>.rows - 1;
+        <span style="color:Blue;">this</span>.endCol = <span style="color:Blue;">this</span>.cols - 2;
+        <span style="color:Blue;">final</span> JPanel panel = <span style="color:Blue;">new</span> JPanel();
+        panel.setLayout(<span style="color:Blue;">new</span> BoxLayout(panel, 3));
+        <span style="color:Blue;">final</span> JPanel comp = <span style="color:Blue;">new</span> JPanel(<span style="color:Blue;">new</span> GridLayout(<span style="color:Blue;">this</span>.rows, <span style="color:Blue;">this</span>.cols));
+        <span style="color:Blue;">final</span> JPanel comp2 = <span style="color:Blue;">new</span> JPanel();
+        <span style="color:Blue;">this</span>.buttons = <span style="color:Blue;">new</span> JButton[<span style="color:Blue;">this</span>.rows][<span style="color:Blue;">this</span>.cols];
+        <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 0; i &lt; <span style="color:Blue;">this</span>.rows; ++i) {
+            <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> j = 0; j &lt; <span style="color:Blue;">this</span>.cols; ++j) {
+                (<span style="color:Blue;">this</span>.buttons[i][j] = <span style="color:Blue;">new</span> JButton(<span style="color:#A31515;">&quot;?&quot;</span>)).addActionListener(<span style="color:Blue;">this</span>);
+                <span style="color:Blue;">this</span>.buttons[i][j].setActionCommand(Integer.toString(j + i * <span style="color:Blue;">this</span>.cols));
+                comp.add(<span style="color:Blue;">this</span>.buttons[i][j]);
+            }
+        }
+        <span style="color:Blue;">this</span>.buttons[<span style="color:Blue;">this</span>.endRow][<span style="color:Blue;">this</span>.endCol].setText(<span style="color:#A31515;">&quot;\u2691&quot;</span>);
+        comp.setPreferredSize(<span style="color:Blue;">new</span> Dimension(45 * <span style="color:Blue;">this</span>.rows, 45 * <span style="color:Blue;">this</span>.cols));
+        comp2.add(<span style="color:Blue;">this</span>.movesLabel = <span style="color:Blue;">new</span> JLabel(<span style="color:#A31515;">&quot;Moves left: 20&quot;</span>));
+        (<span style="color:Blue;">this</span>.resetButton = <span style="color:Blue;">new</span> JButton(<span style="color:#A31515;">&quot;Reset&quot;</span>)).addActionListener(<span style="color:Blue;">this</span>);
+        <span style="color:Blue;">this</span>.resetButton.setActionCommand(<span style="color:#A31515;">&quot;reset&quot;</span>);
+        comp2.add(<span style="color:Blue;">this</span>.resetButton);
+        panel.add(comp);
+        panel.add(comp2);
+        <span style="color:Blue;">this</span>.resetGUI();
+        <span style="color:Blue;">this</span>.getContentPane().add(panel);
+        <span style="color:Blue;">this</span>.pack();
+        <span style="color:Blue;">this</span>.setDefaultCloseOperation(3);
+        <span style="color:Blue;">this</span>.setVisible(<span style="color:Blue;">true</span>);
+    }
+    
+    <span style="color:Blue;">private</span> <span style="color:Blue;">void</span> resetValues() {
+        <span style="color:Blue;">this</span>.posRow = 0;
+        <span style="color:Blue;">this</span>.posCol = 1;
+        (<span style="color:Blue;">this</span>.moveHistory = <span style="color:Blue;">new</span> ArrayList&lt;Integer&gt;()).add(<span style="color:Blue;">this</span>.posCol + <span style="color:Blue;">this</span>.posRow * <span style="color:Blue;">this</span>.cols);
+    }
+    
+    <span style="color:Blue;">private</span> <span style="color:Blue;">void</span> updateMovesLeft() {
+        <span style="color:Blue;">this</span>.movesLabel.setText(invokedynamic(makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;, Integer.toString(139 - <span style="color:Blue;">this</span>.moveHistory.size())));
+    }
+    
+    <span style="color:Blue;">private</span> <span style="color:Blue;">void</span> resetGUI() {
+        <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 0; i &lt; <span style="color:Blue;">this</span>.rows; ++i) {
+            <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> j = 0; j &lt; <span style="color:Blue;">this</span>.cols; ++j) {
+                <span style="color:Blue;">this</span>.buttons[i][j].setEnabled(<span style="color:Blue;">true</span>);
+            }
+        }
+        <span style="color:Blue;">for</span> (<span style="color:Blue;">final</span> <span style="color:Blue;">int</span> intValue : <span style="color:Blue;">this</span>.moveHistory) {
+            <span style="color:Blue;">this</span>.buttons[intValue / <span style="color:Blue;">this</span>.cols][intValue % <span style="color:Blue;">this</span>.cols].setEnabled(<span style="color:Blue;">false</span>);
+        }
+        <span style="color:Blue;">this</span>.updateMovesLeft();
+    }
+    
+    <span style="color:Blue;">private</span> <span style="color:Blue;">void</span> reset() {
+        <span style="color:Blue;">this</span>.resetValues();
+        <span style="color:Blue;">this</span>.resetGUI();
+    }
+    
+    <span style="color:Blue;">private</span> <span style="color:Blue;">boolean</span> isLegalMove(<span style="color:Blue;">final</span> <span style="color:Blue;">int</span> n, <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> n2) {
+        <span style="color:Blue;">return</span> 139 - <span style="color:Blue;">this</span>.moveHistory.size() &gt; 0 &amp;&amp; Buttons.grid[n][n2] == 0 &amp;&amp; Math.abs(n - <span style="color:Blue;">this</span>.posRow) + Math.abs(n2 - <span style="color:Blue;">this</span>.posCol) == 1;
+    }
+    
+    <span style="color:Blue;">private</span> <span style="color:Blue;">void</span> printFlag() {
+        <span style="color:Blue;">final</span> BigInteger[] array = <span style="color:Blue;">new</span> BigInteger[<span style="color:Blue;">this</span>.moveHistory.size()];
+        array[0] = BigInteger.valueOf(2L);
+        <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 1; i &lt; array.length; ++i) {
+            array[i] = array[i - 1].nextProbablePrime();
+        }
+        BigInteger val = BigInteger.valueOf(1L);
+        <span style="color:Blue;">final</span> BigInteger m = <span style="color:Blue;">new</span> BigInteger(<span style="color:#A31515;">&quot;1430313837704837266267655033918654049072573502772041995300810633148485540425442305963378206448908414865491202671058946396326575688430628383447817933039379&quot;</span>);
+        <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> j = 0; j &lt; <span style="color:Blue;">this</span>.moveHistory.size(); ++j) {
+            val = val.multiply(array[j].modPow(BigInteger.valueOf(<span style="color:Blue;">this</span>.moveHistory.get(j)), m)).mod(m);
+        }
+        <span style="color:Blue;">final</span> String x = <span style="color:Blue;">new</span> String(<span style="color:Blue;">new</span> BigInteger(<span style="color:#A31515;">&quot;1181624346478884506978387685027501257422054115549381320819711748725513305918055802813085700551988448885328987653245675378090761255233757606571908411691314&quot;</span>).multiply(val).mod(m).toByteArray(), StandardCharsets.UTF_8);
+        JOptionPane.showMessageDialog((Component)<span style="color:Blue;">this</span>, invokedynamic(makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;, x), <span style="color:#A31515;">&quot;Flag&quot;</span>, 1);
+        System.out.println(x);
+    }
+    
+    @Override
+    <span style="color:Blue;">public</span> <span style="color:Blue;">void</span> actionPerformed(<span style="color:Blue;">final</span> ActionEvent actionEvent) {
+        <span style="color:Blue;">final</span> String actionCommand = actionEvent.getActionCommand();
+        <span style="color:Blue;">if</span> (actionCommand.equals(<span style="color:#A31515;">&quot;reset&quot;</span>)) {
+            <span style="color:Blue;">this</span>.reset();
+        }
+        <span style="color:Blue;">else</span> {
+            <span style="color:Blue;">int</span> int1 = Integer.parseInt(actionCommand);
+		    <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> posRow = int1 / <span style="color:Blue;">this</span>.cols;
+            <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> posCol = int1 % <span style="color:Blue;">this</span>.cols;
+		    <span style="color:Blue;">if</span> (<span style="color:Blue;">this</span>.isLegalMove(posRow, posCol)) {
+		        <span style="color:Blue;">this</span>.buttons[posRow][posCol].setEnabled(<span style="color:Blue;">false</span>);
+		        <span style="color:Blue;">this</span>.posRow = posRow;
+		        <span style="color:Blue;">this</span>.posCol = posCol;
+		        <span style="color:Blue;">this</span>.moveHistory.add(int1);
+		        System.out.println(<span style="color:Blue;">this</span>.moveHistory);
+		        <span style="color:Blue;">this</span>.updateMovesLeft();
+		        <span style="color:Blue;">if</span> (<span style="color:Blue;">this</span>.posRow == <span style="color:Blue;">this</span>.endRow &amp;&amp; <span style="color:Blue;">this</span>.posCol == <span style="color:Blue;">this</span>.endCol) {
+		            <span style="color:Blue;">this</span>.printFlag();
+		        }
+			<span style="color:Blue;">break</span>;
+		    }
+            
+            }
+            <span style="color:Blue;">else</span> {
+                JOptionPane.showMessageDialog(<span style="color:Blue;">this</span>, <span style="color:#A31515;">&quot;Illegal move, you lose \u2639&quot;</span>, <span style="color:#A31515;">&quot;Illegal move&quot;</span>, 0);
+                <span style="color:Blue;">this</span>.reset();
+            }
+        }
+    }
+    
+    <span style="color:Blue;">static</span> {
+        grid = <span style="color:Blue;">new</span> <span style="color:Blue;">int</span>[][] { { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1 }, { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, { 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1 }, { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1 }, { 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1 }, { 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1 }, { 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 } };
+    }
+}
+</pre></div>
+</div>
+<p>The first thing I noticed was the print flag function:</p>
+<div class="lang-java editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">private</span> <span style="color:Blue;">void</span> printFlag() {
+        <span style="color:Blue;">final</span> BigInteger[] array = <span style="color:Blue;">new</span> BigInteger[<span style="color:Blue;">this</span>.moveHistory.size()];
+        array[0] = BigInteger.valueOf(2L);
+        <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 1; i &lt; array.length; ++i) {
+            array[i] = array[i - 1].nextProbablePrime();
+        }
+        BigInteger val = BigInteger.valueOf(1L);
+        <span style="color:Blue;">final</span> BigInteger m = <span style="color:Blue;">new</span> BigInteger(<span style="color:#A31515;">&quot;1430313837704837266267655033918654049072573502772041995300810633148485540425442305963378206448908414865491202671058946396326575688430628383447817933039379&quot;</span>);
+        <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> j = 0; j &lt; <span style="color:Blue;">this</span>.moveHistory.size(); ++j) {
+            val = val.multiply(array[j].modPow(BigInteger.valueOf(<span style="color:Blue;">this</span>.moveHistory.get(j)), m)).mod(m);
+        }
+        <span style="color:Blue;">final</span> String x = <span style="color:Blue;">new</span> String(<span style="color:Blue;">new</span> BigInteger(<span style="color:#A31515;">&quot;1181624346478884506978387685027501257422054115549381320819711748725513305918055802813085700551988448885328987653245675378090761255233757606571908411691314&quot;</span>).multiply(val).mod(m).toByteArray(), StandardCharsets.UTF_8);
+        JOptionPane.showMessageDialog((Component)<span style="color:Blue;">this</span>, invokedynamic(makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;, x), <span style="color:#A31515;">&quot;Flag&quot;</span>, 1);
+        System.out.println(x);
+    }
+</pre></div>
+</div>
+<p>Sadly the flag depends on the move history so we can't just run this function to get the flag. So the next thing I did was look into the function that calls the print flag:</p>
+<div class="lang-java editor-colors"><div style="color:Black;background-color:White;"><pre>
+    @Override
+    <span style="color:Blue;">public</span> <span style="color:Blue;">void</span> actionPerformed(<span style="color:Blue;">final</span> ActionEvent actionEvent) {
+        <span style="color:Blue;">final</span> String actionCommand = actionEvent.getActionCommand();
+        <span style="color:Blue;">if</span> (actionCommand.equals(<span style="color:#A31515;">&quot;reset&quot;</span>)) {
+            <span style="color:Blue;">this</span>.reset();
+        }
+        <span style="color:Blue;">else</span> {
+            <span style="color:Blue;">int</span> int1 = Integer.parseInt(actionCommand);
+		    <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> posRow = int1 / <span style="color:Blue;">this</span>.cols;
+            <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> posCol = int1 % <span style="color:Blue;">this</span>.cols;
+		    <span style="color:Blue;">if</span> (<span style="color:Blue;">this</span>.isLegalMove(posRow, posCol)) {
+		        <span style="color:Blue;">this</span>.buttons[posRow][posCol].setEnabled(<span style="color:Blue;">false</span>);
+		        <span style="color:Blue;">this</span>.posRow = posRow;
+		        <span style="color:Blue;">this</span>.posCol = posCol;
+		        <span style="color:Blue;">this</span>.moveHistory.add(int1);
+		        System.out.println(<span style="color:Blue;">this</span>.moveHistory);
+		        <span style="color:Blue;">this</span>.updateMovesLeft();
+		        <span style="color:Blue;">if</span> (<span style="color:Blue;">this</span>.posRow == <span style="color:Blue;">this</span>.endRow &amp;&amp; <span style="color:Blue;">this</span>.posCol == <span style="color:Blue;">this</span>.endCol) {
+		            <span style="color:Blue;">this</span>.printFlag();
+		        }
+			<span style="color:Blue;">break</span>;
+		    }
+            
+            }
+            <span style="color:Blue;">else</span> {
+                JOptionPane.showMessageDialog(<span style="color:Blue;">this</span>, <span style="color:#A31515;">&quot;Illegal move, you lose \u2639&quot;</span>, <span style="color:#A31515;">&quot;Illegal move&quot;</span>, 0);
+                <span style="color:Blue;">this</span>.reset();
+            }
+        }
+    }
+</pre></div>
+</div>
+<p>We check if the currently selected item is a legal move, if it is then we add it to the history, check if we are at the end, and if we are then we print out the flag.</p>
+<p>At this point I had written a script and noticed that there were several different paths with only one of them getting you to the end so I decided to make a script using a breadth first search algorithm:</p>
+<div class="lang-py editor-colors"># import math 
+import math
+
+# initialize start values
+grid = [ [ 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ], [ 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 ], [ 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 ], [ 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 ], [ 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1 ], [ 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 ], [ 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1 ], [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1 ], [ 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1 ], [ 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 ], [ 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1 ], [ 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1 ], [ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 ], [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1 ], [ 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1 ], [ 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1 ], [ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 ], [ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 ], [ 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1 ], [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 ], [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 ] ];
+gridLen = 441
+MAX_MOVES = 139
+rows = len(grid)
+cols = len(grid[0])
+endRow = rows - 1
+endCol = cols - 2
+
+# all paths that are possible
+paths = []
+
+# Class for a path
+class Path:
+	def __init__(self, posRow, posCol, history):
+		self.posRow = posRow
+		self.posCol = posCol
+		self.history = history
+
+# check if a move is legal
+def isLegal(path, posRow, posCol):
+	return (139 - len(path.history) > 0) and (grid[posRow][posCol] == 0) and (math.fabs(posRow - path.posRow) + math.fabs(posCol - path.posCol) == 1)
+
+# append the first path to the array
+paths.append(Path(0, 1, [1]))
+
+# while there are paths 
+while len(paths) > 0:
+
+    # get the first path
+	path = paths[0]
+	
+    # loop through all of the grid indices
+	for i in range(0, 441):
+
+        # if i is not in the paths history (we haven't already gone to this path, stops looping back)
+		if i not in path.history:
+
+            # gets the rows and columns
+			posRow = i // cols
+			posCol = i % cols
+
+            # check if the path is legal
+			if isLegal(path, posRow, posCol):
+
+                # copy the history from the original path and append the current location
+				history = path.history.copy()
+				history.append(i)
+
+                # create a new path for this move we just found
+				paths.append(Path(posRow, posCol, history))
+
+                # if it is the end then print out the moves
+				if posRow == endRow and posCol == endCol:
+					for x in history:
+
+                        # print in a nice format to paste into our java file
+						print("moveHistory.add(" + str(x) + ");")
+					print("Finished ", history)
+
+    # remove the first path from the array
+	paths.pop(0)
+</div>
+<p>When run this output a bunch of java add to arraylist code which I then pasted into a java file I had made so I could just run it with the print flag code:</p>
+<div class="lang-java editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">import</span> java.awt.event.ActionEvent;
+<span style="color:Blue;">import</span> javax.swing.JOptionPane;
+<span style="color:Blue;">import</span> java.nio.charset.StandardCharsets;
+<span style="color:Blue;">import</span> java.math.BigInteger;
+<span style="color:Blue;">import</span> java.util.Iterator;
+<span style="color:Blue;">import</span> java.awt.Dimension;
+<span style="color:Blue;">import</span> java.awt.Component;
+<span style="color:Blue;">import</span> java.awt.GridLayout;
+<span style="color:Blue;">import</span> java.awt.LayoutManager;
+<span style="color:Blue;">import</span> java.awt.Container;
+<span style="color:Blue;">import</span> javax.swing.BoxLayout;
+<span style="color:Blue;">import</span> javax.swing.JPanel;
+<span style="color:Blue;">import</span> java.util.ArrayList;
+<span style="color:Blue;">import</span> javax.swing.JButton;
+<span style="color:Blue;">import</span> javax.swing.JLabel;
+<span style="color:Blue;">import</span> java.awt.event.ActionListener;
+<span style="color:Blue;">import</span> javax.swing.JFrame;
+
+<span style="color:Blue;">public</span> <span style="color:Blue;">class</span> run
+{
+	<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span>[][] grid = <span style="color:Blue;">new</span> <span style="color:Blue;">int</span>[][] { { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 }, { 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1 }, { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, { 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1 }, { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1 }, { 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1 }, { 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1 }, { 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }, { 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1 }, { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 } };
+
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">int</span> rows = grid.length;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">int</span> cols = grid[0].length;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">int</span> gPosRow = 0;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">int</span> gPosCol = 1;
+    
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> endRow = rows - 1;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> endCol = cols - 2;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> MAX_MOVES = 139;
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> ArrayList&lt;Integer&gt; moveHistory = <span style="color:Blue;">new</span> ArrayList&lt;Integer&gt;();
+
+<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">boolean</span> isLegalMove(<span style="color:Blue;">final</span> <span style="color:Blue;">int</span> n, <span style="color:Blue;">final</span> <span style="color:Blue;">int</span> n2) {
+        <span style="color:Blue;">return</span> 139 - moveHistory.size() &gt; 0 &amp;&amp; grid[n][n2] == 0 &amp;&amp; Math.abs(n - gPosRow) + Math.abs(n2 - gPosCol) == 1;
+    }
+
+    <span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">void</span> printFlag() {
+        <span style="color:Blue;">final</span> BigInteger[] array = <span style="color:Blue;">new</span> BigInteger[moveHistory.size()];
+        array[0] = BigInteger.valueOf(2L);
+        <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 1; i &lt; array.length; ++i) {
+            array[i] = array[i - 1].nextProbablePrime();
+        }
+        BigInteger val = BigInteger.valueOf(1L);
+        <span style="color:Blue;">final</span> BigInteger m = <span style="color:Blue;">new</span> BigInteger(<span style="color:#A31515;">&quot;1430313837704837266267655033918654049072573502772041995300810633148485540425442305963378206448908414865491202671058946396326575688430628383447817933039379&quot;</span>);
+        <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> j = 0; j &lt; moveHistory.size(); ++j) {
+            val = val.multiply(array[j].modPow(BigInteger.valueOf(moveHistory.get(j)), m)).mod(m);
+        }
+        <span style="color:Blue;">final</span> String x = <span style="color:Blue;">new</span> String(<span style="color:Blue;">new</span> BigInteger(<span style="color:#A31515;">&quot;1181624346478884506978387685027501257422054115549381320819711748725513305918055802813085700551988448885328987653245675378090761255233757606571908411691314&quot;</span>).multiply(val).mod(m).toByteArray(), StandardCharsets.UTF_8);
+        System.out.println(x);
+    }
+
+	<span style="color:Blue;">public</span> <span style="color:Blue;">static</span> <span style="color:Blue;">void</span> main(<span style="color:Blue;">final</span> String[] array) <span style="color:Blue;">throws</span> Exception {
+		moveHistory.add(1);
+        moveHistory.add(22);
+        moveHistory.add(43);
+        moveHistory.add(64);
+        moveHistory.add(85);
+        moveHistory.add(106);
+        moveHistory.add(127);
+        moveHistory.add(148);
+        moveHistory.add(149);
+        moveHistory.add(150);
+        moveHistory.add(151);
+        moveHistory.add(152);
+        moveHistory.add(131);
+        moveHistory.add(110);
+        moveHistory.add(89);
+        moveHistory.add(68);
+        moveHistory.add(67);
+        moveHistory.add(66);
+        moveHistory.add(45);
+        moveHistory.add(24);
+        moveHistory.add(25);
+        moveHistory.add(26);
+        moveHistory.add(27);
+        moveHistory.add(28);
+        moveHistory.add(49);
+        moveHistory.add(70);
+        moveHistory.add(71);
+        moveHistory.add(72);
+        moveHistory.add(51);
+        moveHistory.add(30);
+        moveHistory.add(31);
+        moveHistory.add(32);
+        moveHistory.add(33);
+        moveHistory.add(34);
+        moveHistory.add(55);
+        moveHistory.add(76);
+        moveHistory.add(77);
+        moveHistory.add(78);
+        moveHistory.add(79);
+        moveHistory.add(80);
+        moveHistory.add(81);
+        moveHistory.add(82);
+        moveHistory.add(103);
+        moveHistory.add(124);
+        moveHistory.add(123);
+        moveHistory.add(122);
+        moveHistory.add(143);
+        moveHistory.add(164);
+        moveHistory.add(163);
+        moveHistory.add(162);
+        moveHistory.add(161);
+        moveHistory.add(160);
+        moveHistory.add(139);
+        moveHistory.add(118);
+        moveHistory.add(117);
+        moveHistory.add(116);
+        moveHistory.add(115);
+        moveHistory.add(114);
+        moveHistory.add(135);
+        moveHistory.add(156);
+        moveHistory.add(155);
+        moveHistory.add(154);
+        moveHistory.add(175);
+        moveHistory.add(196);
+        moveHistory.add(195);
+        moveHistory.add(194);
+        moveHistory.add(193);
+        moveHistory.add(192);
+        moveHistory.add(213);
+        moveHistory.add(234);
+        moveHistory.add(233);
+        moveHistory.add(232);
+        moveHistory.add(253);
+        moveHistory.add(274);
+        moveHistory.add(275);
+        moveHistory.add(276);
+        moveHistory.add(277);
+        moveHistory.add(278);
+        moveHistory.add(299);
+        moveHistory.add(320);
+        moveHistory.add(321);
+        moveHistory.add(322);
+        moveHistory.add(301);
+        moveHistory.add(280);
+        moveHistory.add(281);
+        moveHistory.add(282);
+        moveHistory.add(261);
+        moveHistory.add(240);
+        moveHistory.add(219);
+        moveHistory.add(198);
+        moveHistory.add(199);
+        moveHistory.add(200);
+        moveHistory.add(221);
+        moveHistory.add(242);
+        moveHistory.add(243);
+        moveHistory.add(244);
+        moveHistory.add(245);
+        moveHistory.add(246);
+        moveHistory.add(247);
+        moveHistory.add(248);
+        moveHistory.add(227);
+        moveHistory.add(206);
+        moveHistory.add(207);
+        moveHistory.add(208);
+        moveHistory.add(229);
+        moveHistory.add(250);
+        moveHistory.add(271);
+        moveHistory.add(292);
+        moveHistory.add(313);
+        moveHistory.add(334);
+        moveHistory.add(333);
+        moveHistory.add(332);
+        moveHistory.add(331);
+        moveHistory.add(330);
+        moveHistory.add(309);
+        moveHistory.add(288);
+        moveHistory.add(287);
+        moveHistory.add(286);
+        moveHistory.add(307);
+        moveHistory.add(328);
+        moveHistory.add(349);
+        moveHistory.add(370);
+        moveHistory.add(369);
+        moveHistory.add(368);
+        moveHistory.add(389);
+        moveHistory.add(410);
+        moveHistory.add(411);
+        moveHistory.add(412);
+        moveHistory.add(413);
+        moveHistory.add(414);
+        moveHistory.add(393);
+        moveHistory.add(372);
+        moveHistory.add(373);
+        moveHistory.add(374);
+        moveHistory.add(375);
+        moveHistory.add(376);
+        moveHistory.add(397);
+        moveHistory.add(418);
+        moveHistory.add(439);
+        printFlag();
+    	}	
+}
+</pre></div>
+</div>
+<p>When run this output:</p>
+<pre><code>buckeye{am4z1ng_j0b_y0u_b1g_j4va_h4ck3r}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

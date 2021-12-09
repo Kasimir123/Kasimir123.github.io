@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-picoCTF - new-vignere</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="picoctf-new-vignere-write-up">picoCTF New Vignere Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 300</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Cryptography</p>
+<p>Comments: Another slight twist on a classic, see if you can recover the flag. (Wrap with picoCTF)</p>
+<pre><code>bkglibgkhghkijphhhejggikgjkbhefgpienefjdioghhchffhmmhhbjgclpjfkp
+</code></pre>
+<h2 id="write-up">Write up:</h2>
+<p>Looking at the code I noticed that this encryption was similar to new caesar but with a longer key length. Because of this I was able to reuse some of the old code I had.</p>
+<p>Looking at the code we can see that the key will always be less than 15, given that the encrypted text is 64 characters, plain text is 32, that means that the key will wrap around so there should be repeats. Based on this we can generate a set of possible keys for each set of encrypted values. After we have the values we can then use the Kasiski examination method to check for the key length, and then we can &quot;brute force&quot; the cipher.</p>
+<p>For that I wrote the following code:</p>
+<div class="lang-python editor-colors"># encrypted text
+enc = "bkglibgkhghkijphhhejggikgjkbhefgpienefjdioghhchffhmmhhbjgclpjfkp"
+
+
+keys = []
+
+# create array
+[keys.append([]) for i in range(0,32)]
+
+# loop through alphabet twice
+for a in ALPHABET:
+	for b in ALPHABET:
+		# generate key pair
+		key = str(a) + str(b)
+		
+		# store plain text		
+		pt = ""
+
+		# unshift all values with key pair
+		for i,c in enumerate(enc):
+			pt += unshift(c, key[i%len(key)])
+
+		# decode
+		pt = b16_decode(pt)
+
+		# loop through decrypted plaintext
+		for cur in range(0, len(pt)):
+
+			# check each plaintext char to see if its valid, if it is then add the arrays
+			if pt[cur] in "abcdef0123456789":
+				keys[cur].append(key)
+
+# print the possible key pairs
+for key in keys:
+	print(key)
+</div>
+<p>Which when run generated:</p>
+<pre><code>['le', 'lf', 'lg', 'lh', 'li', 'lj', 'ob', 'oc', 'od', 'oe', 'of', 'og', 'oh', 'oi', 'oj', 'ok']
+['af', 'ag', 'ah', 'ai', 'aj', 'ak', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj', 'dk', 'dl']
+['ca', 'cl', 'cm', 'cn', 'co', 'cp', 'fa', 'fb', 'fi', 'fj', 'fk', 'fl', 'fm', 'fn', 'fo', 'fp']
+['ae', 'af', 'ag', 'ah', 'ai', 'aj', 'db', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj', 'dk']
+['ba', 'bb', 'bc', 'bd', 'be', 'bf', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'eg', 'en', 'eo', 'ep']
+['be', 'bf', 'bg', 'bh', 'bi', 'bj', 'eb', 'ec', 'ed', 'ee', 'ef', 'eg', 'eh', 'ei', 'ej', 'ek']
+['cd', 'ce', 'cf', 'cg', 'ch', 'ci', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff', 'fg', 'fh', 'fi', 'fj']
+['jb', 'jc', 'jd', 'je', 'jf', 'jg', 'ma', 'mb', 'mc', 'md', 'me', 'mf', 'mg', 'mh', 'mo', 'mp']
+['bb', 'bc', 'bd', 'be', 'bf', 'bg', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'eg', 'eh', 'eo', 'ep']
+['ba', 'bb', 'bc', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'od', 'oe', 'of', 'og', 'oh', 'oi']
+['aa', 'ab', 'ac', 'ad', 'ae', 'af', 'da', 'db', 'dc', 'dd', 'de', 'df', 'dg', 'dn', 'do', 'dp']
+['ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'fb', 'fc', 'fd', 'fe', 'ff', 'fg', 'fh', 'fi', 'fj', 'fk']
+['ad', 'ae', 'af', 'ag', 'ah', 'ai', 'da', 'db', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj']
+['ea', 'el', 'em', 'en', 'eo', 'ep', 'ha', 'hb', 'hi', 'hj', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp']
+['ba', 'bb', 'bc', 'bd', 'bo', 'bp', 'ea', 'eb', 'ec', 'ed', 'ee', 'el', 'em', 'en', 'eo', 'ep']
+['ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'cg', 'cn', 'co', 'cp', 'pa', 'pb', 'pc', 'pd', 'pe', 'pf']
+['jc', 'jd', 'je', 'jf', 'jg', 'jh', 'ma', 'mb', 'mc', 'md', 'me', 'mf', 'mg', 'mh', 'mi', 'mp']
+['be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'oh', 'oi', 'oj', 'ok', 'ol', 'om']
+['ba', 'bb', 'bc', 'bd', 'be', 'bf', 'bm', 'bn', 'bo', 'bp', 'oa', 'ob', 'oc', 'od', 'oe', 'op']
+['da', 'db', 'dc', 'dn', 'do', 'dp', 'ga', 'gb', 'gc', 'gd', 'gk', 'gl', 'gm', 'gn', 'go', 'gp']
+['ci', 'cj', 'ck', 'cl', 'cm', 'cn', 'ff', 'fg', 'fh', 'fi', 'fj', 'fk', 'fl', 'fm', 'fn', 'fo']
+['ab', 'ac', 'ad', 'ae', 'af', 'ag', 'da', 'db', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'do', 'dp']
+['ba', 'bb', 'bm', 'bn', 'bo', 'bp', 'ea', 'eb', 'ec', 'ej', 'ek', 'el', 'em', 'en', 'eo', 'ep']
+['ba', 'bb', 'bc', 'bd', 'be', 'bp', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'em', 'en', 'eo', 'ep']
+['ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'cg', 'ch', 'co', 'cp', 'pb', 'pc', 'pd', 'pe', 'pf', 'pg']
+['gg', 'gh', 'gi', 'gj', 'gk', 'gl', 'jd', 'je', 'jf', 'jg', 'jh', 'ji', 'jj', 'jk', 'jl', 'jm']
+['bb', 'bc', 'bd', 'be', 'bf', 'bg', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'eg', 'eh', 'eo', 'ep']
+['ld', 'le', 'lf', 'lg', 'lh', 'li', 'oa', 'ob', 'oc', 'od', 'oe', 'of', 'og', 'oh', 'oi', 'oj']
+['aa', 'ab', 'am', 'an', 'ao', 'ap', 'da', 'db', 'dc', 'dj', 'dk', 'dl', 'dm', 'dn', 'do', 'dp']
+['fj', 'fk', 'fl', 'fm', 'fn', 'fo', 'ig', 'ih', 'ii', 'ij', 'ik', 'il', 'im', 'in', 'io', 'ip']
+['da', 'db', 'dc', 'dd', 'de', 'dp', 'ga', 'gb', 'gc', 'gd', 'ge', 'gf', 'gm', 'gn', 'go', 'gp']
+['ej', 'ek', 'el', 'em', 'en', 'eo', 'hg', 'hh', 'hi', 'hj', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp']
+</code></pre>
+<p>Looking through this it became fairly obvious that the key pairs repeated every 9 times making the key length 9.</p>
+<p>I then wrote a decryption script to recursively add together the key pairs as well as add one last letter and then test all the possible 9 length keys:</p>
+<div class="lang-python editor-colors"># import string
+import string
+
+# constants
+LOWERCASE_OFFSET = ord("a")
+ALPHABET = string.ascii_lowercase[:16]
+
+# see caesar cipher for what these are
+def b16_decode(cipher):
+	dec = ""
+
+	for c in range(0, len(cipher), 2):
+
+		b = ""
+		b += "{0:b}".format(ALPHABET.index(cipher[c])).zfill(4)
+		b += "{0:b}".format(ALPHABET.index(cipher[c+1])).zfill(4)
+
+		dec += chr(int(b,2))
+    
+	return dec
+
+def unshift(c, k):
+	t1 = ord(c) - LOWERCASE_OFFSET
+	t2 = ord(k) - LOWERCASE_OFFSET
+	return ALPHABET[(t1 - t2) % len(ALPHABET)]
+
+# tries to decrypt
+def get_key(s, matrix):
+	# if we can't go further down
+	if len(matrix) == 1:
+		# add the last value
+		for a in ALPHABET:
+			k = str(s) + str(a)
+			pt = ""
+			for i,c in enumerate(enc):
+				pt += unshift(c, k[i%len(k)])
+
+			pt = b16_decode(pt)
+
+			# if the plain text is good then print it
+			if all(c in "abcdef0123456789" for c in pt):
+				print(pt)
+		return
+	
+	# recursively build key string
+	for x in matrix[0]:
+		s2 = str(s) + str(x)
+		get_key(s2, matrix[1:len(matrix)])
+
+# encrypted text
+enc = "bkglibgkhghkijphhhejggikgjkbhefgpienefjdioghhchffhmmhhbjgclpjfkp"
+
+
+keys = []
+
+# create array
+[keys.append([]) for i in range(0,32)]
+
+# loop through alphabet twice
+for a in ALPHABET:
+	for b in ALPHABET:
+		# generate key pair
+		key = str(a) + str(b)
+		
+		# store plain text		
+		pt = ""
+
+		# unshift all values with key pair
+		for i,c in enumerate(enc):
+			pt += unshift(c, key[i%len(key)])
+
+		# decode
+		pt = b16_decode(pt)
+
+		# loop through decrypted plaintext
+		for cur in range(0, len(pt)):
+
+			# check each plaintext char to see if its valid, if it is then add the arrays
+			if pt[cur] in "abcdef0123456789":
+				keys[cur].append(key)
+
+# print the possible key pairs
+for key in keys:
+	print(key)
+
+# decrypt the code
+get_key("", keys[0:5])
+</div>
+<p>When run this output:</p>
+<pre><code>698987ddce418c11e9aa564229c50fda
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

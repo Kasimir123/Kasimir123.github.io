@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-08-RaRCTF - Dotty</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="rarctf-dotty-write-up">RaRCTF Dotty Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Points: 150</p>
+<p>Comments: My new program will keep your secrets safe using military grade encryption!</p>
+<h2 id="write-up">Write up:</h2>
+<p>Running the file command on dotty.exe we can see that it is a .NET assembly so I opened the file using dnSpy:</p>
+<div class="lang-c# editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">using</span> System;
+<span style="color:Blue;">using</span> System.Collections.Generic;
+<span style="color:Blue;">using</span> System.Linq;
+
+<span style="color:Blue;">namespace</span> Dotty
+{
+	<span style="color:Green;">// Token: 0x02000002 RID: 2</span>
+	<span style="color:Blue;">internal</span> <span style="color:Blue;">class</span> Program
+	{
+		<span style="color:Green;">// Token: 0x06000002 RID: 2 RVA: 0x00002058 File Offset: 0x00000258</span>
+		<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">string</span> Dotter(<span style="color:Blue;">string</span> phrase)
+		{
+			<span style="color:Blue;">return</span> <span style="color:Blue;">string</span>.Join(<span style="color:#A31515;">&quot;|&quot;</span>, <span style="color:Blue;">from</span> <span style="color:Blue;">char</span> c <span style="color:Blue;">in</span> phrase
+			<span style="color:Blue;">select</span> Program.mapper[<span style="color:Blue;">char</span>.ToUpper(c)]);
+		}
+
+		<span style="color:Green;">// Token: 0x06000003 RID: 3 RVA: 0x0000208C File Offset: 0x0000028C</span>
+		<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">void</span> Main(<span style="color:Blue;">string</span>[] args)
+		{
+			Console.Write(<span style="color:#A31515;">&quot;Please enter your secret to encode: &quot;</span>);
+			<span style="color:Blue;">string</span> phrase = Console.ReadLine();
+			<span style="color:Blue;">string</span> text = Program.Dotter(phrase);
+			<span style="color:Blue;">if</span> (text == Check.check)
+			{
+				Console.WriteLine(<span style="color:#A31515;">&quot;That&#39;s the right secret!&quot;</span>);
+			}
+			<span style="color:Blue;">else</span>
+			{
+				Console.WriteLine(text);
+			}
+		}
+
+		<span style="color:Green;">// Token: 0x04000001 RID: 1</span>
+		<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> Dictionary&lt;<span style="color:Blue;">char</span>, <span style="color:Blue;">string</span>&gt; mapper = <span style="color:Blue;">new</span> Dictionary&lt;<span style="color:Blue;">char</span>, <span style="color:Blue;">string</span>&gt;
+		{
+			{
+				<span style="color:#A31515;">&#39; &#39;</span>,
+				<span style="color:#A31515;">&quot;/&quot;</span>
+			},
+...
+			{
+				<span style="color:#A31515;">&#39;0&#39;</span>,
+				<span style="color:#A31515;">&quot;-----&quot;</span>
+			}
+		};
+	}
+}
+</pre></div>
+</div>
+<div class="lang-c# editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">using</span> System;
+
+<span style="color:Blue;">namespace</span> Dotty
+{
+	<span style="color:Green;">// Token: 0x02000003 RID: 3</span>
+	<span style="color:Blue;">internal</span> <span style="color:Blue;">class</span> Check
+	{
+		<span style="color:Green;">// Token: 0x04000003 RID: 3</span>
+		<span style="color:Blue;">public</span> <span style="color:Blue;">static</span> <span style="color:Blue;">string</span> check = <span style="color:#A31515;">&quot;-|....|.|/|..-.|.-..|.-|--.|/|..|...|/|---|.---|--.-|-..-|.|-.--|...--|..-|--|--..|.....|.--|..|--|.-..|.|.-..|.....|....-|-|.-|.....|-.-|--...|---|.-|--..|-|--.|..---|..---|--...|--.|-...|--..|..-.|-....|-.|.-..|--.-|.--.|.|--...|-|-....|.--.|--..|--...|.-..|.....|-|--.|-.-.|-.|-..|-...|--|--|...--|-..|.-|-.|.-..|.....|/|-...|.-|...|.|...--|..---&quot;</span>;
+	}
+}
+</pre></div>
+</div>
+<p>From this I could see that check was the flag in it's encrypted form. So what I did was extract the dictionary and write a script to convert the flag back to text:</p>
+<div class="lang-python editor-colors"># flag string
+flag = "-|....|.|/|..-.|.-..|.-|--.|/|..|...|/|---|.---|--.-|-..-|.|-.--|...--|..-|--|--..|.....|.--|..|--|.-..|.|.-..|.....|....-|-|.-|.....|-.-|--...|---|.-|--..|-|--.|..---|..---|--...|--.|-...|--..|..-.|-....|-.|.-..|--.-|.--.|.|--...|-|-....|.--.|--..|--...|.-..|.....|-|--.|-.-.|-.|-..|-...|--|--|...--|-..|.-|-.|.-..|.....|/|-...|.-|...|.|...--|..---"
+
+# mapped dictionary
+mapped = [[ ' ', "/" ], [ 'A', ".-" ], [ 'B', "-..." ], [ 'C', "-.-." ], [ 'D', "-.." ], [ 'E', "." ], [ 'F', "..-." ], [ 'G', "--." ], [ 'H', "...." ], [ 'I', ".." ], [ 'J', ".---" ], [ 'K', "-.-" ], [ 'L', ".-.." ], [ 'M', "--" ], [ 'N', "-." ], [ 'O', "---" ], [ 'P', ".--." ], [ 'Q', "--.-" ], [ 'R', ".-." ], [ 'S', "..." ], [ 'T', "-" ], [ 'U', "..-" ], [ 'V', "...-" ], [ 'W', ".--" ], [ 'X', "-..-" ], [ 'Y', "-.--" ], [ 'Z', "--.." ], [ '1', ".----" ], [ '2', "..---" ], [ '3', "...--" ], [ '4', "....-" ], [ '5', "....." ], [ '6', "-...." ], [ '7', "--..." ], [ '8', "---.." ], [ '9', "----." ], [ '0', "-----" ]  ]
+
+# split the flag the way the program does it
+flag = flag.split("|")
+
+s = ""
+
+# go through and convert the flag
+for i in flag:
+	for j in mapped:
+		if i == j[1]:
+			s += j[0]
+			break	
+
+
+print(s)
+</div>
+<p>When run this pritned out:</p>
+<pre><code>THE FLAG IS OJQXEY3UMZ5WIMLEL54TA5K7OAZTG227GBZF6NLQPE7T6PZ7L5TGCNDBMM3DANL5 BASE32
+</code></pre>
+<p>When converted from BASE32 I got:</p>
+<pre><code>rarctf{d1d_y0u_p33k_0r_5py????_fa4ac605}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

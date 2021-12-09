@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-09-Battelle - Punch-Out!</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="battelle-punch-out-write-up">Battelle Punch-Out Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Points: 50</p>
+<p>Comments:</p>
+<pre><code>We uncovered an early version of Mike Tyson's Punch-Out! This is quite possibly the greatest fighting game ever released featuring a 2-D Mike Tyson.
+
+Rumor has it that this version of the game had a few bugs impacting the difficulty... See if you can beat it!
+
+Flag format: the flag will be the sequence of actions you enter to win the game
+</code></pre>
+<h2 id="write-up">Write up:</h2>
+<p>Opening the program in a decompiler I saw that the main function was:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+
+  dest[5] = __readfsqword(0x28u);
+  *(_QWORD *)s = 0LL;
+  v9 = 0LL;
+  v10 = 0LL;
+  v11 = 0LL;
+  v6[4] = 0;
+  dest[0] = 0LL;
+  dest[1] = 0LL;
+  dest[2] = 0LL;
+  dest[3] = 0LL;
+  srand(0x539u);
+  puts(
+    <span style="color:#A31515;">&quot;=======================================================================\n&quot;</span>
+    <span style="color:#A31515;">&quot;                Mike Tyson&#39;s Puch-Out! (pre-alpha build)!              \n&quot;</span>
+    <span style="color:#A31515;">&quot;                (imagine this is flashing and looks cool)              \n&quot;</span>
+    <span style="color:#A31515;">&quot;                        &gt;&gt; graphics go here &lt;&lt;                         \n&quot;</span>
+    <span style="color:#A31515;">&quot;=======================================================================&quot;</span>);
+  printf(
+    <span style="color:#A31515;">&quot;Choose your opponent: \n0:  %s\n1:  %s\n2:  %s\n3:  %s\n4:  %s\n5:  %s\n6:  %s\n7:  %s\n8:  %s\n9:  %s\n&gt;&gt; &quot;</span>,
+    boxers,
+    off_4028,
+    off_4030,
+    off_4038,
+    off_4040,
+    off_4048,
+    off_4050,
+    off_4058,
+    off_4060,
+    off_4068);
+  *(_DWORD *)v6 = (<span style="color:Blue;">unsigned</span> __int8)getchar();
+  v3 = v6[0] - 48;
+  <span style="color:Blue;">if</span> ( v3 &lt;= 9 )
+    __asm { jmp     rax }
+  v4 = strlen(src);
+  memcpy(dest, src, v4);
+  puts(<span style="color:#A31515;">&quot;Sorry that boxer is not available. We&#39;re sending you in with Mike Tyson, smarty pants.&quot;</span>);
+  getchar();
+  printf(
+    <span style="color:#A31515;">&quot;\n&quot;</span>
+    <span style="color:#A31515;">&quot;Action list: \n&quot;</span>
+    <span style="color:#A31515;">&quot;0: Dodge and counter right punch.\n&quot;</span>
+    <span style="color:#A31515;">&quot;1: Dodge and counter left punch.\n&quot;</span>
+    <span style="color:#A31515;">&quot;2: Dodge and counter right kick.\n&quot;</span>
+    <span style="color:#A31515;">&quot;3: Dodge and counter left kick.\n&quot;</span>
+    <span style="color:#A31515;">&quot;\n&quot;</span>
+    <span style="color:#A31515;">&quot;%s&#39;s so fast, you need to pick your action before he does!\n&quot;</span>,
+    (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)dest);
+  <span style="color:Blue;">for</span> ( i = 0; i &lt;= 23; ++i )
+  {
+    printf(<span style="color:#A31515;">&quot;Action: &quot;</span>);
+    fgets(s, 32, _bss_start);
+    __isoc99_sscanf(s, <span style="color:#A31515;">&quot;%u&quot;</span>, &amp;v6[1]);
+    <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)combatAction(dest, *(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> *)&amp;v6[1]) )
+    {
+      printf(<span style="color:#A31515;">&quot;[Attack: %d] %s connects snd knocks you down! KO!\n\n&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(i + 1), (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)dest);
+      <span style="color:Blue;">return</span> 0;
+    }
+    printf(
+      <span style="color:#A31515;">&quot;[Attack: %d] You dodge %s&#39;s attack and connect with your own! Keep going!\n\n&quot;</span>,
+      (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(i + 1),
+      (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)dest);
+  }
+  puts(<span style="color:#A31515;">&quot;\nRoll credits. You win! Your flag is the winning comabt sequence. i.e. 020130112...\n&quot;</span>);
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>I noticed two things here, the first was that to get the right combination we would need to loop through 24 times return 1 from the combatAction function each time:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+  <span style="color:Blue;">for</span> ( i = 0; i &lt;= 23; ++i )
+  {
+    printf(<span style="color:#A31515;">&quot;Action: &quot;</span>);
+    fgets(s, 32, _bss_start);
+    __isoc99_sscanf(s, <span style="color:#A31515;">&quot;%u&quot;</span>, &amp;v6[1]);
+    <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)combatAction(dest, *(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> *)&amp;v6[1]) )
+    {
+      printf(<span style="color:#A31515;">&quot;[Attack: %d] %s connects snd knocks you down! KO!\n\n&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(i + 1), (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)dest);
+      <span style="color:Blue;">return</span> 0;
+    }
+    printf(
+      <span style="color:#A31515;">&quot;[Attack: %d] You dodge %s&#39;s attack and connect with your own! Keep going!\n\n&quot;</span>,
+</pre></div>
+</div>
+<p>I also noticed that the program seeded rand:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+  srand(0x539u);
+</pre></div>
+</div>
+<p>From here I decided to look more into the combatAction function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+_BOOL8 __fastcall combatAction(<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *a1, <span style="color:Blue;">int</span> a2)
+{
+
+  v3 = artificialIntelligence();
+  printf(<span style="color:#A31515;">&quot;%s %s\n&quot;</span>, a1, (&amp;combatMoves)[v3]);
+  <span style="color:Blue;">return</span> a2 == v3;
+}
+</pre></div>
+</div>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 artificialIntelligence()
+{
+  <span style="color:Blue;">return</span> (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(rand() % 4);
+}
+</pre></div>
+</div>
+<p>a2 was the number that we input each time, so in order to get the correct number (move) we would need to predict the next rand number.</p>
+<p>The program looked like it was written in C so I decided to write a little program to populate srand and then predict all the numbers needed to win:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> main()
+{
+	srand(1337);
+	<span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 0; i &lt;= 23; i++) {
+		printf(<span style="color:#A31515;">&quot;%d&quot;</span>, rand() % 4);
+	}
+}
+</pre></div>
+</div>
+<p>This output:</p>
+<pre><code>123322100333030310222003
+</code></pre>
+<p>Which was the flag.</p>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

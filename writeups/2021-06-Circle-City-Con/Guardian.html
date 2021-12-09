@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-06-Circle-City-Con - Guardian</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="circle-city-con-guardian-write-up">Circle City Con Guardian Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<h2 id="write-up">Write up:</h2>
+<p>Looking at the main function I saw:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *v3; 
+  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *v4; 
+  size_t v5;
+  <span style="color:Blue;">char</span> *v6;
+  __int64 v7; 
+
+  setup(argc, argv, envp);
+  v3 = (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)getflag();
+  <span style="color:Blue;">if</span> ( !v3 )
+    <span style="color:Blue;">goto</span> LABEL_12;
+  v4 = v3;
+  v5 = strlen(v3);
+  v6 = (<span style="color:Blue;">char</span> *)calloc(1uLL, v5 + 2);
+  <span style="color:Blue;">if</span> ( !v6 )
+    <span style="color:Blue;">goto</span> LABEL_12;
+  __printf_chk(1LL, <span style="color:#A31515;">&quot;%s\n\nHOOOOOOOOOO Goes there? Do you have the password?\n&gt; &quot;</span>, owl);
+  <span style="color:Blue;">if</span> ( !fgets(v6, (<span style="color:Blue;">int</span>)v5 + 1, stdin) )
+    <span style="color:Blue;">goto</span> LABEL_12;
+  <span style="color:Blue;">if</span> ( v5 )
+  {
+    v7 = 0LL;
+    <span style="color:Blue;">while</span> ( v6[v7] == v4[v7] )
+    {
+      ++v7;
+      __printf_chk(1LL, byte_200F);
+      <span style="color:Blue;">if</span> ( (v7 &amp; 7) != 0 )
+      {
+        <span style="color:Blue;">if</span> ( v7 == v5 )
+          <span style="color:Blue;">goto</span> LABEL_10;
+      }
+      <span style="color:Blue;">else</span>
+      {
+        putchar(10);
+        <span style="color:Blue;">if</span> ( v7 == v5 )
+          <span style="color:Blue;">goto</span> LABEL_10;
+      }
+    }
+    puts(<span style="color:#A31515;">&quot;\nHoo hoo hoo!\nThat is incorrect, my guardian.&quot;</span>);
+LABEL_12:
+    exit(0);
+  }
+LABEL_10:
+  puts(<span style="color:#A31515;">&quot;\nWe will do our best.....you have fought well.&quot;</span>);
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>I noticed the checkflag function and took a look at that as well:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">char</span> *getflag()
+{
+  FILE *v0; 
+  <span style="color:Blue;">int</span> v1; 
+  __off_t v2;
+  <span style="color:Blue;">char</span> *v3; 
+  <span style="color:Blue;">char</span> *v4;
+  <span style="color:Blue;">void</span> *v6;
+  <span style="color:Blue;">struct</span> stat v7;
+  <span style="color:Blue;">unsigned</span> __int64 v8; 
+
+  v8 = __readfsqword(0x28u);
+  v0 = fopen(<span style="color:#A31515;">&quot;flag.txt&quot;</span>, <span style="color:#A31515;">&quot;r&quot;</span>);
+  v1 = fileno(v0);
+  __fxstat(1, v1, &amp;v7);
+  v2 = v7.st_size;
+  v3 = (<span style="color:Blue;">char</span> *)calloc(1uLL, v7.st_size + 2);
+  <span style="color:Blue;">if</span> ( fread(v3, 1uLL, v2 + 1, v0) )
+  {
+    v4 = &amp;v3[v2];
+    <span style="color:Blue;">if</span> ( *v4 == 10 )
+      *v4 = 0;
+  }
+  <span style="color:Blue;">else</span>
+  {
+    v6 = v3;
+    v3 = 0LL;
+    free(v6);
+  }
+  fclose(v0);
+  <span style="color:Blue;">return</span> v3;
+}
+</pre></div>
+</div>
+<p>What I got from this is that we could connect and simply brute force the flag one character at a time by reading how many check marks were sent, every 8 characters there would be a new line character added which would mess with our script.</p>
+<p>For this one I was fairly lazy and just manually added the new line each time and near the end I ended up with the following:</p>
+<div class="lang-python editor-colors">from pwn import *
+
+#flag = "CCC{let_"
+# final flag
+flag = "CCC{let_m3_thr0ugh!_let_me_p4ss!_d0_y0u_th1nk_y0u_c4n_h3r?"
+
+# how many items are in the output array when there are no new knowns
+cur = 2
+
+# check for the while loop, if nothing new is found then exit, this was mainly for testing
+check = True
+while (check):
+	check = False
+
+  # brute force all the possible characters
+	for i in range(32, 127):
+		i = chr(i)
+		s = remote("35.224.135.84", 2000)
+
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		s.sendline(flag + i + "}")
+    # these were added each iteration
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		(s.recvline())
+		output = str(s.recvline()).split(" ")
+
+    # parse the output
+		if len(output) > cur:
+			print(output)
+			cur = len(output)
+			print(cur)
+			flag += i
+			print(flag)
+			check = True
+			break
+		(s.recvline())
+</div>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

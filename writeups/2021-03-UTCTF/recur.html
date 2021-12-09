@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-03-UTCTF - recur</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="utctf-recur-write-up">UTCTF recur Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 624</p>
+<p>Jeopardy style CTF</p>
+<p>Category: reverse engineering</p>
+<p>Comment:</p>
+<p>I found this binary that is supposed to print flags.</p>
+<p>It doesn't seem to work properly though...</p>
+<h2 id="write-up">Write up:</h2>
+<p>Running the file we get the following output:</p>
+<pre><code>./recur 
+utflag{
+</code></pre>
+<p>After this the program seems to keep chugging, if left for a bit of time we get one more letter, 0.</p>
+<p>Next I checked what type of file it was and saw that it was a 64 bit ELF file. At this point I started reverse engineering.</p>
+<p>The main function was:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+{
+  <span style="color:Blue;">char</span> v3; <span style="color:Green;">// bl</span>
+  <span style="color:Blue;">unsigned</span> __int8 v4; <span style="color:Green;">// al</span>
+  <span style="color:Blue;">int</span> i; <span style="color:Green;">// [rsp+Ch] [rbp-14h]</span>
+
+  <span style="color:Blue;">for</span> ( i = 0; i &lt;= 27; ++i )
+  {
+    v3 = flag[i];
+    v4 = recurrence(i * i);
+    putchar(v3 ^ v4);
+    fflush(stdout);
+  }
+  <span style="color:Blue;">return</span> 0;
+}
+</pre></div>
+</div>
+<p>This loops through some flag value and then passes the current place squared to the recurrence function before xor'ing them together.</p>
+<p>The recurrence function looked like this:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall recurrence(<span style="color:Blue;">int</span> a1)
+{
+  <span style="color:Blue;">int</span> v2; <span style="color:Green;">// ebx</span>
+
+  <span style="color:Blue;">if</span> ( !a1 )
+    <span style="color:Blue;">return</span> 3LL;
+  <span style="color:Blue;">if</span> ( a1 == 1 )
+    <span style="color:Blue;">return</span> 5LL;
+  v2 = 2 * recurrence(a1 - 1);
+  <span style="color:Blue;">return</span> v2 + 3 * (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)recurrence(a1 - 2);
+}
+</pre></div>
+</div>
+<p>I then also looked at the values of flag:</p>
+<div class="lang-python editor-colors">flag = [0x76, 0x71, 0xC5, 0xA9, 0xE2, 0x22, 0xD8, 0xB5, 0x73, 0xF1, 0x92, 0x28, 0xB2, 0xBF, 0x90, 0x5A, 0x76, 0x77, 0xFC, 0xA6, 0xB3, 0x21, 0x90, 0xDA, 0x6F, 0xB5, 0xCF, 0x38]
+</div>
+<p>As the purpose of this challenge was to complete this program I decided that to do this we would need to optimize the recurrence function. Rather than finding the same numbers over and over again I decided to store all found values in an array and return them. I decided to code this in python since I didn't want to deal with memory allocation in c.</p>
+<div class="lang-python editor-colors"># known flag values
+flag = [0x76, 0x71, 0xC5, 0xA9, 0xE2, 0x22, 0xD8, 0xB5, 0x73, 0xF1, 0x92, 0x28, 0xB2, 0xBF, 0x90, 0x5A, 0x76, 0x77, 0xFC, 0xA6, 0xB3, 0x21, 0x90, 0xDA, 0x6F, 0xB5, 0xCF, 0x38]
+
+# string to store flag in
+s = ""
+
+# known return values
+nums = [3, 5]
+
+# modified recurrence function
+def recurrence(i):
+
+    # if i is in the array then return the found value
+    if i < len(nums):
+        return nums[i]
+
+    # otherwise do the normal stuff
+    x = 2*recurrence(i-1)
+    ret = x + 3* recurrence(i-2)
+
+    # if i is the next number in the array then add it
+    if i == len(nums):
+        nums.append(ret)
+
+    # return the value 
+    return ret
+
+# loop through the flag
+for i in range(0,28):
+    # loop through the values from i to i*i -1
+	for j in range(i, i*i):
+        # add all values to the array
+		recurrence(j)
+    # add value to string, we need to and the result of recurrence with 0xFF 
+    # since char only accepts 2 hex values
+	s += chr(flag[i]^(recurrence(i*i)&0xFF))
+
+# print the string
+print(s)
+</div>
+<p>When run we get the flag:</p>
+<pre><code>utflag{0pt1m1z3_ur_c0d3_l0l}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>

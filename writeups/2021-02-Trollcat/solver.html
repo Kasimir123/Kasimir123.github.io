@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2021-02-Trollcat - solver</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="trollcat-solver-write-up">Trollcat solver Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Points: 500</p>
+<p>Jeopardy style CTF</p>
+<p>Category: Reversing</p>
+<h2 id="write-up">Write up:</h2>
+<p>This challenge gave me a 64 bit executable file:</p>
+<pre><code>file crackme\ \(2\) 
+
+crackme (2): ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=6c8f4137ce00dd9571d3b551dc81d8d4354e4d91, for GNU/Linux 3.2.0, stripped
+</code></pre>
+<p>I then put the file into IDA and found the main function:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+__int64 __fastcall main(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">char</span> **a2, <span style="color:Blue;">char</span> **a3)
+{
+  <span style="color:Blue;">int</span> v3; <span style="color:Green;">// eax</span>
+  <span style="color:Blue;">char</span> buf[264]; <span style="color:Green;">// [rsp+0h] [rbp-110h] BYREF</span>
+  ssize_t v6; <span style="color:Green;">// [rsp+108h] [rbp-8h]</span>
+
+  printf(<span style="color:#A31515;">&quot;Enter key: &quot;</span>);
+  v6 = read(0, buf, 0xFFuLL);
+  buf[v6 - 1] = 0;
+  <span style="color:Blue;">if</span> ( sub_5585577D6200(buf, v6 - 1) )
+  {
+    printf(<span style="color:#A31515;">&quot;Congrats here is your flag: &quot;</span>);
+    v3 = open(<span style="color:#A31515;">&quot;/flag&quot;</span>, 0);
+    sendfile(1, v3, 0LL, 0x100uLL);
+  }
+  <span style="color:Blue;">else</span>
+  {
+    puts(<span style="color:#A31515;">&quot;Invalid key&quot;</span>);
+  }
+  <span style="color:Blue;">return</span> 0LL;
+}
+</pre></div>
+</div>
+<p>The program read in a value and then checked it with sub_5585577D6200, this function looked like:</p>
+<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
+_BOOL8 __fastcall sub_5585577D6200(<span style="color:Blue;">char</span> *a1, <span style="color:Blue;">unsigned</span> __int64 a2)
+{
+  <span style="color:Blue;">int</span> i; <span style="color:Green;">// [rsp+1Ch] [rbp-4h]</span>
+
+  <span style="color:Blue;">for</span> ( i = 0; a2 &gt; i; ++i )
+  {
+    <span style="color:Blue;">if</span> ( a1[i] &lt;= 47 || a1[i] &gt; 122 )
+      <span style="color:Blue;">return</span> 0LL;
+  }
+  <span style="color:Blue;">if</span> ( *a1 + a1[3] != 100 )
+    <span style="color:Blue;">return</span> 0LL;
+  <span style="color:Blue;">if</span> ( a1[1] + a1[18] != 214 )
+    <span style="color:Blue;">return</span> 0LL;
+  <span style="color:Blue;">if</span> ( a1[2] + a1[4] != 178 )
+    <span style="color:Blue;">return</span> 0LL;
+  <span style="color:Blue;">if</span> ( ((<span style="color:Blue;">unsigned</span> __int8)a1[5] ^ (<span style="color:Blue;">unsigned</span> __int8)a1[6]) != 76 )
+    <span style="color:Blue;">return</span> 0LL;
+  <span style="color:Blue;">if</span> ( a1[8] - a1[7] != 17 )
+    <span style="color:Blue;">return</span> 0LL;
+  <span style="color:Blue;">if</span> ( a1[10] - a1[9] != 59 )
+    <span style="color:Blue;">return</span> 0LL;
+  <span style="color:Blue;">if</span> ( a1[12] + a1[11] - a1[13] != 69 )
+    <span style="color:Blue;">return</span> 0LL;
+  <span style="color:Blue;">if</span> ( a1[15] + a1[14] - a1[16] != 31 )
+    <span style="color:Blue;">return</span> 0LL;
+  <span style="color:Blue;">if</span> ( a1[16] + a1[17] - a1[18] == 88 )
+    <span style="color:Blue;">return</span> ((<span style="color:Blue;">unsigned</span> __int8)(a1[20] ^ a1[19]) ^ (<span style="color:Blue;">unsigned</span> __int8)a1[21]) == 69;
+  <span style="color:Blue;">return</span> 0LL;
+}
+</pre></div>
+</div>
+<p>From this I knew that I would need a string that was 22 characters long and matched the compares, I decided to use the z3 library to create a python script:</p>
+<div class="lang-python editor-colors">from z3 import *
+
+# Creates solver
+s = Solver()
+
+# Creates an array of variables to solve for
+flag = [BitVec(f"flag_{i}", 8) for i in range(0, 22)]
+
+# checks that variables are in range
+for i in range(0, 22):
+    s.add(flag[i] >= 48)
+    s.add(flag[i] <= 122)
+
+# adds all the checks
+s.add(flag[0] + flag[3] == 100)
+s.add(flag[1] + flag[18] == 214)
+s.add(flag[2] + flag[4] == 178)
+s.add(flag[5] ^ flag[6] == 76)
+s.add(flag[8] - flag[7] == 17)
+s.add(flag[10] - flag[9] == 59)
+s.add(flag[12] + flag[11] - flag[13] == 69)
+s.add(flag[15] + flag[14] - flag[16] == 31)
+s.add(flag[16] + flag[17] - flag[18] == 88)
+s.add((flag[20] ^ flag[19]) ^ flag[21] == 69)
+
+# print if we were able to solve or not
+print(s.check())
+
+# gets the variables
+m = s.model()
+
+# initializes an empty dictionary
+t = {}
+
+# parses the model to dictionary
+for a in str(m)[1:-1].split(','):
+    t[a.split('=')[0].strip()] = a.split('=')[1].strip()
+
+# creates the string from the variables
+s =""
+for i in [BitVec(f"flag_{i}", 8) for i in range(0, 22)]:
+    s += chr(int(t[str(i)]))
+
+# prints the string
+print(s)
+</div>
+<p>Running the script I got:</p>
+<pre><code>sat
+4wj0Hp&lt;9J9ty=qI?iN_gXz
+</code></pre>
+<p>I then entered this key through netcat and got the flag:</p>
+<pre><code>nc 157.230.33.195 4444   
+
+Enter key: 4wj0Hp&lt;9J9ty=qI?iN_gXz
+Congrats here is your flag: Trollcat{z3_b4by}
+</code></pre>
+
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+</html>
