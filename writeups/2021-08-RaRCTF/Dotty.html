@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,72 +74,65 @@
 <p>Comments: My new program will keep your secrets safe using military grade encryption!</p>
 <h2 id="write-up">Write up:</h2>
 <p>Running the file command on dotty.exe we can see that it is a .NET assembly so I opened the file using dnSpy:</p>
-<div class="lang-c# editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">using</span> System;
-<span style="color:Blue;">using</span> System.Collections.Generic;
-<span style="color:Blue;">using</span> System.Linq;
+<pre><code class="language-text">using System;
+using System.Collections.Generic;
+using System.Linq;
 
-<span style="color:Blue;">namespace</span> Dotty
+namespace Dotty
 {
-	<span style="color:Green;">// Token: 0x02000002 RID: 2</span>
-	<span style="color:Blue;">internal</span> <span style="color:Blue;">class</span> Program
+	// Token: 0x02000002 RID: 2
+	internal class Program
 	{
-		<span style="color:Green;">// Token: 0x06000002 RID: 2 RVA: 0x00002058 File Offset: 0x00000258</span>
-		<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">string</span> Dotter(<span style="color:Blue;">string</span> phrase)
+		// Token: 0x06000002 RID: 2 RVA: 0x00002058 File Offset: 0x00000258
+		private static string Dotter(string phrase)
 		{
-			<span style="color:Blue;">return</span> <span style="color:Blue;">string</span>.Join(<span style="color:#A31515;">&quot;|&quot;</span>, <span style="color:Blue;">from</span> <span style="color:Blue;">char</span> c <span style="color:Blue;">in</span> phrase
-			<span style="color:Blue;">select</span> Program.mapper[<span style="color:Blue;">char</span>.ToUpper(c)]);
+			return string.Join("|", from char c in phrase
+			select Program.mapper[char.ToUpper(c)]);
 		}
 
-		<span style="color:Green;">// Token: 0x06000003 RID: 3 RVA: 0x0000208C File Offset: 0x0000028C</span>
-		<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">void</span> Main(<span style="color:Blue;">string</span>[] args)
+		// Token: 0x06000003 RID: 3 RVA: 0x0000208C File Offset: 0x0000028C
+		private static void Main(string[] args)
 		{
-			Console.Write(<span style="color:#A31515;">&quot;Please enter your secret to encode: &quot;</span>);
-			<span style="color:Blue;">string</span> phrase = Console.ReadLine();
-			<span style="color:Blue;">string</span> text = Program.Dotter(phrase);
-			<span style="color:Blue;">if</span> (text == Check.check)
+			Console.Write("Please enter your secret to encode: ");
+			string phrase = Console.ReadLine();
+			string text = Program.Dotter(phrase);
+			if (text == Check.check)
 			{
-				Console.WriteLine(<span style="color:#A31515;">&quot;That&#39;s the right secret!&quot;</span>);
+				Console.WriteLine("That's the right secret!");
 			}
-			<span style="color:Blue;">else</span>
+			else
 			{
 				Console.WriteLine(text);
 			}
 		}
 
-		<span style="color:Green;">// Token: 0x04000001 RID: 1</span>
-		<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> Dictionary&lt;<span style="color:Blue;">char</span>, <span style="color:Blue;">string</span>&gt; mapper = <span style="color:Blue;">new</span> Dictionary&lt;<span style="color:Blue;">char</span>, <span style="color:Blue;">string</span>&gt;
+		// Token: 0x04000001 RID: 1
+		private static Dictionary<char, string> mapper = new Dictionary<char, string>
 		{
 			{
-				<span style="color:#A31515;">&#39; &#39;</span>,
-				<span style="color:#A31515;">&quot;/&quot;</span>
+				' ',
+				"/"
 			},
 ...
 			{
-				<span style="color:#A31515;">&#39;0&#39;</span>,
-				<span style="color:#A31515;">&quot;-----&quot;</span>
+				'0',
+				"-----"
 			}
 		};
 	}
-}
-</pre></div>
-</div>
-<div class="lang-c# editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">using</span> System;
+}</code></pre><pre><code class="language-text">using System;
 
-<span style="color:Blue;">namespace</span> Dotty
+namespace Dotty
 {
-	<span style="color:Green;">// Token: 0x02000003 RID: 3</span>
-	<span style="color:Blue;">internal</span> <span style="color:Blue;">class</span> Check
+	// Token: 0x02000003 RID: 3
+	internal class Check
 	{
-		<span style="color:Green;">// Token: 0x04000003 RID: 3</span>
-		<span style="color:Blue;">public</span> <span style="color:Blue;">static</span> <span style="color:Blue;">string</span> check = <span style="color:#A31515;">&quot;-|....|.|/|..-.|.-..|.-|--.|/|..|...|/|---|.---|--.-|-..-|.|-.--|...--|..-|--|--..|.....|.--|..|--|.-..|.|.-..|.....|....-|-|.-|.....|-.-|--...|---|.-|--..|-|--.|..---|..---|--...|--.|-...|--..|..-.|-....|-.|.-..|--.-|.--.|.|--...|-|-....|.--.|--..|--...|.-..|.....|-|--.|-.-.|-.|-..|-...|--|--|...--|-..|.-|-.|.-..|.....|/|-...|.-|...|.|...--|..---&quot;</span>;
+		// Token: 0x04000003 RID: 3
+		public static string check = "-|....|.|/|..-.|.-..|.-|--.|/|..|...|/|---|.---|--.-|-..-|.|-.--|...--|..-|--|--..|.....|.--|..|--|.-..|.|.-..|.....|....-|-|.-|.....|-.-|--...|---|.-|--..|-|--.|..---|..---|--...|--.|-...|--..|..-.|-....|-.|.-..|--.-|.--.|.|--...|-|-....|.--.|--..|--...|.-..|.....|-|--.|-.-.|-.|-..|-...|--|--|...--|-..|.-|-.|.-..|.....|/|-...|.-|...|.|...--|..---";
 	}
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>From this I could see that check was the flag in it's encrypted form. So what I did was extract the dictionary and write a script to convert the flag back to text:</p>
-<div class="lang-python editor-colors"># flag string
+<pre><code class="language-python"># flag string
 flag = "-|....|.|/|..-.|.-..|.-|--.|/|..|...|/|---|.---|--.-|-..-|.|-.--|...--|..-|--|--..|.....|.--|..|--|.-..|.|.-..|.....|....-|-|.-|.....|-.-|--...|---|.-|--..|-|--.|..---|..---|--...|--.|-...|--..|..-.|-....|-.|.-..|--.-|.--.|.|--...|-|-....|.--.|--..|--...|.-..|.....|-|--.|-.-.|-.|-..|-...|--|--|...--|-..|.-|-.|.-..|.....|/|-...|.-|...|.|...--|..---"
 
 # mapped dictionary
@@ -157,15 +151,11 @@ for i in flag:
 			break	
 
 
-print(s)
-</div>
+print(s)</code></pre>
 <p>When run this pritned out:</p>
-<pre><code>THE FLAG IS OJQXEY3UMZ5WIMLEL54TA5K7OAZTG227GBZF6NLQPE7T6PZ7L5TGCNDBMM3DANL5 BASE32
-</code></pre>
+<pre><code class="language-text">THE FLAG IS OJQXEY3UMZ5WIMLEL54TA5K7OAZTG227GBZF6NLQPE7T6PZ7L5TGCNDBMM3DANL5 BASE32</code></pre>
 <p>When converted from BASE32 I got:</p>
-<pre><code>rarctf{d1d_y0u_p33k_0r_5py????_fa4ac605}
-</code></pre>
-
+<pre><code class="language-text">rarctf{d1d_y0u_p33k_0r_5py????_fa4ac605}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -178,5 +168,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,17 +74,16 @@
 <p>Comments: In RSA, a small e value can be problematic, but what about N? Can you decrypt this?</p>
 <h2 id="write-up">Write up:</h2>
 <p>Using cat on the file I got:</p>
-<pre><code>cat values           
+<pre><code class="language-text">cat values           
 
 Decrypt my super sick RSA:
 c: 62324783949134119159408816513334912534343517300880137691662780895409992760262021
 n: 1280678415822214057864524798453297819181910621573945477544758171055968245116423923
-e: 65537  
-</code></pre>
+e: 65537  </code></pre>
 <p>This was a pretty small n value so I decided to use alpertron to find the prime factors:</p>
 <p>1899107986527483535344517113948531328331 and 674357869540600933870145899564746495319033</p>
 <p>I then plugged these values and the c, n, and e into the rsa cracker script I wrote for dvCTF:</p>
-<div class="lang-python editor-colors"># all prime factors
+<pre><code class="language-python"># all prime factors
 x = [1899107986527483535344517113948531328331, 674357869540600933870145899564746495319033]
 
 # n
@@ -109,12 +109,9 @@ d = pow(e, -1, i)
 ans = pow(ct, d, n)
 
 # print the answer
-print(bytes.fromhex(hex(ans)[2:]).decode('ascii'))
-</div>
+print(bytes.fromhex(hex(ans)[2:]).decode('ascii'))</code></pre>
 <p>When run I got:</p>
-<pre><code>picoCTF{sma11_N_n0_g0od_05012767}
-</code></pre>
-
+<pre><code class="language-text">picoCTF{sma11_N_n0_g0od_05012767}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -127,5 +124,6 @@ print(bytes.fromhex(hex(ans)[2:]).decode('ascii'))
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

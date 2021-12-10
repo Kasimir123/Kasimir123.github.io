@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,7 +73,7 @@
 <p>Category: Reversing</p>
 <h2 id="write-up">Write up:</h2>
 <p>Finally a challenge in this CTF that I actually ran to solve. Running strings got me a partial flag as well as a bunch of text:</p>
-<pre><code>$ strings key2sucess   
+<pre><code class="language-text">$ strings key2sucess   
 
 ...
 loneTable
@@ -88,25 +89,21 @@ But i need a key in return
 Can you give me the key
 Great. Well here is your key:
 Hmm. This not the key.
-;*3$&quot;
+;*3$"
 GCC: (Debian 9.3.0-18) 9.3.0
-crtstuff.c
-</code></pre>
+crtstuff.c</code></pre>
 <p>At this point I suspected that the flag was Never_stop_learning but still decided to run the program to confirm:</p>
-<pre><code>$ ./key2sucess   
+<pre><code class="language-text">$ ./key2sucess   
 Hey.
 I have a flag for you...
 But i need a key in return
 Can you give me the key
 
-&gt; 
-</code></pre>
+> </code></pre>
 <p>Looking at the strings I got earlier I tried submitting Constant_learning_is_the_key which ended up being the correct answer:</p>
-<pre><code>&gt; Constant_learning_is_the_key
+<pre><code class="language-text">> Constant_learning_is_the_key
 Great. Well here is your key:
-flag{Never_stop_learning}
-</code></pre>
-
+flag{Never_stop_learning}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -119,5 +116,6 @@ flag{Never_stop_learning}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

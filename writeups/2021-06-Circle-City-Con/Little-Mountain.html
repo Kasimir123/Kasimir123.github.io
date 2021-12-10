@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,33 +73,29 @@
 <h2 id="write-up">Write up:</h2>
 <p>I noticed that the binary was packed with UPX so I used upx to unpack it.</p>
 <p>The main function is:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl __noreturn main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">int</span> v3;
-  <span style="color:Blue;">int</span> v4;
-  <span style="color:Blue;">int</span> v5;
-  <span style="color:Blue;">int</span> v6; 
-  <span style="color:Blue;">char</span> v7;
-  <span style="color:Blue;">int</span> v8; 
+  int v3;
+  int v4;
+  int v5;
+  int v6; 
+  char v7;
+  int v8; 
 
   setabuf(argc, argv, envp);
-  <span style="color:Blue;">while</span> ( 1 )
+  while ( 1 )
   {
-    puts(<span style="color:#A31515;">&quot;Option 0: Guess the number&quot;</span>);
-    puts(<span style="color:#A31515;">&quot;Option 1: Change the number&quot;</span>);
-    puts(<span style="color:#A31515;">&quot;Option 2: Exit&quot;</span>);
-    _isoc99_scanf((<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)<span style="color:#A31515;">&quot;%d&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)&amp;v8, v3, v4, v5, v6, v7);
-    ((<span style="color:Blue;">void</span> (*)(<span style="color:Blue;">void</span>))funcs[v8])();
+    puts("Option 0: Guess the number");
+    puts("Option 1: Change the number");
+    puts("Option 2: Exit");
+    _isoc99_scanf((unsigned int)"%d", (unsigned int)&v8, v3, v4, v5, v6, v7);
+    ((void (*)(void))funcs[v8])();
   }
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>I followed the code into setabuf and saw:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">void</span> (__fastcall __noreturn *setabuf())()
+<pre><code class="language-c">void (__fastcall __noreturn *setabuf())()
 {
-  <span style="color:Blue;">void</span> (__fastcall __noreturn *result)();
+  void (__fastcall __noreturn *result)();
 
   srandom(1337LL);
   magic = random();
@@ -107,44 +104,39 @@
   qword_4CC350 = (__int64)c;
   result = d;
   qword_4CC358 = (__int64)d;
-  <span style="color:Blue;">return</span> result;
-}
-</pre></div>
-</div>
+  return result;
+}</code></pre>
 <p>I followed the last function pointer to:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">void</span> __noreturn d()
+<pre><code class="language-c">void __noreturn d()
 {
-  <span style="color:Blue;">char</span> v0; 
-  <span style="color:Blue;">int</span> v1; 
-  <span style="color:Blue;">int</span> v2;
-  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *v3;
+  char v0; 
+  int v1; 
+  int v2;
+  const char *v3;
   _BYTE *v4; 
-  <span style="color:Blue;">int</span> v5;
-  <span style="color:Blue;">int</span> i; 
+  int v5;
+  int i; 
 
-  v4 = &amp;unk_49E022;
-  v3 = <span style="color:#A31515;">&quot;little_mountain&quot;</span>;
-  v2 = j_strlen_ifunc(&amp;unk_49E022);
-  v1 = j_strlen_ifunc(<span style="color:#A31515;">&quot;little_mountain&quot;</span>);
+  v4 = &unk_49E022;
+  v3 = "little_mountain";
+  v2 = j_strlen_ifunc(&unk_49E022);
+  v1 = j_strlen_ifunc("little_mountain");
   v5 = 0;
-  <span style="color:Blue;">if</span> ( modded == 20 )
+  if ( modded == 20 )
   {
-    <span style="color:Blue;">for</span> ( i = 0; i &lt; v2; ++i )
+    for ( i = 0; i < v2; ++i )
     {
-      <span style="color:Blue;">if</span> ( v5 == v1 )
+      if ( v5 == v1 )
         v5 = 0;
       v0 = v4[i] ^ v3[v5++];
-      write(1LL, &amp;v0, 1LL);
+      write(1LL, &v0, 1LL);
     }
-    puts(<span style="color:#A31515;">&quot;\n&quot;</span>);
+    puts("\n");
   }
   exit(0LL);
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>This seemed like the function that prints out the flag so I wrote a little script to print it out:</p>
-<div class="lang-python editor-colors"># initialize variables
+<pre><code class="language-python"># initialize variables
 v5 = 0
 v3 = "little_mountain"
 v4 = [0x0A, 0x05, 0x15, 0x13, 0x17, 0x07, 0x6B, 0x0F, 0x16, 0x06, 0x59, 0x47, 0x11, 0x5C, 0x1B, 0x1C, 0x1D, 0x47, 0x1C, 0x01, 0x55, 0x2A, 0x03, 0x58, 0x41, 0x5F, 0x1A, 0x1C]
@@ -168,12 +160,9 @@ for i in range(0, v2):
 	s += chr(v0)
 
 # print flag
-print(s)
-</div>
+print(s)</code></pre>
 <p>When run we get:</p>
-<pre><code>flag{b4bys73p5upt3hm0un741n}
-</code></pre>
-
+<pre><code class="language-text">flag{b4bys73p5upt3hm0un741n}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -186,5 +175,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

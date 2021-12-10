@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,7 +73,7 @@
 <p>Category: Code</p>
 <p>Comment:</p>
 <p>Below is some code that reads integers from stdin and pases a list of them to a function named &quot;AreNumbersEven&quot;. Implement the &quot;AreNumbersEven&quot; function.</p>
-<div class="lang-python editor-colors">def AreNumbersEven(numbers):
+<pre><code class="language-python">def AreNumbersEven(numbers):
   #impliment here
 
 # Read space delimited integers from stdin and 
@@ -80,20 +81,17 @@
 numbers = raw_input()
 integer_list = [int(i) for i in numbers.split(' ')]
 even_odd_boolean_list = AreNumbersEven(integer_list)
-print even_odd_boolean_list 
-</div>
+print even_odd_boolean_list </code></pre>
 <p>This function takes a list of integers and returns a boolean list: True if number was even, and False if odd.</p>
 <p>If implemented right, the attached code will print the answer returned from your function.</p>
 <p>stdin example:</p>
-<pre><code>66  0 -47
-</code></pre>
+<pre><code class="language-text">66  0 -47</code></pre>
 <p>stdout example:</p>
-<pre><code>[True, True, False]
-</code></pre>
+<pre><code class="language-text">[True, True, False]</code></pre>
 <p>You can ignore default code below and instead use code from attached file. Ensure not to print anything else during your code execution!*</p>
 <h2 id="write-up">Write Up:</h2>
 <p>This challenge was for python2. I just used mod and printed out the result.</p>
-<div class="lang-python editor-colors">def AreNumbersEven(numbers):
+<pre><code class="language-python">def AreNumbersEven(numbers):
     numList = []
     for x in numbers:
         numList.append(x %2 == 0)
@@ -104,9 +102,7 @@ print even_odd_boolean_list
 numbers = raw_input()
 integer_list = [int(i) for i in numbers.split(' ')]
 even_odd_boolean_list = AreNumbersEven(integer_list)
-print(even_odd_boolean_list )
-</div>
-
+print(even_odd_boolean_list )</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -119,5 +115,6 @@ print(even_odd_boolean_list )
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

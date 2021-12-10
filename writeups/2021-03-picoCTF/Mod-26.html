@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,11 +73,9 @@
 <p>Category: Cryptography</p>
 <p>Comments:</p>
 <p>Cryptography can be easy, do you know what ROT13 is?</p>
-<pre><code>cvpbPGS{arkg_gvzr_V'yy_gel_2_ebhaqf_bs_ebg13_MAZyqFQj}
-</code></pre>
-<h2 id="write-up">Write up:</h2>
+<pre><code class="language-text">cvpbPGS{arkg_gvzr_V'yy_gel_2_ebhaqf_bs_ebg13_MAZyqFQj}</code></pre><h2 id="write-up">Write up:</h2>
 <p>ROT13 is a cipher that rotates each character 13 letters over. The mod 26 is a hint about looping back around. You can use an online decoder but since I'm trying to explain things a bit more here I decided to make a small script to decode this:</p>
-<div class="lang-python editor-colors"># initial encrypted text
+<pre><code class="language-python"># initial encrypted text
 flag = "cvpbPGS{arkg_gvzr_V'yy_gel_2_ebhaqf_bs_ebg13_MAZyqFQj}"
 
 # A-Z
@@ -103,12 +102,9 @@ for x in flag:
 		s += x
 
 # print string
-print(s)
-</div>
+print(s)</code></pre>
 <p>Once run we get:</p>
-<pre><code>picoCTF{next_time_I'll_try_2_rounds_of_rot13_ZNMldSDw}
-</code></pre>
-
+<pre><code class="language-text">picoCTF{next_time_I'll_try_2_rounds_of_rot13_ZNMldSDw}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -121,5 +117,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

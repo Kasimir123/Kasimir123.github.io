@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,60 +72,51 @@
 <p>Category: Reverse Engineering</p>
 <h2 id="write-up">Write up:</h2>
 <p>Running the file we see that we are in an infinite loop:</p>
-<pre><code>./warmup 
+<pre><code class="language-text">./warmup 
 I have a number from 1 to 10, what is it? 
 2
 Try again
 I have a number from 1 to 10, what is it? 
-6
-</code></pre>
+6</code></pre>
 <p>Looking for these strings in the binary does not prove useful at all either but when I ctrl-c'd I noticed that it seemed to be running in a .nim file:</p>
-<pre><code>Try again
+<pre><code class="language-text">Try again
 I have a number from 1 to 10, what is it? 
 ^CTraceback (most recent call last)
 /root/rev/warmup.nim(39) warmup
-/root/Nim/lib/system/io.nim(491) readLine
-</code></pre>
+/root/Nim/lib/system/io.nim(491) readLine</code></pre>
 <p>Instead of going down the rabbit hole of trying to figure out what nim is I decided to do some dynamic analysis.</p>
 <p>I found the following function which seemed to be the while loop that I wanted:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
- <span style="color:Blue;">while</span> ( 1 )
+<pre><code class="language-c"> while ( 1 )
   {
     v5 = 38LL;
-    v6 = <span style="color:#A31515;">&quot;/root/rev/warmup.nim&quot;</span>;
-    nimZeroMem_0(&amp;v10, 8LL);
-    v10 = decodeStr__R9b5IlyQjG2mcdkp9a67LGTQ((__int64)&amp;TM__ijE9cayl8YPnol3rizbiT0g_5, 0x3F1997CCu);
-    echoBinSafe(&amp;v10, 1LL);
-    asgnRef_1(&amp;guess__62AlRyOQv9cCViqvgI14ssA, 0LL);
+    v6 = "/root/rev/warmup.nim";
+    nimZeroMem_0(&v10, 8LL);
+    v10 = decodeStr__R9b5IlyQjG2mcdkp9a67LGTQ((__int64)&TM__ijE9cayl8YPnol3rizbiT0g_5, 0x3F1997CCu);
+    echoBinSafe(&v10, 1LL);
+    asgnRef_1(&guess__62AlRyOQv9cCViqvgI14ssA, 0LL);
     v5 = 39LL;
-    v6 = <span style="color:#A31515;">&quot;/root/rev/warmup.nim&quot;</span>;
+    v6 = "/root/rev/warmup.nim";
     v1 = readLine__IfmAdseskhTUnfEYpOo5fA(stdin);
-    asgnRef_1(&amp;guess__62AlRyOQv9cCViqvgI14ssA, v1);
+    asgnRef_1(&guess__62AlRyOQv9cCViqvgI14ssA, v1);
     v5 = 41LL;
-    v6 = <span style="color:#A31515;">&quot;/root/rev/warmup.nim&quot;</span>;
-    <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> __int8)eqStrings(guess__62AlRyOQv9cCViqvgI14ssA, answer__2bKjAtEJJ5cp19bpmXcStjQ) )
-      <span style="color:Blue;">break</span>;
+    v6 = "/root/rev/warmup.nim";
+    if ( (unsigned __int8)eqStrings(guess__62AlRyOQv9cCViqvgI14ssA, answer__2bKjAtEJJ5cp19bpmXcStjQ) )
+      break;
     v5 = 42LL;
-    v6 = <span style="color:#A31515;">&quot;/root/rev/warmup.nim&quot;</span>;
-    nimZeroMem_0(&amp;v9, 8LL);
-    v9 = decodeStr__R9b5IlyQjG2mcdkp9a67LGTQ((__int64)&amp;TM__ijE9cayl8YPnol3rizbiT0g_7, 0x2149F624u);
-    echoBinSafe(&amp;v9, 1LL);
-  }
-</pre></div>
-</div>
+    v6 = "/root/rev/warmup.nim";
+    nimZeroMem_0(&v9, 8LL);
+    v9 = decodeStr__R9b5IlyQjG2mcdkp9a67LGTQ((__int64)&TM__ijE9cayl8YPnol3rizbiT0g_7, 0x2149F624u);
+    echoBinSafe(&v9, 1LL);
+  }</code></pre>
 <p>After reading in my string it compared it against the answer__2bKjAtEJJ5cp19bpmXcStjQ so I took a look at that memory while the program was running.</p>
 <p>I saw that that contained:</p>
-<pre><code>7FD1C85020A0
-</code></pre>
+<pre><code class="language-text">7FD1C85020A0</code></pre>
 <p>And decided to look at the memory that this pointed to where I saw the following:</p>
-<pre><code> 53 65 63 75 72 69 6E 65  74 73 7B 4E 69 6D 70 65  Securinets{Nimpe
+<pre><code class="language-text"> 53 65 63 75 72 69 6E 65  74 73 7B 4E 69 6D 70 65  Securinets{Nimpe
  72 30 72 5F 54 68 65 5F  61 4E 69 6D 41 74 6F 72  r0r_The_aNimAtor
- 7D 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  }...............
-</code></pre>
+ 7D 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  }...............</code></pre>
 <p>The flag was:</p>
-<pre><code>Securinets{Nimper0r_The_aNimAtor}
-</code></pre>
-
+<pre><code class="language-text">Securinets{Nimper0r_The_aNimAtor}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -137,5 +129,6 @@ I have a number from 1 to 10, what is it?
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

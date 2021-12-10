@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,7 +73,7 @@
 <p>Category: Code</p>
 <p>Comment:</p>
 <p>We found the following file on a hacked terminal:</p>
-<div class="lang-python editor-colors">import random
+<pre><code class="language-python">import random
 flag = "flag{not_the_flag}"
 seeds = []
 for i in range(0,len(flag)):
@@ -90,10 +91,9 @@ for i in range(0, len(flag)):
     print(str(rands))
 
 print(res)
-print(seeds)
-</div>
+print(seeds)</code></pre>
 <p>We also found sample output from a previous run:</p>
-<pre><code>[249, 182, 79]
+<pre><code class="language-text">[249, 182, 79]
 [136, 198, 95]
 [159, 167, 6]
 [223, 136, 101]
@@ -117,11 +117,9 @@ print(seeds)
 [180, 239, 144]
 [13, 209, 132]
 [184, 161, 235, 97, 140, 111, 84, 182, 162, 135, 76, 10, 69, 246, 195, 152, 133, 88, 229, 104, 111, 22, 39]
-[9925, 8861, 5738, 1649, 2696, 6926, 1839, 7825, 6434, 9699, 227, 7379, 9024, 817, 4022, 7129, 1096, 4149, 6147, 2966, 1027, 4350, 4272]
-</code></pre>
-<h2 id="write-up">Write up:</h2>
+[9925, 8861, 5738, 1649, 2696, 6926, 1839, 7825, 6434, 9699, 227, 7379, 9024, 817, 4022, 7129, 1096, 4149, 6147, 2966, 1027, 4350, 4272]</code></pre><h2 id="write-up">Write up:</h2>
 <p>This challenge was python 3. The challenge may look a bit confusing at first but once you look at it it is fairly simple. We are given the &quot;encrypted&quot; values, the seeds for random, and then some other information that is meant to confuse us. I extracted the &quot;encrypted&quot; characters and the seeds and then set random and use those values to xor the right flag.</p>
-<div class="lang-python editor-colors">import random
+<pre><code class="language-python">import random
 
 x = [184, 161, 235, 97, 140, 111, 84, 182, 162, 135, 76, 10, 69, 246, 195, 152, 133, 88, 229, 104, 111, 22, 39]
 
@@ -142,12 +140,9 @@ print(flag)
 st=""
 for i in range(0, len(flag)):
     st += chr(flag[i])
-print(st)
-</div>
+print(st)</code></pre>
 <p>After running I got:</p>
-<pre><code>flag{Oppsire_LULZ_fixed}
-</code></pre>
-
+<pre><code class="language-text">flag{Oppsire_LULZ_fixed}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -160,5 +155,6 @@ print(st)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

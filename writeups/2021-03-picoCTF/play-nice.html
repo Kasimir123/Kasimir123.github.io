@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,22 +74,20 @@
 <p>Comments: Not all ancient ciphers were so bad... The flag is not in standard format. nc mercury.picoctf.net 30568 playfair.py</p>
 <h2 id="write-up">Write up:</h2>
 <p>Running the netcat command we get:</p>
-<pre><code>nc mercury.picoctf.net 30568
+<pre><code class="language-text">nc mercury.picoctf.net 30568
 
 Here is the alphabet: 0fkdwu6rp8zvsnlj3iytxmeh72ca9bg5o41q
 Here is the encrypted message: herfayo7oqxrz7jwxx15ie20p40u1i
-What is the plaintext message?
-</code></pre>
+What is the plaintext message?</code></pre>
 <p>Looking into the python script provided I first generated the matrix using the provided alphabet so that I had it to look at:</p>
-<div class="lang-python editor-colors"># [['0', 'f', 'k', 'd', 'w', 'u'], 
+<pre><code class="language-python"># [['0', 'f', 'k', 'd', 'w', 'u'], 
 #  ['6', 'r', 'p', '8', 'z', 'v'], 
 #  ['s', 'n', 'l', 'j', '3', 'i'], 
 #  ['y', 't', 'x', 'm', 'e', 'h'], 
 #  ['7', '2', 'c', 'a', '9', 'b'], 
-#  ['g', '5', 'o', '4', '1', 'q']]
-</div>
+#  ['g', '5', 'o', '4', '1', 'q']]</code></pre>
 <p>I then started slowing reversing what the encryption did. From the encryption I saw that for each character one was added so the length would be the same. But that every pair relied on each other so I would need to iterate through two at a time:</p>
-<div class="lang-python editor-colors"># decrypt string function
+<pre><code class="language-python"># decrypt string function
 def decrypt_string(s, matrix):
 	# place to store result
     result = ""
@@ -100,10 +99,9 @@ def decrypt_string(s, matrix):
 		result += decrypt_pair(s[i:i+2], matrix)
 
     # return result
-	return result
-</div>
+	return result</code></pre>
 <p>Next I looked at the encrypt pair function. I then looked at how the different cases were encrypted, checked for those cases and then decrypted:</p>
-<div class="lang-python editor-colors"># decrypt each pair
+<pre><code class="language-python"># decrypt each pair
 def decrypt_pair(pair, matrix):
 
     # get the indices in the matrix
@@ -119,10 +117,9 @@ def decrypt_pair(pair, matrix):
 		return matrix[(p1[0] - 1)  % SQUARE_SIZE][p1[1]] + matrix[(p2[0] - 1)  % SQUARE_SIZE][p2[1]]
 
     # else
-	return matrix[p1[0]][p2[1]] + matrix[p2[0]][p1[1]]
-</div>
+	return matrix[p1[0]][p2[1]] + matrix[p2[0]][p1[1]]</code></pre>
 <p>This gave me the following script:</p>
-<div class="lang-python editor-colors"># alphabet for matrix
+<pre><code class="language-python"># alphabet for matrix
 alphabet = "0fkdwu6rp8zvsnlj3iytxmeh72ca9bg5o41q"
 
 # square size
@@ -187,20 +184,16 @@ m = generate_square(alphabet)
 enc_msg = "herfayo7oqxrz7jwxx15ie20p40u1i"
 
 # decrypt string
-print(decrypt_string(enc_msg, m))
-</div>
+print(decrypt_string(enc_msg, m))</code></pre>
 <p>When run I got:</p>
-<pre><code>emf57mgc51tp693dtt4g3h7f8ouwq3
-</code></pre>
+<pre><code class="language-text">emf57mgc51tp693dtt4g3h7f8ouwq3</code></pre>
 <p>When put into the nc instance I got the flag:</p>
-<pre><code>nc mercury.picoctf.net 30568
+<pre><code class="language-text">nc mercury.picoctf.net 30568
 
 Here is the alphabet: 0fkdwu6rp8zvsnlj3iytxmeh72ca9bg5o41q
 Here is the encrypted message: herfayo7oqxrz7jwxx15ie20p40u1i
 What is the plaintext message? emf57mgc51tp693dtt4g3h7f8ouwq3
-Congratulations! Here's the flag: 007d0a696aaad7fb5ec21c7698e4f754
-</code></pre>
-
+Congratulations! Here's the flag: 007d0a696aaad7fb5ec21c7698e4f754</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -213,5 +206,6 @@ Congratulations! Here's the flag: 007d0a696aaad7fb5ec21c7698e4f754
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,7 +72,7 @@
 <p>Category: Reverse Engineerings</p>
 <h2 id="write-up">Write up:</h2>
 <p>I used uncompyle6 to decompile the wargames .pyc file and found the following:</p>
-<div class="lang-python editor-colors">game = ["FALKEN'S MAZE", 'TIC TAC TOE ', 'GLOBAL THERMONUCLEAR WAR']
+<pre><code class="language-python">game = ["FALKEN'S MAZE", 'TIC TAC TOE ', 'GLOBAL THERMONUCLEAR WAR']
 
 def validateLaunchcode(launchcode):
     if len(launchcode[::-2]) != 12 or len(launchcode[15:]) != 9:
@@ -121,11 +122,10 @@ def validateLaunchcode(launchcode):
             else:
                 if KARMA == MISSILE:
                     print(okk)
-                    exit()
-</div>
+                    exit()</code></pre>
 <p>This split the key into 3 different components and checked each, this also told me that the game I wanted to get was 'GLOBAL THERMONUCLEAR WAR'.</p>
 <p>I then wrote the following:</p>
-<div class="lang-python editor-colors"># first encrypted key
+<pre><code class="language-python"># first encrypted key
 correct = [159, 218, 153, 214, 45, 206, 153, 374]
 
 # string to store result
@@ -169,17 +169,13 @@ for i in range(0, len(KARMA)):
     I = (I+1)%len(KEY)
 
 # print all
-print(s)
-</div>
+print(s)</code></pre>
 <p>This then output:</p>
-<pre><code>m4n741n_
+<pre><code class="language-text">m4n741n_
 m4n741n_p34c3_XV
-m4n741n_p34c3_XVT9022GLD
-</code></pre>
+m4n741n_p34c3_XVT9022GLD</code></pre>
 <p>When entered into the &quot;game&quot; we got:</p>
-<pre><code>GLUG{15_7h15_r34l_0r_15_17_g4m3??}
-</code></pre>
-
+<pre><code class="language-text">GLUG{15_7h15_r34l_0r_15_17_g4m3??}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -192,5 +188,6 @@ m4n741n_p34c3_XVT9022GLD
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,7 +74,7 @@
 <p>Comments: What could go wrong if we let Word documents run programs? (aka &quot;in-the-clear&quot;)</p>
 <h2 id="write-up">Write up:</h2>
 <p>Based on the hint we want to see any macros in the file they provided us, we are going to use oletools:</p>
-<pre><code>olevba -c ./weird.docm                                                                                                                             100 ⨯
+<pre><code class="language-text">olevba -c ./weird.docm                                                                                                                             100 ⨯
 olevba 0.56 on Python 3.9.1 - http://decalage.info/python/oletools
 ===============================================================================
 FILE: ./weird.docm
@@ -84,13 +85,13 @@ VBA MACRO ThisDocument.cls
 in file: word/vbaProject.bin - OLE stream: 'VBA/ThisDocument'
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 Sub AutoOpen()
-    MsgBox &quot;Macros can run any program&quot;, 0, &quot;Title&quot;
+    MsgBox "Macros can run any program", 0, "Title"
     Signature
 
 End Sub
  
  Sub Signature()
-    Selection.TypeText Text:=&quot;some text&quot;
+    Selection.TypeText Text:="some text"
     Selection.TypeParagraph
     
  End Sub
@@ -98,17 +99,14 @@ End Sub
  Sub runpython()
 
 Dim Ret_Val
-Args = &quot;&quot;&quot;&quot; '&quot;&quot;&quot;
-Ret_Val = Shell(&quot;python -c 'print(\&quot;cGljb0NURnttNGNyMHNfcl9kNG5nM3IwdXN9\&quot;)'&quot; &amp; &quot; &quot; &amp; Args, vbNormalFocus)
+Args = """" '"""
+Ret_Val = Shell("python -c 'print(\"cGljb0NURnttNGNyMHNfcl9kNG5nM3IwdXN9\")'" & " " & Args, vbNormalFocus)
 If Ret_Val = 0 Then
-   MsgBox &quot;Couldn't run python script!&quot;, vbOKOnly
+   MsgBox "Couldn't run python script!", vbOKOnly
 End If
-End Sub
-</code></pre>
+End Sub</code></pre>
 <p>I then used a base64 decoder to turn the string into the flag:</p>
-<pre><code>picoCTF{m4cr0s_r_d4ng3r0us}
-</code></pre>
-
+<pre><code class="language-text">picoCTF{m4cr0s_r_d4ng3r0us}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -121,5 +119,6 @@ End Sub
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

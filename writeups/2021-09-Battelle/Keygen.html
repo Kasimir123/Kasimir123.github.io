@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,66 +72,57 @@
 <p>Category: Reverse Engineering</p>
 <p>Points: 100</p>
 <p>Comments:</p>
-<pre><code>One of our employees doesn't trust &quot;Big Crypto&quot; and decided to roll his own key generator, claiming it was impossible ot predict! See if you can crack his code... the Flag will be the input that produces the requested password
+<pre><code class="language-text">One of our employees doesn't trust "Big Crypto" and decided to roll his own key generator, claiming it was impossible ot predict! See if you can crack his code... the Flag will be the input that produces the requested password
 
-The solution will be in ALL CAPS
-</code></pre>
-<h2 id="write-up">Write up:</h2>
+The solution will be in ALL CAPS</code></pre><h2 id="write-up">Write up:</h2>
 <p>Opening the main function in a decompiler I saw:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">void</span> *v3; <span style="color:Green;">// esp</span>
-  size_t v5; <span style="color:Green;">// [esp+2Ch] [ebp-41Ch]</span>
-  <span style="color:Blue;">char</span> Destination[16]; <span style="color:Green;">// [esp+30h] [ebp-418h] BYREF</span>
-  <span style="color:Blue;">char</span> Buffer[1032]; <span style="color:Green;">// [esp+40h] [ebp-408h] BYREF</span>
+  void *v3; // esp
+  size_t v5; // [esp+2Ch] [ebp-41Ch]
+  char Destination[16]; // [esp+30h] [ebp-418h] BYREF
+  char Buffer[1032]; // [esp+40h] [ebp-408h] BYREF
 
   v3 = alloca(16);
   __main();
-  printf(<span style="color:#A31515;">&quot;Name/Password Generator:\n&quot;</span>);
-  printf(<span style="color:#A31515;">&quot;1) Figure out the algorithm\n&quot;</span>);
-  printf(<span style="color:#A31515;">&quot;2) Name: ?    Password: AFMWAFPE\n&quot;</span>);
-  <span style="color:Blue;">do</span>
+  printf("Name/Password Generator:\n");
+  printf("1) Figure out the algorithm\n");
+  printf("2) Name: ?    Password: AFMWAFPE\n");
+  do
   {
-    printf(<span style="color:#A31515;">&quot;Name: &quot;</span>);
+    printf("Name: ");
     fgets(Buffer, 1024, (FILE *)__iob[0]._ptr);
     Destination[strlen(Buffer) + 15] = 0;
   }
-  <span style="color:Blue;">while</span> ( !Buffer[0] );
+  while ( !Buffer[0] );
   Sleep(0x5DCu);
   strncpy(Destination, Buffer, 8u);
   Destination[8] = 0;
   v5 = strlen(Buffer);
   computePassword(Destination, v5);
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  return 0;
+}</code></pre>
 <p>From here I could see that our username will always be 8 characters since that is all the program looks at. I then went into the computePassword function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl computePassword(_BYTE *a1, <span style="color:Blue;">char</span> a2)
+<pre><code class="language-c">int __cdecl computePassword(_BYTE *a1, char a2)
 {
-  <span style="color:Blue;">int</span> v2; <span style="color:Green;">// ecx</span>
+  int v2; // ecx
 
-  data[0] = (<span style="color:Blue;">unsigned</span> __int8)(122 - *a1) % 0x1Au + 65;
+  data[0] = (unsigned __int8)(122 - *a1) % 0x1Au + 65;
   v2 = 1;
-  <span style="color:Blue;">do</span>
+  do
   {
-    data[v2] = (<span style="color:Blue;">unsigned</span> __int8)(a2 + a1[v2] + v2 + data[v2] - data[v2 - 1]) % 0x1Au + 65;
+    data[v2] = (unsigned __int8)(a2 + a1[v2] + v2 + data[v2] - data[v2 - 1]) % 0x1Au + 65;
     ++v2;
   }
-  <span style="color:Blue;">while</span> ( (v2 &amp; 8) == 0 );
+  while ( (v2 & 8) == 0 );
   Sleep(0x5DCu);
-  <span style="color:Blue;">return</span> printf(<span style="color:#A31515;">&quot;Password: %s\n&quot;</span>, data);
-}
-</pre></div>
-</div>
+  return printf("Password: %s\n", data);
+}</code></pre>
 <p>I also extracted the data array:</p>
-<pre><code>ABCDEFGH
-</code></pre>
+<pre><code class="language-text">ABCDEFGH</code></pre>
 <p>Looking at the above function I could tell that it modified the data based on the input name and the previously solved for password character for the second character on and simply subtracted 122 by the first character, modding it, and then adding 65 to make it uppercase for the first character. The program then printed out data as the encrypted password.</p>
 <p>Knowing that our goal was to get the password: AFMWAFPE, I decided to make a z3py script to solve for all the possible usernames that get use that password:</p>
-<div class="lang-py editor-colors"># original data values
+<pre><code class="language-text"># original data values
 og = [0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48]
 
 # end values that we want to get to
@@ -200,10 +192,9 @@ while s.check() == sat:
 
 # print all flags
 [print(i) for i in flags]
-print(len(flags))
-</div>
+print(len(flags))</code></pre>
 <p>When I ran this script the first time I saw that there were 864 flags which was way too many to test, however I noticed that some had the prefix FISH so I decided to grep for that:</p>
-<pre><code>FISHTuhK
+<pre><code class="language-text">FISHTuhK
 FISHTuh1
 FISHTu41
 FISHTu4K
@@ -238,8 +229,7 @@ FISHnuhK
 FISHnuh1
 FISHnu41
 FISHnu4e
-FISHnuhe
-</code></pre>
+FISHnuhe</code></pre>
 <p>I saw that FISHTANK was an option and I tried it and it ended up being the flag.</p>
 
         </article>
@@ -254,5 +244,6 @@ FISHnuhe
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

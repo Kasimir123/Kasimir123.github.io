@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -74,7 +75,7 @@
 <p><img src="./Original-Files/ddr.png" alt="" /></p>
 <p>After looking a little bit I noticed that the background for the first flag was #FFFFFF. Since the flag format was flag I decided to follow the arrows and keep track of the background hex colors.</p>
 <p>The next few values were all in the ascii range so I knew I was on the right track. Then when I hit x7D7D7D I knew I had hit the end so I made a python script to write the hex to chars:</p>
-<div class="lang-python editor-colors"># values
+<pre><code class="language-python"># values
 x = [0xff, 0x6c, 0x61, 0x67, 0x7b, 0x32, 0x61, 0x34, 0x63, 0x36, 0x37, 0x30, 0x36, 0x37, 0x34, 0x30, 0x32, 0x33, 0x62, 0x39, 0x37, 0x32, 0x66, 0x34, 0x65, 0x66, 0x32, 0x62, 0x63, 0x31, 0x39, 0x32, 0x32, 0x34, 0x65, 0x32, 0x35, 0x7d]
 
 # string to save to
@@ -85,11 +86,9 @@ for i in x:
         s += chr(i)
 
 # print string
-print(s)
-</div>
+print(s)</code></pre>
 <p>This output:</p>
-<pre><code>ÿlag{2a4c670674023b972f4ef2bc19224e25}
-</code></pre>
+<pre><code class="language-text">ÿlag{2a4c670674023b972f4ef2bc19224e25}</code></pre>
 <p>The first character is &quot;off&quot; but we know its an f, thats just because of how they set up the first tile.</p>
 
         </article>
@@ -104,5 +103,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

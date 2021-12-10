@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -74,7 +75,7 @@
 <h2 id="write-up">Write up:</h2>
 <p>I decided to open these files up using PIL to play around a little. Xor'ing the various pixels together I noticed that most of the xor values ended up being 255,255,255.</p>
 <p>I then wrote a python script to xor all the values together but the photo was mostly white with a little but of blue in it. I then decided that everything that was pure white should be turned black:</p>
-<div class="lang-python editor-colors"># import Image
+<pre><code class="language-python"># import Image
 from PIL import Image
 
 # open both photos
@@ -106,10 +107,9 @@ for i in range(width1):
 		i3.putpixel((i,j), (x,y,z))
 
 # save the image
-i3.save("test.png", "PNG")
-</div>
+i3.save("test.png", "PNG")</code></pre>
 <p>This resulted in the following image:</p>
-<p><img src="./Photos/test.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2021-03-picoCTF/pixelated/Photos/test.png" alt="" /></p>
 
         </article>
 
@@ -123,5 +123,6 @@ i3.save("test.png", "PNG")
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,64 +72,57 @@
 <p>Category: Reverse Engineering</p>
 <h2 id="write-up">Write up:</h2>
 <p>Opening the binary in a decompiler we can see that we are lucky and the binary wasn't stripped which is awesome. So we start by taking a look at the main function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">if</span> ( argc &gt; 1 &amp;&amp; strstr(argv[1], <span style="color:#A31515;">&quot;.recc&quot;</span>) )
+  if ( argc > 1 && strstr(argv[1], ".recc") )
   {
-    v7 = (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> *)initBytecodeFileWithFile(argv[1]);
+    v7 = (unsigned int *)initBytecodeFileWithFile(argv[1]);
     runProgram(*((_QWORD *)v7 + 2), *((_QWORD *)v7 + 3), *v7);
   }
-  <span style="color:Blue;">else</span> <span style="color:Blue;">if</span> ( argc &gt; 1 &amp;&amp; strstr(argv[1], <span style="color:#A31515;">&quot;.rec&quot;</span>) )
+  else if ( argc > 1 && strstr(argv[1], ".rec") )
   {
-    fileData = (<span style="color:Blue;">void</span> *)readFile(argv[1], &amp;fileSize);
+    fileData = (void *)readFile(argv[1], &fileSize);
     v5 = fileData;
     program = initProgramNode();
-    v6 = initFunctionNode(<span style="color:#A31515;">&quot;main&quot;</span>);
+    v6 = initFunctionNode("main");
     addElementToProgramNode(program, v6);
     curFunction = v6;
-    parseFunction(program, &amp;v5);
-    <span style="color:Blue;">if</span> ( argc == 4 &amp;&amp; !strcmp(argv[2], <span style="color:#A31515;">&quot;-s&quot;</span>) )
+    parseFunction(program, &v5);
+    if ( argc == 4 && !strcmp(argv[2], "-s") )
       v3 = argv[3];
-    <span style="color:Blue;">else</span>
-      v3 = (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)&amp;unk_5008;
+    else
+      v3 = (const char *)&unk_5008;
     compileBytecode(program, v3);
     free(fileData);
     freeProgramNode(program);
   }
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  return 0;
+}</code></pre>
 <p>The file we were given is a .recc file which means we can ignore the else if statement and dive straight into the if statement. Since we check if .recc is in argv[1] we can assume that that is our file name and we pass it into initBytecodeFileWithFile:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> *__fastcall initBytecodeFileWithFile(<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *a1)
+<pre><code class="language-c">int *__fastcall initBytecodeFileWithFile(const char *a1)
 {
-  v3 = (<span style="color:Blue;">int</span> *)malloc(0x20uLL);
-  stream = fopen(a1, <span style="color:#A31515;">&quot;rb&quot;</span>);
+  v3 = (int *)malloc(0x20uLL);
+  stream = fopen(a1, "rb");
   fread(v3 + 2, 4uLL, 1uLL, stream);
   *((_QWORD *)v3 + 2) = malloc(v3[2] + 1);
-  fread(*((<span style="color:Blue;">void</span> **)v3 + 2), 1uLL, v3[2], stream);
+  fread(*((void **)v3 + 2), 1uLL, v3[2], stream);
   v3[1] = 1024;
   *((_QWORD *)v3 + 3) = malloc(v3[1] + 1);
-  <span style="color:Blue;">for</span> ( i = fread(*((<span style="color:Blue;">void</span> **)v3 + 3), 1uLL, 0x400uLL, stream);
+  for ( i = fread(*((void **)v3 + 3), 1uLL, 0x400uLL, stream);
         i == 1024;
-        i = fread((<span style="color:Blue;">void</span> *)(*((_QWORD *)v3 + 3) + *v3), 1uLL, 0x400uLL, stream) )
+        i = fread((void *)(*((_QWORD *)v3 + 3) + *v3), 1uLL, 0x400uLL, stream) )
   {
     *v3 += 1024;
     v3[1] += 1024;
-    *((_QWORD *)v3 + 3) = realloc(*((<span style="color:Blue;">void</span> **)v3 + 3), v3[1] + 1);
+    *((_QWORD *)v3 + 3) = realloc(*((void **)v3 + 3), v3[1] + 1);
   }
   *v3 += i;
   fclose(stream);
-  <span style="color:Blue;">return</span> v3;
-}
-</pre></div>
-</div>
+  return v3;
+}</code></pre>
 <p>The first thing that we do is malloc some space and then open the file and read 4 bytes, the size of an int. We then malloc the amount of memory that we just read from the first 4 bytes and read that amount of data. The rest of the function seems to start by mallocing some memory and then reading in the data, reallocating more memory if needed.</p>
 <p>We then go into the next function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall runProgram(__int64 a1, __int64 a2)
+<pre><code class="language-c">__int64 __fastcall runProgram(__int64 a1, __int64 a2)
 {
   v76 = initializeFunctions(a1);
   v84 = 0;
@@ -137,36 +131,36 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
   v81 = 0;
   v80 = 64;
   ptr = malloc(0x200uLL);
-  <span style="color:Blue;">for</span> ( i = 0; i &lt; v80; ++i )
+  for ( i = 0; i < v80; ++i )
     *((_QWORD *)ptr + i) = malloc(8uLL);
-  <span style="color:Blue;">while</span> ( 1 )
+  while ( 1 )
   {
-    result = *(<span style="color:Blue;">unsigned</span> __int8 *)(v84 + a2);
-    <span style="color:Blue;">if</span> ( (_BYTE)result == 13 )
-      <span style="color:Blue;">return</span> result;
+    result = *(unsigned __int8 *)(v84 + a2);
+    if ( (_BYTE)result == 13 )
+      return result;
     v2 = v84++;
     v75 = *(_BYTE *)(v2 + a2);
-    <span style="color:Blue;">switch</span> ( v75 )
+    switch ( v75 )
     {
-      <span style="color:Blue;">case</span> 1:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
+      case 1:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
         v3 = v83++;
-        *(_QWORD *)&amp;v73[8 * v3 + 8] = *((_QWORD *)&amp;v74 + 1) - v74;
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 2:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
+        *(_QWORD *)&v73[8 * v3 + 8] = *((_QWORD *)&v74 + 1) - v74;
+        break;
+      case 2:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
         v4 = v83++;
-        *(_QWORD *)&amp;v73[8 * v4 + 8] = v74 * *((_QWORD *)&amp;v74 + 1);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 3:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
+        *(_QWORD *)&v73[8 * v4 + 8] = v74 * *((_QWORD *)&v74 + 1);
+        break;
+      case 3:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
         v6 = v83++;
-        *(_QWORD *)&amp;v73[8 * v6 + 8] = *((_QWORD *)&amp;v74 + 1) + v74;
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 8:
+        *(_QWORD *)&v73[8 * v6 + 8] = *((_QWORD *)&v74 + 1) + v74;
+        break;
+      case 8:
         v10 = v84++;
         v73[0] = *(_BYTE *)(v10 + a2);
         v11 = v84++;
@@ -184,9 +178,9 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
         v17 = v84++;
         v73[7] = *(_BYTE *)(v17 + a2);
         v18 = v83++;
-        *(_QWORD *)&amp;v73[8 * v18 + 8] = bytesToLongLong(v73);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 11:
+        *(_QWORD *)&v73[8 * v18 + 8] = bytesToLongLong(v73);
+        break;
+      case 11:
         v19 = v84++;
         v69 = *(_BYTE *)(v19 + a2);
         v20 = v84++;
@@ -195,11 +189,11 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
         v71 = *(_BYTE *)(v21 + a2);
         v22 = v84++;
         v72 = *(_BYTE *)(v22 + a2);
-        v23 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        v24 = bytesToInt(&amp;v69);
+        v23 = *(_QWORD *)&v73[8 * --v83 + 8];
+        v24 = bytesToInt(&v69);
         setLocal(*(_QWORD *)(8LL * v81 + v76), v24, v23);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 12:
+        break;
+      case 12:
         v25 = v84++;
         v69 = *(_BYTE *)(v25 + a2);
         v26 = v84++;
@@ -208,29 +202,29 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
         v71 = *(_BYTE *)(v27 + a2);
         v28 = v84++;
         v72 = *(_BYTE *)(v28 + a2);
-        v29 = bytesToInt(&amp;v69);
+        v29 = bytesToInt(&v69);
         v30 = *(_QWORD *)(8LL * v81 + v76);
         v31 = v83++;
-        *(_QWORD *)&amp;v73[8 * v31 + 8] = getLocal(v30, v29);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 14:
+        *(_QWORD *)&v73[8 * v31 + 8] = getLocal(v30, v29);
+        break;
+      case 14:
         decrementFunction(*(_QWORD *)(8LL * v81 + v76));
         v84 = **((_DWORD **)ptr + --v82);
         v81 = *(_DWORD *)(*((_QWORD *)ptr + v82) + 4LL);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 15:
-        printf(<span style="color:#A31515;">&quot;%lld\n&quot;</span>, *(_QWORD *)&amp;v73[8 * --v83 + 8]);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 16:
+        break;
+      case 15:
+        printf("%lld\n", *(_QWORD *)&v73[8 * --v83 + 8]);
+        break;
+      case 16:
         --v83;
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 19:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
+        break;
+      case 19:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
         v5 = v83++;
-        *(_QWORD *)&amp;v73[8 * v5 + 8] = *((_QWORD *)&amp;v74 + 1) / (__int64)v74;
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 21:
+        *(_QWORD *)&v73[8 * v5 + 8] = *((_QWORD *)&v74 + 1) / (__int64)v74;
+        break;
+      case 21:
         v32 = v84++;
         v69 = *(_BYTE *)(v32 + a2);
         v33 = v84++;
@@ -239,98 +233,98 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
         v71 = *(_BYTE *)(v34 + a2);
         v35 = v84++;
         v72 = *(_BYTE *)(v35 + a2);
-        <span style="color:Blue;">if</span> ( v82 &gt;= v80 )
+        if ( v82 >= v80 )
         {
           v80 *= 2;
           ptr = realloc(ptr, 8LL * v80);
-          <span style="color:Blue;">for</span> ( j = v82; j &lt; v80; ++j )
+          for ( j = v82; j < v80; ++j )
           {
-            v36 = (<span style="color:Blue;">void</span> **)((<span style="color:Blue;">char</span> *)ptr + 8 * j);
+            v36 = (void **)((char *)ptr + 8 * j);
             *v36 = malloc(8uLL);
           }
         }
         *(_DWORD *)(*((_QWORD *)ptr + v82) + 4LL) = v81;
         **((_DWORD **)ptr + v82++) = v84;
-        v81 = bytesToInt(&amp;v69);
+        v81 = bytesToInt(&v69);
         v84 = **(_DWORD **)(8LL * v81 + v76);
         incrementFunction(*(_QWORD *)(8LL * v81 + v76));
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 22:
-        __isoc99_scanf(<span style="color:#A31515;">&quot;%lld&quot;</span>, &amp;v68);
+        break;
+      case 22:
+        __isoc99_scanf("%lld", &v68);
         v37 = v83++;
-        *(_QWORD *)&amp;v73[8 * v37 + 8] = v68;
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 23:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        <span style="color:Blue;">if</span> ( *((_QWORD *)&amp;v74 + 1) != (_QWORD)v74 )
+        *(_QWORD *)&v73[8 * v37 + 8] = v68;
+        break;
+      case 23:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
+        if ( *((_QWORD *)&v74 + 1) != (_QWORD)v74 )
         {
-          <span style="color:Blue;">do</span>
+          do
           {
             v38 = v84++;
             v75 = *(_BYTE *)(v38 + a2);
           }
-          <span style="color:Blue;">while</span> ( v75 != 14 );
+          while ( v75 != 14 );
         }
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 24:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
+        break;
+      case 24:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
         v7 = v83++;
-        *(_QWORD *)&amp;v73[8 * v7 + 8] = v74 | *((_QWORD *)&amp;v74 + 1);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 25:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
+        *(_QWORD *)&v73[8 * v7 + 8] = v74 | *((_QWORD *)&v74 + 1);
+        break;
+      case 25:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
         v8 = v83++;
-        *(_QWORD *)&amp;v73[8 * v8 + 8] = v74 &amp; *((_QWORD *)&amp;v74 + 1);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 26:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
+        *(_QWORD *)&v73[8 * v8 + 8] = v74 & *((_QWORD *)&v74 + 1);
+        break;
+      case 26:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
         v9 = v83++;
-        *(_QWORD *)&amp;v73[8 * v9 + 8] = v74 ^ *((_QWORD *)&amp;v74 + 1);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 27:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        <span style="color:Blue;">if</span> ( *((_QWORD *)&amp;v74 + 1) == (_QWORD)v74 )
+        *(_QWORD *)&v73[8 * v9 + 8] = v74 ^ *((_QWORD *)&v74 + 1);
+        break;
+      case 27:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
+        if ( *((_QWORD *)&v74 + 1) == (_QWORD)v74 )
         {
-          <span style="color:Blue;">do</span>
+          do
           {
             v39 = v84++;
             v75 = *(_BYTE *)(v39 + a2);
           }
-          <span style="color:Blue;">while</span> ( v75 != 14 );
+          while ( v75 != 14 );
         }
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 28:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        <span style="color:Blue;">if</span> ( *((__int64 *)&amp;v74 + 1) &lt; (__int64)v74 )
+        break;
+      case 28:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
+        if ( *((__int64 *)&v74 + 1) < (__int64)v74 )
         {
-          <span style="color:Blue;">do</span>
+          do
           {
             v40 = v84++;
             v75 = *(_BYTE *)(v40 + a2);
           }
-          <span style="color:Blue;">while</span> ( v75 != 14 );
+          while ( v75 != 14 );
         }
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 29:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        <span style="color:Blue;">if</span> ( *((__int64 *)&amp;v74 + 1) &gt; (__int64)v74 )
+        break;
+      case 29:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
+        if ( *((__int64 *)&v74 + 1) > (__int64)v74 )
         {
-          <span style="color:Blue;">do</span>
+          do
           {
             v41 = v84++;
             v75 = *(_BYTE *)(v41 + a2);
           }
-          <span style="color:Blue;">while</span> ( v75 != 14 );
+          while ( v75 != 14 );
         }
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 30:
+        break;
+      case 30:
         v42 = v84++;
         v69 = *(_BYTE *)(v42 + a2);
         v43 = v84++;
@@ -339,12 +333,12 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
         v71 = *(_BYTE *)(v44 + a2);
         v45 = v84++;
         v72 = *(_BYTE *)(v45 + a2);
-        v84 = bytesToInt(&amp;v69);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 31:
-        v84 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 32:
+        v84 = bytesToInt(&v69);
+        break;
+      case 31:
+        v84 = *(_QWORD *)&v73[8 * --v83 + 8];
+        break;
+      case 32:
         v46 = v84++;
         v69 = *(_BYTE *)(v46 + a2);
         v47 = v84++;
@@ -353,10 +347,10 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
         v71 = *(_BYTE *)(v48 + a2);
         v49 = v84++;
         v72 = *(_BYTE *)(v49 + a2);
-        v50 = (<span style="color:Blue;">int</span>)bytesToInt(&amp;v69);
+        v50 = (int)bytesToInt(&v69);
         ++*(_BYTE *)(v50 + a2);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 33:
+        break;
+      case 33:
         v51 = v84++;
         v69 = *(_BYTE *)(v51 + a2);
         v52 = v84++;
@@ -365,15 +359,15 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
         v71 = *(_BYTE *)(v53 + a2);
         v54 = v84++;
         v72 = *(_BYTE *)(v54 + a2);
-        v55 = (<span style="color:Blue;">int</span>)bytesToInt(&amp;v69);
+        v55 = (int)bytesToInt(&v69);
         --*(_BYTE *)(v55 + a2);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 34:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_BYTE *)(v74 + a2) = *(_BYTE *)(*((_QWORD *)&amp;v74 + 1) + a2);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 35:
+        break;
+      case 34:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_BYTE *)(v74 + a2) = *(_BYTE *)(*((_QWORD *)&v74 + 1) + a2);
+        break;
+      case 35:
         v56 = v84++;
         v69 = *(_BYTE *)(v56 + a2);
         v57 = v84++;
@@ -382,12 +376,12 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
         v71 = *(_BYTE *)(v58 + a2);
         v59 = v84++;
         v72 = *(_BYTE *)(v59 + a2);
-        v60 = *(<span style="color:Blue;">unsigned</span> __int8 *)((<span style="color:Blue;">int</span>)bytesToInt(&amp;v69) + a2) &lt;&lt; 8;
-        v61 = v60 + *(<span style="color:Blue;">unsigned</span> __int8 *)((<span style="color:Blue;">int</span>)bytesToInt(&amp;v69) + 1LL + a2);
+        v60 = *(unsigned __int8 *)((int)bytesToInt(&v69) + a2) << 8;
+        v61 = v60 + *(unsigned __int8 *)((int)bytesToInt(&v69) + 1LL + a2);
         v62 = v83++;
-        *(_QWORD *)&amp;v73[8 * v62 + 8] = v61;
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> 36:
+        *(_QWORD *)&v73[8 * v62 + 8] = v61;
+        break;
+      case 36:
         v63 = v84++;
         v69 = *(_BYTE *)(v63 + a2);
         v64 = v84++;
@@ -396,30 +390,27 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
         v71 = *(_BYTE *)(v65 + a2);
         v66 = v84++;
         v72 = *(_BYTE *)(v66 + a2);
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        <span style="color:Blue;">if</span> ( *((_QWORD *)&amp;v74 + 1) == (_QWORD)v74 )
-          v84 = bytesToInt(&amp;v69);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">default</span>:
-        <span style="color:Blue;">continue</span>;
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
+        if ( *((_QWORD *)&v74 + 1) == (_QWORD)v74 )
+          v84 = bytesToInt(&v69);
+        break;
+      default:
+        continue;
     }
   }
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>This function is definitly the meat of our program, this is the interpreter that runs the recurso bytecode and executes our program. The first thing I wanted to look into was checking what intializeFunctions does:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">void</span> *__fastcall initializeFunctions(<span style="color:Blue;">char</span> *a1)
+<pre><code class="language-c">void *__fastcall initializeFunctions(char *a1)
 {
   v25 = 2;
   v24 = 1;
   ptr = malloc(0x10uLL);
   v22 = 1;
-  <span style="color:Blue;">for</span> ( i = *a1; i == 17; i = a1[v16] )
+  for ( i = *a1; i == 17; i = a1[v16] )
   {
     v1 = v22++;
-    <span style="color:Blue;">for</span> ( i = a1[v1]; i != 18; i = a1[v2] )
+    for ( i = a1[v1]; i != 18; i = a1[v2] )
       v2 = v22++;
     v3 = v22++;
     v19[0] = a1[v3];
@@ -437,12 +428,12 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
     v18[2] = a1[v9];
     v10 = v22++;
     v18[3] = a1[v10];
-    <span style="color:Blue;">if</span> ( v24 &gt;= v25 )
+    if ( v24 >= v25 )
     {
       v25 *= 2;
       ptr = realloc(ptr, 8LL * v25);
     }
-    v11 = (<span style="color:Blue;">void</span> **)((<span style="color:Blue;">char</span> *)ptr + 8 * v24 - 8);
+    v11 = (void **)((char *)ptr + 8 * v24 - 8);
     *v11 = malloc(0x20uLL);
     v12 = (_DWORD *)*((_QWORD *)ptr + v24 - 1);
     *v12 = bytesToInt(v18);
@@ -451,96 +442,81 @@ __int64 __fastcall runProgram(__int64 a1, __int64 a2)
     *(_DWORD *)(v13 + 16) = bytesToInt(v19);
     *(_DWORD *)(*((_QWORD *)ptr + v24 - 1) + 24LL) = v24 == 1;
     v14 = *((_QWORD *)ptr + v24 - 1);
-    *(_QWORD *)(v14 + 8) = malloc(8LL * *(<span style="color:Blue;">int</span> *)(v14 + 16));
-    <span style="color:Blue;">for</span> ( j = 0; j &lt; *(_DWORD *)(*((_QWORD *)ptr + v24 - 1) + 16LL); ++j )
+    *(_QWORD *)(v14 + 8) = malloc(8LL * *(int *)(v14 + 16));
+    for ( j = 0; j < *(_DWORD *)(*((_QWORD *)ptr + v24 - 1) + 16LL); ++j )
     {
-      v15 = (<span style="color:Blue;">void</span> **)(*(_QWORD *)(*((_QWORD *)ptr + v24 - 1) + 8LL) + 8LL * j);
+      v15 = (void **)(*(_QWORD *)(*((_QWORD *)ptr + v24 - 1) + 8LL) + 8LL * j);
       *v15 = malloc(0xA0uLL);
     }
     ++v24;
     v16 = v22++;
   }
-  <span style="color:Blue;">return</span> ptr;
-}
-</pre></div>
-</div>
+  return ptr;
+}</code></pre>
 <p>This function starts by mallocing some space and then it checks if the first value in a1 is equal to 17. We then loop and increment a1 while a1 is not equal to 18. After that we fill in two different byte arrays of size 4 each while incrementing a1. We then check if one size is greater than another, if it is then we reallocate the memory we malloced at the start.</p>
 <p>Then we malloc an object and fill in several of its parts, calling bytesToInt on the two arrays we populated earlier. After that we malloc some more space and then increment a1 yet again.</p>
 <p>Back in the runProgram function we now want to look at the next section:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  ptr = malloc(0x200uLL);
-  <span style="color:Blue;">for</span> ( i = 0; i &lt; v80; ++i )
-    *((_QWORD *)ptr + i) = malloc(8uLL);
-</pre></div>
-</div>
+<pre><code class="language-c">  ptr = malloc(0x200uLL);
+  for ( i = 0; i < v80; ++i )
+    *((_QWORD *)ptr + i) = malloc(8uLL);</code></pre>
 <p>We malloc an original pointer and then look through and malloc again which means that this is probably a pointer to an array of pointers.</p>
 <p>We now move on to the first part of the while loop:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  <span style="color:Blue;">while</span> ( 1 )
+<pre><code class="language-c">  while ( 1 )
   {
-    result = *(<span style="color:Blue;">unsigned</span> __int8 *)(v84 + a2);
-    <span style="color:Blue;">if</span> ( (_BYTE)result == 13 )
-      <span style="color:Blue;">return</span> result;
+    result = *(unsigned __int8 *)(v84 + a2);
+    if ( (_BYTE)result == 13 )
+      return result;
     v2 = v84++;
-    v75 = *(_BYTE *)(v2 + a2);
-</pre></div>
-</div>
+    v75 = *(_BYTE *)(v2 + a2);</code></pre>
 <p>From the looks of this program and the fact that a2 is the program data we can assume that v84 is most likely the instruction pointer. We get the current opcode at the ip and if it is 13 then we return that value, if not, we increment the ip and set it to v2, then get the next opcode and save it to v75.</p>
 <p>We now see a massive switch statement that switches on v75:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-    <span style="color:Blue;">switch</span> ( v75 )
+<pre><code class="language-c">    switch ( v75 )
     {
-      <span style="color:Blue;">case</span> 1:
-        *((_QWORD *)&amp;v74 + 1) = *(_QWORD *)&amp;v73[8 * --v83 + 8];
-        *(_QWORD *)&amp;v74 = *(_QWORD *)&amp;v73[8 * --v83 + 8];
+      case 1:
+        *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
+        *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
         v3 = v83++;
-        *(_QWORD *)&amp;v73[8 * v3 + 8] = *((_QWORD *)&amp;v74 + 1) - v74;
-        <span style="color:Blue;">break</span>;
-</pre></div>
-</div>
+        *(_QWORD *)&v73[8 * v3 + 8] = *((_QWORD *)&v74 + 1) - v74;
+        break;</code></pre>
 <p>Since we know that v75 is the current opcode we can assume that the switch is for various different operations, so lets start with the first one since it looks fairly simple. We see that we decrement a value (v83) twice and use that to index from the array v73. We then increment v83 and then subtract the two values from each other and put them back into the array.</p>
 <p>From this we can assume several things, the first is that this case is some sort of subtraction operation, the next thing we can assume is that v73 is the stack since we seem to be popping values off the stack and then pushing values back onto the stack. And the last thing we can assume is that v83 is the stack pointer. With this information we can start deciphering what the rest of the opcodes do.</p>
 <p>For the sake of brevity I am not going to go super in depth into how to figure out each one since you know you have the return stack and the actual stack so the rest can be figured out quite easily, however, I will add a quick summary:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-ISUB        &#39;\x01&#39;
-IMUL        &#39;\x02&#39;
-IADD        &#39;\x03&#39; 
-FADD        &#39;\x04&#39;
-FSUB        &#39;\x05&#39;
-ITOF        &#39;\x06&#39;
-CCONST      &#39;\x07&#39;
-ICONST      &#39;\x08&#39;
-SCONST      &#39;\x09&#39;
-FCONST      &#39;\x0A&#39;
-STORE       &#39;\x0B&#39;
-LOAD        &#39;\x0C&#39;
-HALT        &#39;\x0D&#39;
-RET         &#39;\x0E&#39;
-PRINT       &#39;\x0F&#39;
-POP         &#39;\x10&#39;
-FUNC        &#39;\x11&#39;
-FUNCINFO    &#39;\x12&#39;
-IDIV        &#39;\x13&#39;
-FDIV        &#39;\x14&#39;
-CALL        &#39;\x15&#39;
-INPUT       &#39;\x16&#39;
-CMP         &#39;\x17&#39;
-OR          &#39;\x18&#39;
-AND         &#39;\x19&#39;
-XOR         &#39;\x1A&#39;
-NCMP        &#39;\x1B&#39;
-LTCMP       &#39;\x1C&#39;
-GTCMP       &#39;\x1D&#39;
-JMP         &#39;\x1E&#39;
-IJMP        &#39;\x1F&#39;
-INC         &#39;\x20&#39;
-DEC         &#39;\x21&#39;
-MOV         &#39;\x22&#39;
-MEMP        &#39;\x23&#39;
-CMPJMP      &#39;\x24&#39;
-</pre></div>
-</div>
-<pre><code>ISUB
+<pre><code class="language-c">ISUB        '\x01'
+IMUL        '\x02'
+IADD        '\x03' 
+FADD        '\x04'
+FSUB        '\x05'
+ITOF        '\x06'
+CCONST      '\x07'
+ICONST      '\x08'
+SCONST      '\x09'
+FCONST      '\x0A'
+STORE       '\x0B'
+LOAD        '\x0C'
+HALT        '\x0D'
+RET         '\x0E'
+PRINT       '\x0F'
+POP         '\x10'
+FUNC        '\x11'
+FUNCINFO    '\x12'
+IDIV        '\x13'
+FDIV        '\x14'
+CALL        '\x15'
+INPUT       '\x16'
+CMP         '\x17'
+OR          '\x18'
+AND         '\x19'
+XOR         '\x1A'
+NCMP        '\x1B'
+LTCMP       '\x1C'
+GTCMP       '\x1D'
+JMP         '\x1E'
+IJMP        '\x1F'
+INC         '\x20'
+DEC         '\x21'
+MOV         '\x22'
+MEMP        '\x23'
+CMPJMP      '\x24'</code></pre><pre><code class="language-text">ISUB
 Pops the stack twice, subtracts 2nd item on stack from the 1st item on the stack, then pushes them back onto the stack.
 
 IMUL
@@ -619,11 +595,10 @@ MEMP
 Reads next 4 bytes, then reads the opcode at that location and the next opcode, converts them to an integer, and pushes to the stack.
 
 CMPJMP
-Reads next 4 bytes, pops 2 values from the stack, if they are equal then set ip to the value of the number we read.
-</code></pre>
+Reads next 4 bytes, pops 2 values from the stack, if they are equal then set ip to the value of the number we read.</code></pre>
 <p>From this point I needed to make a disassembler, I decided to make a plugin for Binary Ninja to do this step since that way I would be able to have a nice view.</p>
 <p>I first made a disassembly file named <code>recwrapper.py</code>:</p>
-<div class="lang-py editor-colors">from binaryninja.function import RegisterInfo, InstructionInfo, InstructionTextToken
+<pre><code class="language-text">from binaryninja.function import RegisterInfo, InstructionInfo, InstructionTextToken
 from binaryninja.enums import InstructionTextTokenType, BranchType
 from binaryninjaui import UIContext
 
@@ -755,10 +730,9 @@ class Disassembler():
         elif op == CMPJMP:
             return ([ "CMPJMP",  " ",  str(bytesToInt(data, 1))], 5)
 
-        return ([ "empty"], 1)
-</div>
+        return ([ "empty"], 1)</code></pre>
 <p>What this code does is it takes in a few bytes and figures out what instructions they are supposed to be. I then tied this into a <code>__init__.py</code> which contained a custom view so that I could see the code:</p>
-<div class="lang-py editor-colors">from binaryninja.architecture import Architecture
+<pre><code class="language-text">from binaryninja.architecture import Architecture
 from binaryninja.binaryview import *
 from binaryninja.function import RegisterInfo, InstructionInfo, InstructionTextToken
 from binaryninja.enums import InstructionTextTokenType, BranchType, SegmentFlag, SymbolType
@@ -893,10 +867,9 @@ class RecursoView(BinaryView):
         return True
 
 Recurso.register()
-RecursoView.register()
-</div>
+RecursoView.register()</code></pre>
 <p>The view basically parsed out what components of the data were function data and what was opcodes, remember that the first 4 bytes tell us the length of the function data and then rest is opcodes. It then calls the diassembler and creates branches so that we can get a nicer view of the program. When we run the disassembler we get:</p>
-<pre><code>0000018e  int32_t main()
+<pre><code class="language-text">0000018e  int32_t main()
 
 0000018e  0c00000000         LOAD 0
 00000193  16                 INPUT
@@ -1493,31 +1466,29 @@ RecursoView.register()
 000009fd  19                 AND
 000009fe  0b0000000a         STORE 10
 00000a03  0c0000000a         LOAD 10
-00000a08  0e                 RET
-</code></pre>
+00000a08  0e                 RET</code></pre>
 <p>Luckily Recurso bytecode translate pretty easily straight into its high level representation so from here we can simply turn it back into its source code:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> antidebug(<span style="color:Blue;">int</span> a)
+<pre><code class="language-c">int antidebug(int a)
 | 0, 0 |
 {
-    <span style="color:Blue;">int</span> b = a - 1;
+    int b = a - 1;
 
     a = a + 1;
     a = a - 1;
     a = a * 1;
     a = a / 1;
-    a = a &amp; 1;
+    a = a & 1;
     a = a | 1;
     a = a ^ 0;
 
     antidebug(b);
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> itsATwap(<span style="color:Blue;">int</span> a)
+int itsATwap(int a)
 | 3713, 1 |
 {
-    <span style="color:Blue;">int</span> b;
+    int b;
 
     input b;
 
@@ -1525,31 +1496,31 @@ RecursoView.register()
 
     itsATwap(a);
 
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> oddCheck(<span style="color:Blue;">int</span> a, <span style="color:Blue;">int</span> b, <span style="color:Blue;">int</span> c, <span style="color:Blue;">int</span> d)
+int oddCheck(int a, int b, int c, int d)
 | 30001, 26419, 62003745337707, 27955, 1 |
 {
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> evenCheck(<span style="color:Blue;">int</span> a, <span style="color:Blue;">int</span> b, <span style="color:Blue;">int</span> c, <span style="color:Blue;">int</span> d)
+int evenCheck(int a, int b, int c, int d)
 | !25695, !928999216, !13151, !125, 0 |
 {
-    <span style="color:Blue;">return</span> 1;
+    return 1;
 }
 
-<span style="color:Blue;">int</span> finalCheck()
+int finalCheck()
 {
-    <span style="color:Blue;">int</span> a;
-    <span style="color:Blue;">int</span> b;
-    <span style="color:Blue;">int</span> c;
-    <span style="color:Blue;">int</span> d;
-    <span style="color:Blue;">int</span> e;
-    <span style="color:Blue;">int</span> f;
-    <span style="color:Blue;">int</span> g;
-    <span style="color:Blue;">int</span> h;
+    int a;
+    int b;
+    int c;
+    int d;
+    int e;
+    int f;
+    int g;
+    int h;
 
     input a;
     input b;
@@ -1560,27 +1531,27 @@ RecursoView.register()
     input g;
     input h;
 
-    <span style="color:Blue;">int</span> resp = oddCheck(a,c,e,g);
-    <span style="color:Blue;">int</span> resp2 = evenCheck(b,d,f,h);
+    int resp = oddCheck(a,c,e,g);
+    int resp2 = evenCheck(b,d,f,h);
 
-    <span style="color:Blue;">int</span> res = resp &amp; resp2;
+    int res = resp & resp2;
 
-    <span style="color:Blue;">return</span> res;
+    return res;
 }
 
-<span style="color:Blue;">int</span> checkThemAll(<span style="color:Blue;">int</span> a, <span style="color:Blue;">int</span> b, <span style="color:Blue;">int</span> c, <span style="color:Blue;">int</span> d, <span style="color:Blue;">int</span> e, <span style="color:Blue;">int</span> f)
+int checkThemAll(int a, int b, int c, int d, int e, int f)
 | -188178084847, 10593957610752, 118730899270, 1346493052268, 409991082872, 103082098739, 1 |
 {
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> nextNextNextCheck()
+int nextNextNextCheck()
 {
-    <span style="color:Blue;">int</span> a;
-    <span style="color:Blue;">int</span> b;
-    <span style="color:Blue;">int</span> c;
-    <span style="color:Blue;">int</span> d;
-    <span style="color:Blue;">int</span> e;
+    int a;
+    int b;
+    int c;
+    int d;
+    int e;
 
     input a;
     input b;
@@ -1588,186 +1559,184 @@ RecursoView.register()
     input d;
     input e;
 
-    <span style="color:Blue;">int</span> f = a - b;
-    <span style="color:Blue;">int</span> g = a * e;
-    <span style="color:Blue;">int</span> h = f + c;
-    <span style="color:Blue;">int</span> i = a + b + c + d;
-    <span style="color:Blue;">int</span> j = d | e;
-    <span style="color:Blue;">int</span> k = d - c;
+    int f = a - b;
+    int g = a * e;
+    int h = f + c;
+    int i = a + b + c + d;
+    int j = d | e;
+    int k = d - c;
 
-    <span style="color:Blue;">int</span> resp = checkThemAll(f,g,h,i,j,k);
+    int resp = checkThemAll(f,g,h,i,j,k);
 
-    <span style="color:Blue;">int</span> resp2 = finalCheck();
+    int resp2 = finalCheck();
 
-    <span style="color:Blue;">int</span> res = resp &amp; resp2;
+    int res = resp & resp2;
 
-    <span style="color:Blue;">return</span> res;
+    return res;
 
 }
 
-<span style="color:Blue;">int</span> checkity(<span style="color:Blue;">int</span> a, <span style="color:Blue;">int</span> b, <span style="color:Blue;">int</span> c, <span style="color:Blue;">int</span> d, <span style="color:Blue;">int</span> e)
+int checkity(int a, int b, int c, int d, int e)
 | 489139534831, 1, 2, 3, 4, 1 |
 {
     antidebug(7331);
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> midThree(<span style="color:Blue;">int</span> a)
+int midThree(int a)
 | !892362496, 0 |
 {
-    <span style="color:Blue;">return</span> 1;
+    return 1;
 }
 
-<span style="color:Blue;">int</span> topAndBottom(<span style="color:Blue;">int</span> a)
+int topAndBottom(int a)
 | 7, 1 |
 {
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> checkTheBigs(<span style="color:Blue;">int</span> a, <span style="color:Blue;">int</span> b)
-| &gt;b, !b, 0 |
+int checkTheBigs(int a, int b)
+| >b, !b, 0 |
 {
 
-    <span style="color:Blue;">int</span> c = b - a;
+    int c = b - a;
 
-    <span style="color:Blue;">int</span> resp = checkity(c, 1, 2, 3, 4);
+    int resp = checkity(c, 1, 2, 3, 4);
 
-    <span style="color:Blue;">int</span> d = b &amp; 4294967040;
+    int d = b & 4294967040;
 
-    <span style="color:Blue;">int</span> resp2 = midThree(d);
+    int resp2 = midThree(d);
 
-    <span style="color:Blue;">int</span> e = a &amp; 255;
+    int e = a & 255;
 
-    <span style="color:Blue;">int</span> f = b &amp; 1095216660480;
+    int f = b & 1095216660480;
 
-    <span style="color:Blue;">int</span> g = e ^ f;
+    int g = e ^ f;
 
-    <span style="color:Blue;">int</span> resp3 = 1;
+    int resp3 = 1;
 
-    <span style="color:Blue;">int</span> resp4 = nextNextNextCheck();
+    int resp4 = nextNextNextCheck();
 
-    <span style="color:Blue;">int</span> res = resp &amp; resp2 &amp; resp3 &amp; resp4;
+    int res = resp & resp2 & resp3 & resp4;
 
-    <span style="color:Blue;">return</span> res;
+    return res;
 }
 
-<span style="color:Blue;">int</span> isItOr(<span style="color:Blue;">int</span> a)
+int isItOr(int a)
 | 99, 1 |
 {
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> isItXor(<span style="color:Blue;">int</span> a)
+int isItXor(int a)
 | !28, 0 |
 {
-    <span style="color:Blue;">return</span> 1;
+    return 1;
 }
 
-<span style="color:Blue;">int</span> keepGoing()
+int keepGoing()
 {
     antidebug(7331);
 
-    <span style="color:Blue;">int</span> a;
+    int a;
 
-    <span style="color:Blue;">int</span> b;
+    int b;
 
     input a;
 
     input b;
 
-    <span style="color:Blue;">int</span> c = a ^ b;
+    int c = a ^ b;
 
-    <span style="color:Blue;">int</span> resp = isItXor(c);
+    int resp = isItXor(c);
 
-    c = a &amp; b;
+    c = a & b;
 
-    <span style="color:Blue;">int</span> resp2 = isItOr(c);
+    int resp2 = isItOr(c);
 
-    <span style="color:Blue;">int</span> twap;
+    int twap;
 
     input twap;
 
     itsATwap(twap);
 
-    <span style="color:Blue;">int</span> d;
+    int d;
 
-    <span style="color:Blue;">int</span> e;
+    int e;
 
     input d;
 
     input e;
 
-    <span style="color:Blue;">int</span> resp3 = checkTheBigs(d, e);
+    int resp3 = checkTheBigs(d, e);
 
-    <span style="color:Blue;">int</span> res = resp &amp; resp2 &amp; resp3;
+    int res = resp & resp2 & resp3;
 
-    <span style="color:Blue;">return</span> res;
+    return res;
 }
 
-<span style="color:Blue;">int</span> wowzaACheck2(<span style="color:Blue;">int</span> a)
-| &gt;26960, 1 |
+int wowzaACheck2(int a)
+| >26960, 1 |
 {
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> wowzaACheck(<span style="color:Blue;">int</span> a)
-| &lt;269700, 1 |
+int wowzaACheck(int a)
+| <269700, 1 |
 {
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> yetAnotherCheck(<span style="color:Blue;">int</span> a)
+int yetAnotherCheck(int a)
 | !28025, 0 |
 {
-    <span style="color:Blue;">return</span> 1;
+    return 1;
 }
 
-<span style="color:Blue;">int</span> anotherCheck(<span style="color:Blue;">int</span> a)
+int anotherCheck(int a)
 | 1057, 1 |
 {
-    <span style="color:Blue;">return</span> 0;
+    return 0;
 }
 
-<span style="color:Blue;">int</span> check(<span style="color:Blue;">int</span> a)
+int check(int a)
 | !102, 0 |
 {
-    <span style="color:Blue;">int</span> a;
+    int a;
 
     input a;
 
-    <span style="color:Blue;">int</span> b = a &amp; 1337;
+    int b = a & 1337;
 
-    <span style="color:Blue;">int</span> resp = anotherCheck(b);
+    int resp = anotherCheck(b);
 
-    <span style="color:Blue;">int</span> c = a | 1337;
+    int c = a | 1337;
 
-    <span style="color:Blue;">int</span> resp2 = yetAnotherCheck(c);
+    int resp2 = yetAnotherCheck(c);
 
-    <span style="color:Blue;">int</span> d = a ^ 1337;
+    int d = a ^ 1337;
 
-    <span style="color:Blue;">int</span> resp3 = wowzaACheck(d);
+    int resp3 = wowzaACheck(d);
 
-    <span style="color:Blue;">int</span> resp4 = wowzaACheck(d);
+    int resp4 = wowzaACheck(d);
 
-    <span style="color:Blue;">int</span> resp5 = keepGoing();
+    int resp5 = keepGoing();
 
-    <span style="color:Blue;">int</span> res = resp &amp; resp2 &amp; resp3 &amp; resp4 &amp; resp5;
+    int res = resp & resp2 & resp3 & resp4 & resp5;
 
-    <span style="color:Blue;">return</span> res;
+    return res;
 }
 
-<span style="color:Blue;">int</span> a;
+int a;
 
 input a;
 
-<span style="color:Blue;">int</span> b = check(a);
+int b = check(a);
 
-print(b);
-</pre></div>
-</div>
+print(b);</code></pre>
 <p>From here we can see that we have a bunch of conditions which means that we can simply write a z3py script.</p>
 <p>pure constriants (no guessing):</p>
-<div class="lang-py editor-colors">from z3 import *
+<pre><code class="language-text">from z3 import *
 
 maina = BitVec('maina', 64)
 
@@ -1846,10 +1815,9 @@ for i in vals:
         print(cur_str)
 	total_str += cur_str
 
-print(total_str)
-</div>
+print(total_str)</code></pre>
 <p>Which gives you:</p>
-<pre><code>f
+<pre><code class="language-text">f
 la
 c
 
@@ -1868,11 +1836,10 @@ g3
 3_
 m3
 }
-flac`R3c%.50_3c0mp_3z!_Gu3s5_u_sh0u1d_g37_g08d_71k3_m3}
-</code></pre>
+flac`R3c%.50_3c0mp_3z!_Gu3s5_u_sh0u1d_g37_g08d_71k3_m3}</code></pre>
 <p>R3c..50 makes it fairly obvious that it is Recurso in some form. and that we don't need that initial value in front so it is 4 bytes.</p>
 <p>and you know it should be flag{ so you can add some more constraints:</p>
-<div class="lang-py editor-colors">from z3 import *
+<pre><code class="language-text">from z3 import *
 
 maina = BitVec('maina', 64)
 
@@ -1955,10 +1922,9 @@ for i in vals:
 	print(cur_str)
 	total_str += cur_str
 
-print(total_str)
-</div>
+print(total_str)</code></pre>
 <p>And with that you get:</p>
-<pre><code>f
+<pre><code class="language-text">f
 la
 g
 {
@@ -1977,11 +1943,9 @@ g3
 3_
 m3
 }
-flag{~R3cU.50_D.3c0mp._3z!_Gu3s5_u_sh0u1d_g37_g08d_71k3_m3}
-</code></pre>
+flag{~R3cU.50_D.3c0mp._3z!_Gu3s5_u_sh0u1d_g37_g08d_71k3_m3}</code></pre>
 <p>You know you may have sizes slightly off but if you constrain to only allow sizes you know for sure you end up with:</p>
-<pre><code>flag{R3cU.50_.3c0mp._3z!_Gu3s5_u_sh0u1d_g37_g08d_71k3_m3}
-</code></pre>
+<pre><code class="language-text">flag{R3cU.50_.3c0mp._3z!_Gu3s5_u_sh0u1d_g37_g08d_71k3_m3}</code></pre>
 <p>However, based on the challenge description you can see that they are either r/R or d/D for recurso and decompilation. Making the flag:</p>
 <p><code>flag{R3cUr50_D3c0mp_3z!_Gu3s5_u_sh0u1d_g37_g08d_71k3_m3}</code></p>
 
@@ -1997,5 +1961,6 @@ flag{~R3cU.50_D.3c0mp._3z!_Gu3s5_u_sh0u1d_g37_g08d_71k3_m3}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

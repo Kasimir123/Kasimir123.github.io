@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -74,91 +75,78 @@
 <p>CENSORED and CENSORED Sitting in a tree, H-A-C-K-I-N-G! First comes pwn, Then comes rev, Then comes a flag And a happy dev!</p>
 <h2 id="write-up">Write up:</h2>
 <p>Opening the main function I saw:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  puts(<span style="color:#A31515;">&quot;Ice cream!&quot;</span>);
-  puts(<span style="color:#A31515;">&quot;Soda Pop!&quot;</span>);
-  puts(<span style="color:#A31515;">&quot;Cherry on top!&quot;</span>);
-  puts(<span style="color:#A31515;">&quot;Is your flag exact?&quot;</span>);
-  puts(<span style="color:#A31515;">&quot;Well, let&#39;s find out!&quot;</span>);
+  puts("Ice cream!");
+  puts("Soda Pop!");
+  puts("Cherry on top!");
+  puts("Is your flag exact?");
+  puts("Well, let's find out!");
   sleep(1u);
-  puts(<span style="color:#A31515;">&quot;\nEighty-eight characters!&quot;</span>);
-  puts(<span style="color:#A31515;">&quot;A secret well kept!&quot;</span>);
-  puts(<span style="color:#A31515;">&quot;If you get it right,&quot;</span>);
-  puts(<span style="color:#A31515;">&quot;I&#39;ll shout CORRECT!\n&quot;</span>);
-  <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)checkFlag(<span style="color:#A31515;">&quot;I&#39;ll shout CORRECT!\n&quot;</span>, argv) )
-    printf(<span style="color:#A31515;">&quot;Nope!&quot;</span>);
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  puts("\nEighty-eight characters!");
+  puts("A secret well kept!");
+  puts("If you get it right,");
+  puts("I'll shout CORRECT!\n");
+  if ( !(unsigned int)checkFlag("I'll shout CORRECT!\n", argv) )
+    printf("Nope!");
+  return 0;
+}</code></pre>
 <p>I then looked into the checkFlag function and saw:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 checkFlag()
+<pre><code class="language-c">__int64 checkFlag()
 {
-  <span style="color:Blue;">char</span> vars0[8]; 
-  <span style="color:Blue;">void</span> *retaddr; 
+  char vars0[8]; 
+  void *retaddr; 
 
-  printf(<span style="color:#A31515;">&quot;&gt;&gt;&gt; &quot;</span>);
-  __isoc99_scanf(<span style="color:#A31515;">&quot;%88s%c&quot;</span>, &amp;retaddr, &amp;dead);
-  <span style="color:Blue;">for</span> ( count = 8; count &lt;= 95; ++count )
+  printf(">>> ");
+  __isoc99_scanf("%88s%c", &retaddr, &dead);
+  for ( count = 8; count <= 95; ++count )
   {
     val = next(val);
     vars0[count] ^= x[count - 8] ^ val;
   }
-  <span style="color:Blue;">return</span> 0LL;
-}
-</pre></div>
-</div>
+  return 0LL;
+}</code></pre>
 <p>From here I can see that the code reads our input and then we xor that data with some other xor'ed data.</p>
 <p>From here I extracted the next function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">unsigned</span> __int64 __fastcall next(<span style="color:Blue;">unsigned</span> __int64 a1)
+<pre><code class="language-c">unsigned __int64 __fastcall next(unsigned __int64 a1)
 {
-  <span style="color:Blue;">int</span> j; 
-  <span style="color:Blue;">unsigned</span> __int64 v4; 
+  int j; 
+  unsigned __int64 v4; 
   __int64 v5; 
-  <span style="color:Blue;">int</span> i; 
+  int i; 
 
-  <span style="color:Blue;">for</span> ( i = 0; i &lt;= 7; ++i )
+  for ( i = 0; i <= 7; ++i )
   {
     v5 = 0LL;
     v4 = a1;
-    <span style="color:Blue;">for</span> ( j = 0; j &lt;= 7; ++j )
+    for ( j = 0; j <= 7; ++j )
     {
-      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)test((<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(j + 1)) )
-        v5 ^= v4 &amp; 1;
-      v4 &gt;&gt;= 1;
+      if ( (unsigned int)test((unsigned int)(j + 1)) )
+        v5 ^= v4 & 1;
+      v4 >>= 1;
     }
-    a1 = (v5 &lt;&lt; 7) + (a1 &gt;&gt; 1);
+    a1 = (v5 << 7) + (a1 >> 1);
   }
-  <span style="color:Blue;">return</span> a1;
-}
-</pre></div>
-</div>
+  return a1;
+}</code></pre>
 <p>The test function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall test(<span style="color:Blue;">int</span> a1)
+<pre><code class="language-c">__int64 __fastcall test(int a1)
 {
-  <span style="color:Blue;">int</span> i; <span style="color:Green;">// [rsp+10h] [rbp-4h]</span>
+  int i; // [rsp+10h] [rbp-4h]
 
-  <span style="color:Blue;">if</span> ( a1 == 1 )
-    <span style="color:Blue;">return</span> 0LL;
-  <span style="color:Blue;">for</span> ( i = 2; i &lt; a1 - 1; ++i )
+  if ( a1 == 1 )
+    return 0LL;
+  for ( i = 2; i < a1 - 1; ++i )
   {
-    <span style="color:Blue;">if</span> ( !(a1 % i) )
-      <span style="color:Blue;">return</span> 0LL;
+    if ( !(a1 % i) )
+      return 0LL;
   }
-  <span style="color:Blue;">return</span> 1LL;
-}
-</pre></div>
-</div>
+  return 1LL;
+}</code></pre>
 <p>And the x array:</p>
-<div class="lang-py editor-colors">[0x00000000000000FD, 0x000000000000003C, 0x00000000000000C4, 0x000000000000000E, 0x0000000000000076, 0x00000000000000FF, 0x000000000000004B, 0x0000000000000045, 0x000000000000001F, 0x0000000000000040, 0x00000000000000F4, 0x00000000000000E6, 0x0000000000000080, 0x00000000000000B8, 0x00000000000000B5, 0x00000000000000E8, 0x0000000000000076, 0x000000000000008E, 0x000000000000003B, 0x00000000000000F8, 0x00000000000000E4, 0x00000000000000BD, 0x00000000000000C9, 0x00000000000000C7, 0x000000000000003F, 0x00000000000000E6, 0x00000000000000CF, 0x0000000000000015, 0x0000000000000094, 0x000000000000009A, 0x000000000000008A, 0x0000000000000028, 0x000000000000004E, 0x000000000000005E, 0x000000000000001E, 0x000000000000003F, 0x0000000000000025, 0x00000000000000D4, 0x000000000000002C, 0x00000000000000A9, 0x0000000000000036, 0x0000000000000028, 0x0000000000000042, 0x0000000000000040, 0x0000000000000093, 0x000000000000008D, 0x000000000000000F, 0x00000000000000FF, 0x00000000000000AE, 0x000000000000002B, 0x000000000000002B, 0x00000000000000DF, 0x000000000000007E, 0x000000000000001A, 0x000000000000004E, 0x0000000000000005, 0x0000000000000063, 0x00000000000000D0, 0x0000000000000088, 0x00000000000000E1, 0x00000000000000A1, 0x000000000000001F, 0x000000000000005A, 0x000000000000003D, 0x0000000000000036, 0x000000000000004F, 0x00000000000000AE, 0x0000000000000089, 0x000000000000007B, 0x00000000000000D7, 0x0000000000000027, 0x00000000000000D0, 0x0000000000000029, 0x00000000000000C0, 0x000000000000009E, 0x00000000000000F0, 0x0000000000000020, 0x00000000000000DF, 0x0000000000000069, 0x0000000000000077, 0x0000000000000094, 0x00000000000000E9, 0x0000000000000058, 0x000000000000000F, 0x00000000000000B8, 0x00000000000000EC, 0x00000000000000F9, 0x0000000000000024]
-</div>
+<pre><code class="language-text">[0x00000000000000FD, 0x000000000000003C, 0x00000000000000C4, 0x000000000000000E, 0x0000000000000076, 0x00000000000000FF, 0x000000000000004B, 0x0000000000000045, 0x000000000000001F, 0x0000000000000040, 0x00000000000000F4, 0x00000000000000E6, 0x0000000000000080, 0x00000000000000B8, 0x00000000000000B5, 0x00000000000000E8, 0x0000000000000076, 0x000000000000008E, 0x000000000000003B, 0x00000000000000F8, 0x00000000000000E4, 0x00000000000000BD, 0x00000000000000C9, 0x00000000000000C7, 0x000000000000003F, 0x00000000000000E6, 0x00000000000000CF, 0x0000000000000015, 0x0000000000000094, 0x000000000000009A, 0x000000000000008A, 0x0000000000000028, 0x000000000000004E, 0x000000000000005E, 0x000000000000001E, 0x000000000000003F, 0x0000000000000025, 0x00000000000000D4, 0x000000000000002C, 0x00000000000000A9, 0x0000000000000036, 0x0000000000000028, 0x0000000000000042, 0x0000000000000040, 0x0000000000000093, 0x000000000000008D, 0x000000000000000F, 0x00000000000000FF, 0x00000000000000AE, 0x000000000000002B, 0x000000000000002B, 0x00000000000000DF, 0x000000000000007E, 0x000000000000001A, 0x000000000000004E, 0x0000000000000005, 0x0000000000000063, 0x00000000000000D0, 0x0000000000000088, 0x00000000000000E1, 0x00000000000000A1, 0x000000000000001F, 0x000000000000005A, 0x000000000000003D, 0x0000000000000036, 0x000000000000004F, 0x00000000000000AE, 0x0000000000000089, 0x000000000000007B, 0x00000000000000D7, 0x0000000000000027, 0x00000000000000D0, 0x0000000000000029, 0x00000000000000C0, 0x000000000000009E, 0x00000000000000F0, 0x0000000000000020, 0x00000000000000DF, 0x0000000000000069, 0x0000000000000077, 0x0000000000000094, 0x00000000000000E9, 0x0000000000000058, 0x000000000000000F, 0x00000000000000B8, 0x00000000000000EC, 0x00000000000000F9, 0x0000000000000024]</code></pre>
 <p>I then made a python script to find everything but the input key:</p>
-<div class="lang-py editor-colors">x = [0x00000000000000FD, 0x000000000000003C, 0x00000000000000C4, 0x000000000000000E, 0x0000000000000076, 0x00000000000000FF, 0x000000000000004B, 0x0000000000000045, 0x000000000000001F, 0x0000000000000040, 0x00000000000000F4, 0x00000000000000E6, 0x0000000000000080, 0x00000000000000B8, 0x00000000000000B5, 0x00000000000000E8, 0x0000000000000076, 0x000000000000008E, 0x000000000000003B, 0x00000000000000F8, 0x00000000000000E4, 0x00000000000000BD, 0x00000000000000C9, 0x00000000000000C7, 0x000000000000003F, 0x00000000000000E6, 0x00000000000000CF, 0x0000000000000015, 0x0000000000000094, 0x000000000000009A, 0x000000000000008A, 0x0000000000000028, 0x000000000000004E, 0x000000000000005E, 0x000000000000001E, 0x000000000000003F, 0x0000000000000025, 0x00000000000000D4, 0x000000000000002C, 0x00000000000000A9, 0x0000000000000036, 0x0000000000000028, 0x0000000000000042, 0x0000000000000040, 0x0000000000000093, 0x000000000000008D, 0x000000000000000F, 0x00000000000000FF, 0x00000000000000AE, 0x000000000000002B, 0x000000000000002B, 0x00000000000000DF, 0x000000000000007E, 0x000000000000001A, 0x000000000000004E, 0x0000000000000005, 0x0000000000000063, 0x00000000000000D0, 0x0000000000000088, 0x00000000000000E1, 0x00000000000000A1, 0x000000000000001F, 0x000000000000005A, 0x000000000000003D, 0x0000000000000036, 0x000000000000004F, 0x00000000000000AE, 0x0000000000000089, 0x000000000000007B, 0x00000000000000D7, 0x0000000000000027, 0x00000000000000D0, 0x0000000000000029, 0x00000000000000C0, 0x000000000000009E, 0x00000000000000F0, 0x0000000000000020, 0x00000000000000DF, 0x0000000000000069, 0x0000000000000077, 0x0000000000000094, 0x00000000000000E9, 0x0000000000000058, 0x000000000000000F, 0x00000000000000B8, 0x00000000000000EC, 0x00000000000000F9, 0x0000000000000024]
+<pre><code class="language-text">x = [0x00000000000000FD, 0x000000000000003C, 0x00000000000000C4, 0x000000000000000E, 0x0000000000000076, 0x00000000000000FF, 0x000000000000004B, 0x0000000000000045, 0x000000000000001F, 0x0000000000000040, 0x00000000000000F4, 0x00000000000000E6, 0x0000000000000080, 0x00000000000000B8, 0x00000000000000B5, 0x00000000000000E8, 0x0000000000000076, 0x000000000000008E, 0x000000000000003B, 0x00000000000000F8, 0x00000000000000E4, 0x00000000000000BD, 0x00000000000000C9, 0x00000000000000C7, 0x000000000000003F, 0x00000000000000E6, 0x00000000000000CF, 0x0000000000000015, 0x0000000000000094, 0x000000000000009A, 0x000000000000008A, 0x0000000000000028, 0x000000000000004E, 0x000000000000005E, 0x000000000000001E, 0x000000000000003F, 0x0000000000000025, 0x00000000000000D4, 0x000000000000002C, 0x00000000000000A9, 0x0000000000000036, 0x0000000000000028, 0x0000000000000042, 0x0000000000000040, 0x0000000000000093, 0x000000000000008D, 0x000000000000000F, 0x00000000000000FF, 0x00000000000000AE, 0x000000000000002B, 0x000000000000002B, 0x00000000000000DF, 0x000000000000007E, 0x000000000000001A, 0x000000000000004E, 0x0000000000000005, 0x0000000000000063, 0x00000000000000D0, 0x0000000000000088, 0x00000000000000E1, 0x00000000000000A1, 0x000000000000001F, 0x000000000000005A, 0x000000000000003D, 0x0000000000000036, 0x000000000000004F, 0x00000000000000AE, 0x0000000000000089, 0x000000000000007B, 0x00000000000000D7, 0x0000000000000027, 0x00000000000000D0, 0x0000000000000029, 0x00000000000000C0, 0x000000000000009E, 0x00000000000000F0, 0x0000000000000020, 0x00000000000000DF, 0x0000000000000069, 0x0000000000000077, 0x0000000000000094, 0x00000000000000E9, 0x0000000000000058, 0x000000000000000F, 0x00000000000000B8, 0x00000000000000EC, 0x00000000000000F9, 0x0000000000000024]
 
 val = 2
 
@@ -192,15 +180,11 @@ s = []
 for i in range(8, 96):
 	val = next(val)
 	s.append(chr(x[i-8] ^ val))
-printA(s)
-</div>
+printA(s)</code></pre>
 <p>This then output:</p>
-<pre><code>xq4f{n0tÔx!st_ni´¨CLbut_Zz%_nigh/M&quot;ef0ref7enty_&quot;5r_haczw2s_camîK!_kn0c¥Ã¹_at_økd00r}
-</code></pre>
+<pre><code class="language-text">xq4f{n0tÔx!st_ni´¨CLbut_Zz%_nigh/M"ef0ref7enty_"5r_haczw2s_camîK!_kn0c¥Ã¹_at_økd00r}</code></pre>
 <p>From here it was a mix or bruteforcing a guessing but we were able to find that the flag was:</p>
-<pre><code>ictf{n0t_last_night_but_the_night_bef0re_twenty_f0ur_hackers_came_a_kn0cking_at_my_d00r}
-</code></pre>
-
+<pre><code class="language-text">ictf{n0t_last_night_but_the_night_bef0re_twenty_f0ur_hackers_came_a_kn0cking_at_my_d00r}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -213,5 +197,6 @@ printA(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,391 +72,349 @@
 <p>Category: Reverse Engineering</p>
 <h2 id="write-up">Write up:</h2>
 <p>Opening the main function in a decompiler we see:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall main(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">char</span> **a2, <span style="color:Blue;">char</span> **a3)
+<pre><code class="language-c">__int64 __fastcall main(int a1, char **a2, char **a3)
 {
 
-  <span style="color:Blue;">if</span> ( a1 == 2 )
+  if ( a1 == 2 )
   {
     sub_2540(path, a2[1], a3);
-    sub_24A6(&amp;unk_6180, path);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(path);
+    sub_24A6(&unk_6180, path);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
   }
-  sub_2540(directory, <span style="color:#A31515;">&quot;&quot;</span>, a3);
-  <span style="color:Blue;">while</span> ( 1 )
+  sub_2540(directory, "", a3);
+  while ( 1 )
   {
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(path, &amp;unk_6180);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, &unk_6180);
     v3 = sub_2663(path);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(path);
-    <span style="color:Blue;">if</span> ( v3 &lt;= 0 )
-      <span style="color:Blue;">break</span>;
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(path, directory);
-    sub_29E3((<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)path, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)directory, v4, v5, v6, v7, directory[0]);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(path);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
+    if ( v3 <= 0 )
+      break;
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, directory);
+    sub_29E3((unsigned int)path, (unsigned int)directory, v4, v5, v6, v7, directory[0]);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
   }
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(path, directory);
-  sub_29E3((<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)path, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)directory, v8, v9, v10, v11, directory[0]);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(path);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(directory);
-  <span style="color:Blue;">return</span> 0LL;
-}
-</pre></div>
-</div>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
- <span style="color:Blue;">if</span> ( a1 == 2 )
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, directory);
+  sub_29E3((unsigned int)path, (unsigned int)directory, v8, v9, v10, v11, directory[0]);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(directory);
+  return 0LL;
+}</code></pre><pre><code class="language-c"> if ( a1 == 2 )
   {
     sub_2540(path, a2[1], a3);
-    sub_24A6(&amp;unk_6180, path);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(path);
-  }
-</pre></div>
-</div>
+    sub_24A6(&unk_6180, path);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
+  }</code></pre>
 <p>We see that the function checks if a1 is equal to 2, since this is the main function we know that a1 is argc, so this check passes when we pass an argument to the binary. In the if statement we set the path to the command line argument.</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  sub_2540(directory, <span style="color:#A31515;">&quot;&quot;</span>, a3);
-  <span style="color:Blue;">while</span> ( 1 )
+<pre><code class="language-c">  sub_2540(directory, "", a3);
+  while ( 1 )
   {
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(path, &amp;unk_6180);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, &unk_6180);
     v3 = sub_2663(path);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(path);
-    <span style="color:Blue;">if</span> ( v3 &lt;= 0 )
-      <span style="color:Blue;">break</span>;
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(path, directory);
-    sub_29E3((<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)path, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)directory, v4, v5, v6, v7, directory[0]);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(path);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
+    if ( v3 <= 0 )
+      break;
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, directory);
+    sub_29E3((unsigned int)path, (unsigned int)directory, v4, v5, v6, v7, directory[0]);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
   }
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(path, directory);
-  sub_29E3((<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)path, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)directory, v8, v9, v10, v11, directory[0]);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(path);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(directory);
-</pre></div>
-</div>
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, directory);
+  sub_29E3((unsigned int)path, (unsigned int)directory, v8, v9, v10, v11, directory[0]);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(directory);</code></pre>
 <p>We then set the directory to &quot;&quot; and then enter a while loop. We pass the path to sub_2663 and check for the response, if the value is less than or equal to 0 we break out of the loop. Otherwise we call the other function.</p>
 <p>First we want to analyze sub_2663:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall sub_2663(<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **a1)
+<pre><code class="language-c">__int64 __fastcall sub_2663(const char **a1)
 {
-  <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> v1; <span style="color:Green;">// er12</span>
-  DIR *v2; <span style="color:Green;">// rbx</span>
-  <span style="color:Blue;">struct</span> dirent *i; <span style="color:Green;">// rax</span>
+  unsigned int v1; // er12
+  DIR *v2; // rbx
+  struct dirent *i; // rax
 
   v1 = 0;
   v2 = opendir(*a1);
-  <span style="color:Blue;">for</span> ( i = readdir(v2); i; i = readdir(v2) )
+  for ( i = readdir(v2); i; i = readdir(v2) )
   {
-    <span style="color:Blue;">if</span> ( i-&gt;d_type == 4 &amp;&amp; i-&gt;d_name[0] != 46 )
+    if ( i->d_type == 4 && i->d_name[0] != 46 )
       ++v1;
   }
-  <span style="color:Blue;">return</span> v1;
-}
-</pre></div>
-</div>
+  return v1;
+}</code></pre>
 <p>We know that a1 is the path since we use opendir using that string. We then attempt to all the items in the directory. Looking up d_type on the object returned from readdir we can see that 4 is the enum for DT_DIR. So this function increments v1 for every directory in the directory that doesn't start with &quot;.&quot;. This means this function is most likely used to count the number of directories within the current directory.</p>
 <p>Going back into the main loop we go to look at the other function that is called:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall sub_29E3(__int64 a1)
+<pre><code class="language-c">__int64 __fastcall sub_29E3(__int64 a1)
 {
 
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(name, &amp;qword_6180);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::append(name, a1);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(name, &qword_6180);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(name, a1);
   v1 = opendir(name[0]);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v8, &amp;qword_6180);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, name);
-  <span style="color:Blue;">if</span> ( v10[1] == (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)0x3FFFFFFFFFFFFFFFLL )
-    std::__throw_length_error(<span style="color:#A31515;">&quot;basic_string::append&quot;</span>);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_append(v10, <span style="color:#A31515;">&quot;/&quot;</span>, 1LL);
-  sub_24A6(&amp;qword_6180, v10, v2, v3);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
-  <span style="color:Blue;">if</span> ( v1 )
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v8, &qword_6180);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
+  if ( v10[1] == (const char *)0x3FFFFFFFFFFFFFFFLL )
+    std::__throw_length_error("basic_string::append");
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_append(v10, "/", 1LL);
+  sub_24A6(&qword_6180, v10, v2, v3);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+  if ( v1 )
   {
     v5 = readdir(v1);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, name);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
     v6 = sub_2663(v10);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
-    <span style="color:Blue;">if</span> ( v6 )
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+    if ( v6 )
     {
-      <span style="color:Blue;">while</span> ( v5 )
+      while ( v5 )
       {
-        std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, name);
+        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
         sub_2BE4(v10, v5);
-        std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
+        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
         v5 = readdir(v1);
       }
     }
-    <span style="color:Blue;">else</span>
+    else
     {
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, a1);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v9, v8);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, a1);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v9, v8);
       sub_2C32(v9, v10, v5, v1);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v9);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v9);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
     }
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::resize(
-      &amp;qword_6180,
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::resize(
+      &qword_6180,
       qword_6188 - 1 - *(_QWORD *)(a1 + 8));
     closedir(v1);
   }
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v8);
-  <span style="color:Blue;">return</span> std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(name);
-}
-</pre></div>
-</div>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  v1 = opendir(name[0]);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v8, &amp;qword_6180);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, name);
-  <span style="color:Blue;">if</span> ( v10[1] == (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)0x3FFFFFFFFFFFFFFFLL )
-    std::__throw_length_error(<span style="color:#A31515;">&quot;basic_string::append&quot;</span>);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_append(v10, <span style="color:#A31515;">&quot;/&quot;</span>, 1LL);
-  sub_24A6(&amp;qword_6180, v10, v2, v3);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
-  <span style="color:Blue;">if</span> ( v1 )
-</pre></div>
-</div>
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v8);
+  return std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(name);
+}</code></pre><pre><code class="language-c">  v1 = opendir(name[0]);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v8, &qword_6180);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
+  if ( v10[1] == (const char *)0x3FFFFFFFFFFFFFFFLL )
+    std::__throw_length_error("basic_string::append");
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_append(v10, "/", 1LL);
+  sub_24A6(&qword_6180, v10, v2, v3);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+  if ( v1 )</code></pre>
 <p>The first that happens in this function is that we open the directory and then check if it is null, if it is not null then we continue to the meat of this function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-    v5 = readdir(v1);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, name);
+<pre><code class="language-c">    v5 = readdir(v1);
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
     v6 = sub_2663(v10);
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
-    <span style="color:Blue;">if</span> ( v6 )
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+    if ( v6 )
     {
-      <span style="color:Blue;">while</span> ( v5 )
+      while ( v5 )
       {
-        std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, name);
+        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
         sub_2BE4(v10, v5);
-        std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
+        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
         v5 = readdir(v1);
       }
     }
-    <span style="color:Blue;">else</span>
+    else
     {
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, a1);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v9, v8);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, a1);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v9, v8);
       sub_2C32(v9, v10, v5, v1);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v9);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v9);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
     }
-    std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::resize(
-      &amp;qword_6180,
+    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::resize(
+      &qword_6180,
       qword_6188 - 1 - *(_QWORD *)(a1 + 8));
-    closedir(v1);
-</pre></div>
-</div>
+    closedir(v1);</code></pre>
 <p>We call readdir on the directory we opened earlier and then call sub_2663 (number of directories) again on the path we used to open the directory.</p>
 <p>If the number of directories is not 0 we have:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-    <span style="color:Blue;">if</span> ( v6 )
+<pre><code class="language-c">    if ( v6 )
     {
-      <span style="color:Blue;">while</span> ( v5 )
+      while ( v5 )
       {
-        std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, name);
+        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
         sub_2BE4(v10, v5);
-        std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
+        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
         v5 = readdir(v1);
       }
-    }
-</pre></div>
-</div>
+    }</code></pre>
 <p>We loop while the value from readdir is not null and then we call sub_2BE4 on the directory path and the current entity from readdir:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall sub_2BE4(__int64 a1, __int64 a2)
+<pre><code class="language-c">__int64 __fastcall sub_2BE4(__int64 a1, __int64 a2)
 {
 
-  <span style="color:Blue;">if</span> ( *(_BYTE *)(a2 + 18) == 4 &amp;&amp; *(_BYTE *)(a2 + 19) != 46 )
+  if ( *(_BYTE *)(a2 + 18) == 4 && *(_BYTE *)(a2 + 19) != 46 )
   {
-    sub_2540(v3, (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)(a2 + 19));
+    sub_2540(v3, (const char *)(a2 + 19));
     sub_29E3((__int64)v3);
-    result = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v3);
+    result = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v3);
   }
-  <span style="color:Blue;">return</span> result;
-}
-</pre></div>
-</div>
+  return result;
+}</code></pre>
 <p>In this function we check again if the entity is a directory and doesn't start with &quot;.&quot;, if it is a directory we call the function we were just in.</p>
 <p>Going back out to the function we are in we are now going to take a look at the else, what gets run when the number of directories in the current directory is 0:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-    <span style="color:Blue;">else</span>
+<pre><code class="language-c">    else
     {
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v10, a1);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v9, v8);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, a1);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v9, v8);
       sub_2C32(v9, v10, v5, v1);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v9);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v10);
-    }
-</pre></div>
-</div>
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v9);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+    }</code></pre>
 <p>We call some function and pass in the directory path, the entity, and the current diectory as well as one other value which we can reverse to find is the old path before the current directory was added to the path, making it the path one directory up:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall sub_2C32(__int64 a1, __int64 a2, <span style="color:Blue;">struct</span> dirent *a3, DIR *a4)
+<pre><code class="language-c">__int64 __fastcall sub_2C32(__int64 a1, __int64 a2, struct dirent *a3, DIR *a4)
 {
-  _BYTE *v5; <span style="color:Green;">// rax</span>
-  <span style="color:Blue;">void</span> *v6; <span style="color:Green;">// r12</span>
-  __int64 v7; <span style="color:Green;">// rax</span>
-  <span style="color:Blue;">unsigned</span> __int64 v8; <span style="color:Green;">// rdx</span>
-  <span style="color:Blue;">char</span> *v9; <span style="color:Green;">// rax</span>
-  <span style="color:Blue;">unsigned</span> __int64 v10; <span style="color:Green;">// rdx</span>
-  __int64 v11; <span style="color:Green;">// rax</span>
-  __int64 v12; <span style="color:Green;">// rbx</span>
-  <span style="color:Blue;">char</span> *v13; <span style="color:Green;">// r14</span>
-  __int64 v14; <span style="color:Green;">// rax</span>
-  __int64 v15; <span style="color:Green;">// rax</span>
-  size_t size; <span style="color:Green;">// [rsp+8h] [rbp-2E0h]</span>
-  __int64 v18; <span style="color:Green;">// [rsp+10h] [rbp-2D8h]</span>
-  <span style="color:Blue;">char</span> v20[32]; <span style="color:Green;">// [rsp+28h] [rbp-2C0h] BYREF</span>
-  __int64 v21[4]; <span style="color:Green;">// [rsp+48h] [rbp-2A0h] BYREF</span>
-  _QWORD v22[4]; <span style="color:Green;">// [rsp+68h] [rbp-280h] BYREF</span>
-  <span style="color:Blue;">char</span> *command[2]; <span style="color:Green;">// [rsp+88h] [rbp-260h] BYREF</span>
-  <span style="color:Blue;">unsigned</span> __int64 v24; <span style="color:Green;">// [rsp+98h] [rbp-250h] BYREF</span>
-  __int64 v25[2]; <span style="color:Green;">// [rsp+A8h] [rbp-240h] BYREF</span>
-  <span style="color:Blue;">unsigned</span> __int64 v26; <span style="color:Green;">// [rsp+B8h] [rbp-230h] BYREF</span>
+  _BYTE *v5; // rax
+  void *v6; // r12
+  __int64 v7; // rax
+  unsigned __int64 v8; // rdx
+  char *v9; // rax
+  unsigned __int64 v10; // rdx
+  __int64 v11; // rax
+  __int64 v12; // rbx
+  char *v13; // r14
+  __int64 v14; // rax
+  __int64 v15; // rax
+  size_t size; // [rsp+8h] [rbp-2E0h]
+  __int64 v18; // [rsp+10h] [rbp-2D8h]
+  char v20[32]; // [rsp+28h] [rbp-2C0h] BYREF
+  __int64 v21[4]; // [rsp+48h] [rbp-2A0h] BYREF
+  _QWORD v22[4]; // [rsp+68h] [rbp-280h] BYREF
+  char *command[2]; // [rsp+88h] [rbp-260h] BYREF
+  unsigned __int64 v24; // [rsp+98h] [rbp-250h] BYREF
+  __int64 v25[2]; // [rsp+A8h] [rbp-240h] BYREF
+  unsigned __int64 v26; // [rsp+B8h] [rbp-230h] BYREF
 
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v20, a1);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::append(v20, a2);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v20, a1);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(v20, a2);
   v5 = malloc(0x3E8uLL);
   size = 1000LL;
   *v5 = 0;
   v6 = v5;
   v18 = 0LL;
-  <span style="color:Blue;">while</span> ( a3 )
+  while ( a3 )
   {
-    <span style="color:Blue;">if</span> ( a3-&gt;d_type == 8 )
+    if ( a3->d_type == 8 )
     {
-      sub_2540(v25, a3-&gt;d_name);
-      sub_2540(v22, <span style="color:#A31515;">&quot;/&quot;</span>);
-      v7 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::insert(v22, 0LL, v20);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(command, v7);
+      sub_2540(v25, a3->d_name);
+      sub_2540(v22, "/");
+      v7 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v22, 0LL, v20);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(command, v7);
       v8 = 15LL;
-      v9 = &amp;command[1][v25[1]];
-      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> __int64 *)command[0] != &amp;v24 )
+      v9 = &command[1][v25[1]];
+      if ( (unsigned __int64 *)command[0] != &v24 )
         v8 = v24;
-      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> __int64)v9 &lt;= v8 )
-        <span style="color:Blue;">goto</span> LABEL_13;
+      if ( (unsigned __int64)v9 <= v8 )
+        goto LABEL_13;
       v10 = 15LL;
-      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> __int64 *)v25[0] != &amp;v26 )
+      if ( (unsigned __int64 *)v25[0] != &v26 )
         v10 = v26;
-      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> __int64)v9 &gt; v10 )
+      if ( (unsigned __int64)v9 > v10 )
 LABEL_13:
-        v11 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::append(command, v25);
-      <span style="color:Blue;">else</span>
-        v11 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::insert(v25, 0LL, command);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v21, v11);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(command);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v22);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v25);
+        v11 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(command, v25);
+      else
+        v11 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v25, 0LL, command);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v21, v11);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(command);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v22);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
       std::ifstream::basic_ifstream(v25, v21[0], 6LL);
       v12 = std::istream::tellg((std::istream *)v25);
-      v13 = (<span style="color:Blue;">char</span> *)<span style="color:Blue;">operator</span> <span style="color:Blue;">new</span>[](v12 + 1);
+      v13 = (char *)operator new[](v12 + 1);
       std::istream::seekg(v25, 0LL, 0LL);
       std::istream::read((std::istream *)v25, v13, v12);
       std::ifstream::close(v25);
       v13[v12] = 0;
-      <span style="color:Blue;">while</span> ( v18 + strlen(v13) &gt; size )
+      while ( v18 + strlen(v13) > size )
       {
         size *= 2LL;
         v6 = realloc(v6, size);
       }
-      strcat((<span style="color:Blue;">char</span> *)v6, v13);
+      strcat((char *)v6, v13);
       v18 += v12;
       free(v13);
       std::ifstream::~ifstream(v25);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v21);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v21);
     }
     a3 = readdir(a4);
   }
-  sub_2540(v25, <span style="color:#A31515;">&quot;.txt&quot;</span>);
-  v14 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::insert(v25, 0LL, v20);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v22, v14);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v25);
-  sub_2540(v25, <span style="color:#A31515;">&quot;rm -rf &quot;</span>);
-  v15 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::append(v25, v20);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(command, v15);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v25);
+  sub_2540(v25, ".txt");
+  v14 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v25, 0LL, v20);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v22, v14);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+  sub_2540(v25, "rm -rf ");
+  v15 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(v25, v20);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(command, v15);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
   system(command[0]);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v25, v22);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v25, v22);
   sub_26A3(v18, v6, v25);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v25);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
   free(v6);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(command);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v22);
-  <span style="color:Blue;">return</span> std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v20);
-}
-</pre></div>
-</div>
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(command);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v22);
+  return std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v20);
+}</code></pre>
 <p>This is a pretty meaty function so I decided to split it apart quite a bit, the first thing I did was look at what was at the big while loop:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  <span style="color:Blue;">while</span> ( a3 )
+<pre><code class="language-c">  while ( a3 )
   {
-    <span style="color:Blue;">if</span> ( a3-&gt;d_type == 8 )
+    if ( a3->d_type == 8 )
     {
-      sub_2540(v25, a3-&gt;d_name);
-      sub_2540(v22, <span style="color:#A31515;">&quot;/&quot;</span>);
-      v7 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::insert(v22, 0LL, v20);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(command, v7);
+      sub_2540(v25, a3->d_name);
+      sub_2540(v22, "/");
+      v7 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v22, 0LL, v20);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(command, v7);
       v8 = 15LL;
-      v9 = &amp;command[1][v25[1]];
-      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> __int64 *)command[0] != &amp;v24 )
+      v9 = &command[1][v25[1]];
+      if ( (unsigned __int64 *)command[0] != &v24 )
         v8 = v24;
-      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> __int64)v9 &lt;= v8 )
-        <span style="color:Blue;">goto</span> LABEL_13;
+      if ( (unsigned __int64)v9 <= v8 )
+        goto LABEL_13;
       v10 = 15LL;
-      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> __int64 *)v25[0] != &amp;v26 )
+      if ( (unsigned __int64 *)v25[0] != &v26 )
         v10 = v26;
-      <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> __int64)v9 &gt; v10 )
+      if ( (unsigned __int64)v9 > v10 )
 LABEL_13:
-        v11 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::append(command, v25);
-      <span style="color:Blue;">else</span>
-        v11 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::insert(v25, 0LL, command);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v21, v11);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(command);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v22);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v25);
+        v11 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(command, v25);
+      else
+        v11 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v25, 0LL, command);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v21, v11);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(command);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v22);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
       std::ifstream::basic_ifstream(v25, v21[0], 6LL);
       v12 = std::istream::tellg((std::istream *)v25);
-      v13 = (<span style="color:Blue;">char</span> *)<span style="color:Blue;">operator</span> <span style="color:Blue;">new</span>[](v12 + 1);
+      v13 = (char *)operator new[](v12 + 1);
       std::istream::seekg(v25, 0LL, 0LL);
       std::istream::read((std::istream *)v25, v13, v12);
       std::ifstream::close(v25);
       v13[v12] = 0;
-      <span style="color:Blue;">while</span> ( v18 + strlen(v13) &gt; size )
+      while ( v18 + strlen(v13) > size )
       {
         size *= 2LL;
         v6 = realloc(v6, size);
       }
-      strcat((<span style="color:Blue;">char</span> *)v6, v13);
+      strcat((char *)v6, v13);
       v18 += v12;
       free(v13);
       std::ifstream::~ifstream(v25);
-      std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v21);
+      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v21);
     }
     a3 = readdir(a4);
-  }
-</pre></div>
-</div>
+  }</code></pre>
 <p>Again here we seem to be looping through all of the items in the directory. However, this time we compare to a different enum (we can look this up to see it is DT_REG, or just regular files). We then seem to be doing some string work in order get the path to the current file, we know this since we use the current directory string, &quot;/&quot;, and the current entity name. We then get the length of the file using seekg and we read the file into memory. We then reallocate the char array is we are above a certain size and hen we concatenate what we just read to another array.</p>
 <p>After having concatenated all of the file contents into the array we move on the section after the while loop.</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  sub_2540(v25, <span style="color:#A31515;">&quot;.txt&quot;</span>);
-  v14 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::insert(v25, 0LL, v20);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v22, v14);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v25);
-  sub_2540(v25, <span style="color:#A31515;">&quot;rm -rf &quot;</span>);
-  v15 = std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::append(v25, v20);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(command, v15);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v25);
+<pre><code class="language-c">  sub_2540(v25, ".txt");
+  v14 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v25, 0LL, v20);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v22, v14);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+  sub_2540(v25, "rm -rf ");
+  v15 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(v25, v20);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(command, v15);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
   system(command[0]);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::basic_string(v25, v22);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v25, v22);
   sub_26A3(v18, v6, v25);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v25);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
   free(v6);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(command);
-  std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v22);
-  <span style="color:Blue;">return</span> std::__cxx11::basic_string&lt;<span style="color:Blue;">char</span>,std::char_traits&lt;<span style="color:Blue;">char</span>&gt;,std::allocator&lt;<span style="color:Blue;">char</span>&gt;&gt;::_M_dispose(v20);
-</pre></div>
-</div>
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(command);
+  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v22);
+  return std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v20);</code></pre>
 <p>First we append &quot;.txt&quot; and the directory path to some new string. We then call rm -rf on the directory and then pass the concatenated bytes to another function, sub_26A3:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall sub_26A3(__int64 a1, <span style="color:Blue;">void</span> *a2, _QWORD *a3)
+<pre><code class="language-c">__int64 __fastcall sub_26A3(__int64 a1, void *a2, _QWORD *a3)
 {
 
   v3 = a1;
@@ -463,22 +422,22 @@ __int64 __fastcall sub_26A3(__int64 a1, <span style="color:Blue;">void</span> *a
   v4 = sub_25CA(a1);
   v47 = realloc(a2, a1 + v4);
 LABEL_2:
-  v5 = sqrt((<span style="color:Blue;">double</span>)(<span style="color:Blue;">int</span>)v3);
+  v5 = sqrt((double)(int)v3);
   v6 = 0LL;
-  v7 = (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(<span style="color:Blue;">int</span>)v5;
-  <span style="color:Blue;">while</span> ( 1 )
+  v7 = (unsigned int)(int)v5;
+  while ( 1 )
   {
-    <span style="color:Blue;">if</span> ( v7 + 1 &lt; v6 )
+    if ( v7 + 1 < v6 )
     {
       v47[v3++] = 0;
-      <span style="color:Blue;">goto</span> LABEL_2;
+      goto LABEL_2;
     }
     v8 = v6 + v7;
     v9 = v3 / (v6 + v7);
     v46 = v9;
     v10 = v3 % (v6 + v7);
-    <span style="color:Blue;">if</span> ( !v10 )
-      <span style="color:Blue;">break</span>;
+    if ( !v10 )
+      break;
     ++v6;
   }
   v11 = 8 * v9;
@@ -487,7 +446,7 @@ LABEL_2:
   v14 = (_DWORD **)malloc(v11);
   v15 = 8 * v8;
   v16 = v14;
-  <span style="color:Blue;">while</span> ( v12 &lt; v46 )
+  while ( v12 < v46 )
   {
     v49 = v15;
     v13[v12] = malloc(v15);
@@ -498,9 +457,9 @@ LABEL_2:
   v18 = 0LL;
   v19 = 0;
   v20 = 0LL;
-  <span style="color:Blue;">while</span> ( v18 &lt; v46 )
+  while ( v18 < v46 )
   {
-    <span style="color:Blue;">for</span> ( i = 0LL; i &lt; v8; ++i )
+    for ( i = 0LL; i < v8; ++i )
     {
       *(_BYTE *)(v13[v18] + i) = v47[v20 + i];
       v16[v18][i] = v19 + i;
@@ -511,64 +470,64 @@ LABEL_2:
   }
   v22 = v3;
   v23 = 1;
-  size = 4LL * (<span style="color:Blue;">int</span>)v3;
+  size = 4LL * (int)v3;
   v24 = malloc(size);
   v25 = 69;
   v26 = v24;
   *v24 = **v16;
-  <span style="color:Blue;">while</span> ( v23 &lt; v22 )
+  while ( v23 < v22 )
   {
     v27 = v25;
     v50 = v25;
     sub_2606(v25, 1);
     v28 = sub_2606(v27, 0);
     v32 = v31 + v28;
-    <span style="color:Blue;">switch</span> ( v25 )
+    switch ( v25 )
     {
-      <span style="color:Blue;">case</span> &#39;N&#39;:
-        v33 = v30 &gt;&gt; 2 &lt;= v32;
-        <span style="color:Blue;">goto</span> LABEL_27;
-      <span style="color:Blue;">case</span> &#39;E&#39;:
+      case 'N':
+        v33 = v30 >> 2 <= v32;
+        goto LABEL_27;
+      case 'E':
         v34 = v29;
         v35 = v8;
-        v36 = v30 &gt;&gt; 2;
-        <span style="color:Blue;">goto</span> LABEL_23;
-      <span style="color:Blue;">case</span> &#39;S&#39;:
+        v36 = v30 >> 2;
+        goto LABEL_23;
+      case 'S':
         v35 = v46;
         v34 = v32;
-        v36 = v30 &gt;&gt; 2;
+        v36 = v30 >> 2;
 LABEL_23:
-        <span style="color:Blue;">if</span> ( v34 &gt;= v35 - v36 )
-          <span style="color:Blue;">goto</span> LABEL_28;
+        if ( v34 >= v35 - v36 )
+          goto LABEL_28;
 LABEL_30:
         v37 = v23++;
         v26[v37] = v16[v32][v29];
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> &#39;W&#39;:
-        v33 = v30 &gt;&gt; 2 &lt;= v29;
+        break;
+      case 'W':
+        v33 = v30 >> 2 <= v29;
 LABEL_27:
-        <span style="color:Blue;">if</span> ( v33 )
-          <span style="color:Blue;">goto</span> LABEL_30;
+        if ( v33 )
+          goto LABEL_30;
 LABEL_28:
         v25 = sub_263A(v50);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">default</span>:
-        <span style="color:Blue;">goto</span> LABEL_30;
+        break;
+      default:
+        goto LABEL_30;
     }
   }
   v38 = malloc(size);
   v39 = v22 - (__int64)(v22 / 5);
-  <span style="color:Blue;">for</span> ( j = v39; v22 &gt; j; ++j )
+  for ( j = v39; v22 > j; ++j )
   {
     v43 = v26[j];
     v38[v10++] = v43;
   }
-  v41 = (<span style="color:Blue;">char</span> *)&amp;v38[v10];
-  <span style="color:Blue;">if</span> ( v39 &lt; 0 )
+  v41 = (char *)&v38[v10];
+  if ( v39 < 0 )
     v39 = 0LL;
   v42 = 0;
   qmemcpy(v41, v26, 4 * v39);
-  <span style="color:Blue;">while</span> ( v42 &lt; v22 )
+  while ( v42 < v22 )
   {
     v44 = sub_2656((__int64)v26, v42);
     sub_2522((__int64)v51, v47[v38[v44]]);
@@ -581,88 +540,73 @@ LABEL_28:
   sub_2522((__int64)v51, 108);
   sub_2522((__int64)v51, 121);
   std::ofstream::close(v51);
-  <span style="color:Blue;">return</span> std::ofstream::~ofstream(v51);
-}
-</pre></div>
-</div>
+  return std::ofstream::~ofstream(v51);
+}</code></pre>
 <p>This function was pretty obviously the algorithm so lets get started:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  v3 = a1;
+<pre><code class="language-c">  v3 = a1;
   std::ofstream::basic_ofstream(v51, *a3, 4LL);
   v4 = sub_25CA(a1);
-  v47 = realloc(a2, a1 + v4);
-</pre></div>
-</div>
+  v47 = realloc(a2, a1 + v4);</code></pre>
 <p>We start off by opening an outstream and then we call sub_25CA:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall sub_25CA(__int64 a1)
+<pre><code class="language-c">__int64 __fastcall sub_25CA(__int64 a1)
 {
 
   v1 = a1;
-  <span style="color:Blue;">do</span>
+  do
   {
-    v2 = (<span style="color:Blue;">double</span>)(<span style="color:Blue;">int</span>)v1;
+    v2 = (double)(int)v1;
     v3 = v1;
     v4 = v1++;
     v5 = v3 - a1;
     v6 = sqrt(v2);
   }
-  <span style="color:Blue;">while</span> ( v4 != (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(<span style="color:Blue;">int</span>)v6 * (<span style="color:Blue;">unsigned</span> __int64)(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(<span style="color:Blue;">int</span>)v6 );
-  <span style="color:Blue;">return</span> v5;
-}
-</pre></div>
-</div>
+  while ( v4 != (unsigned int)(int)v6 * (unsigned __int64)(unsigned int)(int)v6 );
+  return v5;
+}</code></pre>
 <p>This function seems to start with the length that is passed to it and then increases that value till it is a perfect square, we then return the difference between the perfect square and the current length.</p>
 <p>After the function call we allocate the perfect square length of data. The next component of the algorithm is a while loop:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-LABEL_2:
-  v5 = sqrt((<span style="color:Blue;">double</span>)(<span style="color:Blue;">int</span>)v3);
+<pre><code class="language-c">LABEL_2:
+  v5 = sqrt((double)(int)v3);
   v6 = 0LL;
-  v7 = (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(<span style="color:Blue;">int</span>)v5;
-  <span style="color:Blue;">while</span> ( 1 )
+  v7 = (unsigned int)(int)v5;
+  while ( 1 )
   {
-    <span style="color:Blue;">if</span> ( v7 + 1 &lt; v6 )
+    if ( v7 + 1 < v6 )
     {
       v47[v3++] = 0;
-      <span style="color:Blue;">goto</span> LABEL_2;
+      goto LABEL_2;
     }
     v8 = v6 + v7;
     v9 = v3 / (v6 + v7);
     v46 = v9;
     v10 = v3 % (v6 + v7);
-    <span style="color:Blue;">if</span> ( !v10 )
-      <span style="color:Blue;">break</span>;
+    if ( !v10 )
+      break;
     ++v6;
-  }
-</pre></div>
-</div>
+  }</code></pre>
 <p>This loop keeps looping until v3 (length) modded by v6 plus v7 was equal to 0. v7 starts out by being the sqrt of the length of the data. We then keep incrementing v6 from 0 till we reach the checkpoint. If we are unable to make the data rectangle shaped (perfectly dividing closest square plus a value less than or equal to that value) then we add a \x00 to the end of the data and redo the loop.</p>
 <p>We then move on to the next loop:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  v11 = 8 * v9;
+<pre><code class="language-c">  v11 = 8 * v9;
   v12 = 0LL;
   v13 = malloc(8 * v9);
   v14 = (_DWORD **)malloc(v11);
   v15 = 8 * v8;
   v16 = v14;
-  <span style="color:Blue;">while</span> ( v12 &lt; v46 )
+  while ( v12 < v46 )
   {
     v49 = v15;
     v13[v12] = malloc(v15);
     v17 = malloc(4 * v8);
     v15 = v49;
     v16[v12++] = v17;
-  }
-</pre></div>
-</div>
+  }</code></pre>
 <p>What we are doing here is just going through and mallocing space for all the data we need to shuffle around. We then move on to the next loop:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  v18 = 0LL;
+<pre><code class="language-c">  v18 = 0LL;
   v19 = 0;
   v20 = 0LL;
-  <span style="color:Blue;">while</span> ( v18 &lt; v46 )
+  while ( v18 < v46 )
   {
-    <span style="color:Blue;">for</span> ( i = 0LL; i &lt; v8; ++i )
+    for ( i = 0LL; i < v8; ++i )
     {
       *(_BYTE *)(v13[v18] + i) = v47[v20 + i];
       v16[v18][i] = v19 + i;
@@ -670,124 +614,112 @@ LABEL_2:
     ++v18;
     v20 += v8;
     v19 += v8;
-  }
-</pre></div>
-</div>
+  }</code></pre>
 <p>In this function we are creating two different arrays, one with the values from the original data, and the other is the index we used to get that value from the original data. Ok, time for the next section:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
- v22 = v3;
+<pre><code class="language-c"> v22 = v3;
   v23 = 1;
-  size = 4LL * (<span style="color:Blue;">int</span>)v3;
+  size = 4LL * (int)v3;
   v24 = malloc(size);
   v25 = 69;
   v26 = v24;
   *v24 = **v16;
-  <span style="color:Blue;">while</span> ( v23 &lt; v22 )
+  while ( v23 < v22 )
   {
     v27 = v25;
     v50 = v25;
     sub_2606(v25, 1);
     v28 = sub_2606(v27, 0);
     v32 = v31 + v28;
-    <span style="color:Blue;">switch</span> ( v25 )
+    switch ( v25 )
     {
-      <span style="color:Blue;">case</span> &#39;N&#39;:
-        v33 = v30 &gt;&gt; 2 &lt;= v32;
-        <span style="color:Blue;">goto</span> LABEL_27;
-      <span style="color:Blue;">case</span> &#39;E&#39;:
+      case 'N':
+        v33 = v30 >> 2 <= v32;
+        goto LABEL_27;
+      case 'E':
         v34 = v29;
         v35 = v8;
-        v36 = v30 &gt;&gt; 2;
-        <span style="color:Blue;">goto</span> LABEL_23;
-      <span style="color:Blue;">case</span> &#39;S&#39;:
+        v36 = v30 >> 2;
+        goto LABEL_23;
+      case 'S':
         v35 = v46;
         v34 = v32;
-        v36 = v30 &gt;&gt; 2;
+        v36 = v30 >> 2;
 LABEL_23:
-        <span style="color:Blue;">if</span> ( v34 &gt;= v35 - v36 )
-          <span style="color:Blue;">goto</span> LABEL_28;
+        if ( v34 >= v35 - v36 )
+          goto LABEL_28;
 LABEL_30:
         v37 = v23++;
         v26[v37] = v16[v32][v29];
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">case</span> &#39;W&#39;:
-        v33 = v30 &gt;&gt; 2 &lt;= v29;
+        break;
+      case 'W':
+        v33 = v30 >> 2 <= v29;
 LABEL_27:
-        <span style="color:Blue;">if</span> ( v33 )
-          <span style="color:Blue;">goto</span> LABEL_30;
+        if ( v33 )
+          goto LABEL_30;
 LABEL_28:
         v25 = sub_263A(v50);
-        <span style="color:Blue;">break</span>;
-      <span style="color:Blue;">default</span>:
-        <span style="color:Blue;">goto</span> LABEL_30;
+        break;
+      default:
+        goto LABEL_30;
     }
-  }
-</pre></div>
-</div>
+  }</code></pre>
 <p>The first thing we need to figure out in this function is what the sub_2606 function does:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall sub_2606(<span style="color:Blue;">char</span> a1, <span style="color:Blue;">int</span> a2)
+<pre><code class="language-c">__int64 __fastcall sub_2606(char a1, int a2)
 {
-  <span style="color:Blue;">bool</span> v2; <span style="color:Green;">// al</span>
-  __int64 result; <span style="color:Green;">// rax</span>
+  bool v2; // al
+  __int64 result; // rax
 
-  <span style="color:Blue;">if</span> ( a1 != 78 )
+  if ( a1 != 78 )
   {
-    <span style="color:Blue;">if</span> ( a1 == 69 )
+    if ( a1 == 69 )
     {
       LOBYTE(result) = a2 == 1;
     }
-    <span style="color:Blue;">else</span>
+    else
     {
-      <span style="color:Blue;">if</span> ( a1 != 83 )
+      if ( a1 != 83 )
       {
         v2 = a2 == 1;
-        <span style="color:Blue;">return</span> (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)-v2;
+        return (unsigned int)-v2;
       }
       LOBYTE(result) = a2 != 1;
     }
-    <span style="color:Blue;">return</span> (<span style="color:Blue;">unsigned</span> __int8)result;
+    return (unsigned __int8)result;
   }
   v2 = a2 != 1;
-  <span style="color:Blue;">return</span> (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)-v2;
-}
-</pre></div>
-</div>
+  return (unsigned int)-v2;
+}</code></pre>
 <p>This function gets passed 2 values, a1 is either 'N', 'E', 'S', or 'W', while a2 is either 1 or 0. This function then either returns 1, 0, or -1 based on a1 and a2.</p>
 <p>We also have another function, sub_263A, that we need to consider:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">char</span> __fastcall sub_263A(<span style="color:Blue;">char</span> a1)
+<pre><code class="language-c">char __fastcall sub_263A(char a1)
 {
-  <span style="color:Blue;">char</span> result; <span style="color:Green;">// al</span>
+  char result; // al
 
   result = 69;
-  <span style="color:Blue;">if</span> ( a1 != 78 )
+  if ( a1 != 78 )
   {
     result = 83;
-    <span style="color:Blue;">if</span> ( a1 != 69 )
+    if ( a1 != 69 )
       result = 9 * (a1 == 83) + 78;
   }
-  <span style="color:Blue;">return</span> result;
-}
-</pre></div>
-</div>
+  return result;
+}</code></pre>
 <p>This function takes in either 'N', 'E', 'S', or 'W' and then returns another value based on that.</p>
 <p>Looking back at the algorithm, we can see that we loop through the length of the data and then get two different directions, then based on an if statement  we either get a new move direction or we copy data from the second array to the new array we malloced.</p>
 <p>We then move on to the next section:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  v38 = malloc(size);
+<pre><code class="language-c">  v38 = malloc(size);
   v39 = v22 - (__int64)(v22 / 5);
-  <span style="color:Blue;">for</span> ( j = v39; v22 &gt; j; ++j )
+  for ( j = v39; v22 > j; ++j )
   {
     v43 = v26[j];
     v38[v10++] = v43;
   }
-  v41 = (<span style="color:Blue;">char</span> *)&amp;v38[v10];
-  <span style="color:Blue;">if</span> ( v39 &lt; 0 )
+  v41 = (char *)&v38[v10];
+  if ( v39 < 0 )
     v39 = 0LL;
   v42 = 0;
   qmemcpy(v41, v26, 4 * v39);
-  <span style="color:Blue;">while</span> ( v42 &lt; v22 )
+  while ( v42 < v22 )
   {
     v44 = sub_2656((__int64)v26, v42);
     sub_2522((__int64)v51, v47[v38[v44]]);
@@ -799,13 +731,11 @@ __int64 __fastcall sub_2606(<span style="color:Blue;">char</span> a1, <span styl
   sub_2522((__int64)v51, 111);
   sub_2522((__int64)v51, 108);
   sub_2522((__int64)v51, 121);
-  std::ofstream::close(v51);
-</pre></div>
-</div>
+  std::ofstream::close(v51);</code></pre>
 <p>We then malloc a new byte array and move data from the array we just made into the array. We move the data by first getting a value by dividing the length by 5 and then we move the data starting at that index to the end of the data to the new array. Then we move the data from the start to that index over. So something like abcde would become bcdea.</p>
 <p>After that we loop through all the data and write it out to a file, after writing all the data we write abroly to the file as well, and then close the file.</p>
 <p>From here you can make a python version of the algorithm:</p>
-<div class="lang-py editor-colors"># Imports
+<pre><code class="language-text"># Imports
 import numpy as np
 
 # Factor the length as square-like as possible
@@ -890,15 +820,13 @@ def WannaSwirl(in_bytes, nperm=-1):
 
 trial = b'flag{}'
 
-enc = (WannaSwirl(trial,nperm=-1)) + b'abroly'
-</div>
+enc = (WannaSwirl(trial,nperm=-1)) + b'abroly'</code></pre>
 <p>This works as a proof of concept and if you only encrypt one directory deep using the binary you can get the same result.</p>
 <p>I then made a python script to undo what the original swirl function had done. We know that everything is already sized correctly if we remove the abroly at the end so we can just reshape the matrix rather than trying to find the correct size. The vortex will be the same as well, so then all we need to do is use the values from the dictionary to undo what the swirl has done:</p>
-<div class="lang-py editor-colors">for i in range(bytmat.size):
-   swirled[perm_dic[i]] = msg[i]
-</div>
+<pre><code class="language-text">for i in range(bytmat.size):
+   swirled[perm_dic[i]] = msg[i]</code></pre>
 <p>Writing a full script I got:</p>
-<div class="lang-py editor-colors"># Imports
+<pre><code class="language-text"># Imports
 import numpy as np
 import sys
 
@@ -973,22 +901,18 @@ def unswirl(msg):
 
 enc = open(sys.argv[1], "rb").read().rstrip(b'abroly')
 
-dec = unswirl(enc)
-</div>
+dec = unswirl(enc)</code></pre>
 <p>I then added some code at the bottom of the file to search for the flag:</p>
-<div class="lang-py editor-colors">flg = str(dec).index('flag{')
+<pre><code class="language-text">flg = str(dec).index('flag{')
 
-print(str(dec)[flg:flg+100])
-</div>
+print(str(dec)[flg:flg+100])</code></pre>
 <p>Running this on the original FlagFolder.txt I get:</p>
-<pre><code>flag{w0w_1m_g3tt1ng_s0_d1zzy_1_th1nk_1m_g0nn4_puk3}Lorem ipsum dolor sit amet, consectetur adipiscin
-</code></pre>
+<pre><code class="language-text">flag{w0w_1m_g3tt1ng_s0_d1zzy_1_th1nk_1m_g0nn4_puk3}Lorem ipsum dolor sit amet, consectetur adipiscin</code></pre>
 <p>However the original file had an unintended solve where you could simply ctrl + f for { and see the flag so another file was released. Running our solve script on that file we get that the substring wasn't find so I decided to print out dec:</p>
-<pre><code>b'QRSTUVWf\n98765432}00t_n14rb_ym_d31rFGXl1ws_lr1ws4l}aEPONMLKJ{{w4nng_YDCBAzyxwvutsrIZaHqponmlkjihgfedcbabrolyabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\n'
-</code></pre>
+<pre><code class="language-text">b'QRSTUVWf\n98765432}00t_n14rb_ym_d31rFGXl1ws_lr1ws4l}aEPONMLKJ{{w4nng_YDCBAzyxwvutsrIZaHqponmlkjihgfedcbabrolyabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\n'</code></pre>
 <p>We can see that there is another abroly in the output so now we need to consider what the program does. We know how to reverse a single swirl, but the program swirls every single directory starting from the farthest down. Encrypting the directory, moving it up one directory, encrypting again, until all of the subfolders have been encrypted into one single massive file. With the subfolders having been encrypted multiple times.</p>
 <p>Lucily for us, the hacker wasn't very smart and added abroly to the end of each swirl so we basically have a partition that we can look up. So what we need to do it split on that partition and run the unswirl function yet again:</p>
-<div class="lang-py editor-colors"># Imports
+<pre><code class="language-text"># Imports
 import numpy as np
 import sys
 
@@ -1065,12 +989,9 @@ enc = open(sys.argv[1], "rb").read().rstrip(b'abroly')
 
 dec = unswirl(enc)
 
-print(unswirl(dec.split(b'abroly')[0]))
-</div>
+print(unswirl(dec.split(b'abroly')[0]))</code></pre>
 <p>When run on the file the output is:</p>
-<pre><code>b'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nflag{w4nn4sw1rl_sw1rl3d_my_br41n_t00}'
-</code></pre>
-
+<pre><code class="language-text">b'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nflag{w4nn4sw1rl_sw1rl3d_my_br41n_t00}'</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -1083,5 +1004,6 @@ print(unswirl(dec.split(b'abroly')[0]))
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

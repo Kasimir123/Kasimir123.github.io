@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,7 +74,7 @@
 <p>Comments: Norse senor snorts spores, abhors non-nors, adores s'mores, and snores.</p>
 <h2 id="write-up">Write up:</h2>
 <p>For this challenge I noticed that this would require a z3 script to solve so I went and wrote a script:</p>
-<div class="lang-py editor-colors">from z3 import *
+<pre><code class="language-text">from z3 import *
 
 s = Solver()
 
@@ -103,10 +104,9 @@ s.add(w1 == ~(flag | c1))
 
 print(s.check())
 print(s.assertions())
-print(s.model())
-</div>
+print(s.model())</code></pre>
 <p>The script solves backwards from the output since we know that wrong equals 0. Once solved it then prints out the flag:</p>
-<pre><code>sat
+<pre><code class="language-text">sat
 [~(w7 | w8) == 0,
  w8 ==
  ~(95000751626272728732540896924058463535582995596703552905478832713420442258465 |
@@ -132,15 +132,11 @@ print(s.model())
  w3 = 18720520355760665948407574113844429694093778404376606824335946431530901053788,
  w2 = 2070817255282800742622513970785014623593210664560404309642804862961786327682,
  w7 = 95000751626272728732540896924058463535582995596703552905478832713420442258465,
- w8 = 20791337611043466691030088084629444317686989068937011133978751294492687381470]
-</code></pre>
+ w8 = 20791337611043466691030088084629444317686989068937011133978751294492687381470]</code></pre>
 <p>I then converted the decimal flag value to hex:</p>
-<pre><code>0x696374667B4131315F686121315F7468335F6E33775F6E30726D5F6E3072217D
-</code></pre>
+<pre><code class="language-text">0x696374667B4131315F686121315F7468335F6E33775F6E30726D5F6E3072217D</code></pre>
 <p>When run through a hex to ascii converted I then got:</p>
-<pre><code>ictf{A11_ha!1_th3_n3w_n0rm_n0r!}
-</code></pre>
-
+<pre><code class="language-text">ictf{A11_ha!1_th3_n3w_n0rm_n0r!}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -153,5 +149,6 @@ print(s.model())
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

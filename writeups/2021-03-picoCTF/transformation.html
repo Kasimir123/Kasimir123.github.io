@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,9 +73,7 @@
 <p>Category: Reverse Engineering</p>
 <p>Comments:</p>
 <p>I wonder what this really is... enc</p>
-<div class="lang-python editor-colors">''.join([chr((ord(flag[i]) << 8) + ord(flag[i + 1])) for i in range(0, len(flag), 2)])
-</div>
-<h2 id="write-up">Write up:</h2>
+<pre><code class="language-python">''.join([chr((ord(flag[i]) << 8) + ord(flag[i + 1])) for i in range(0, len(flag), 2)])</code></pre><h2 id="write-up">Write up:</h2>
 <p>Looking at the &quot;encryption&quot; used on the flag I noticed a few things.</p>
 <ul>
 <li>The script loops through 2 characters at a time</li>
@@ -82,7 +81,7 @@
 <li>This is then added to the value of the 2nd character and turned into a character</li>
 </ul>
 <p>So in order to undo this we need to take each character, take the first 2 bytes and turn that into a character and take the last 2 bytes into a character as well:</p>
-<div class="lang-python editor-colors"># encrypted text
+<pre><code class="language-python"># encrypted text
 out = "灩捯䍔䙻ㄶ形楴獟楮獴㌴摟潦弸弰㑣〷㘰摽"
 
 # string to output to
@@ -96,12 +95,9 @@ for x in out:
 	s += chr(ord(x)&0xFF)
 
 # print string
-print(s)
-</div>
+print(s)</code></pre>
 <p>When run we get:</p>
-<pre><code>picoCTF{16_bits_inst34d_of_8_04c0760d}
-</code></pre>
-
+<pre><code class="language-text">picoCTF{16_bits_inst34d_of_8_04c0760d}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -114,5 +110,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

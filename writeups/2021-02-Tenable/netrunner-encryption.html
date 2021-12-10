@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -75,47 +76,44 @@
 <p><a href="http://167.71.246.232:8080/crypto.php">http://167.71.246.232:8080/crypto.php</a></p>
 <h2 id="write-up">Write up:</h2>
 <p>Looking at the url I saw the following webpage:</p>
-<p><img src="./Photos/webpage.PNG" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2021-02-Tenable/netrunner-encryption/Photos/webpage.PNG" alt="" /></p>
 <p>Clicking on the source code I saw:</p>
-<div class="lang-php editor-colors"><div style="color:Black;background-color:White;"><pre>
-&lt;html&gt;
-&lt;body&gt;
-  &lt;h1&gt;Netrunner Encryption Tool&lt;/h1&gt;
-  &lt;a href=<span style="color:#A31515;">&quot;netrun.txt&quot;</span>&gt;Source Code&lt;/a&gt;
-  &lt;form method=post action=<span style="color:#A31515;">&quot;crypto.php&quot;</span>&gt;
-  &lt;input type=text name=<span style="color:#A31515;">&quot;text_to_encrypt&quot;</span>&gt;
-  &lt;input type=<span style="color:#A31515;">&quot;submit&quot;</span> name=<span style="color:#A31515;">&quot;do_encrypt&quot;</span> value=<span style="color:#A31515;">&quot;Encrypt&quot;</span>&gt;
-  &lt;/form&gt;
+<pre><code class="language-php"><html>
+<body>
+  <h1>Netrunner Encryption Tool</h1>
+  <a href="netrun.txt">Source Code</a>
+  <form method=post action="crypto.php">
+  <input type=text name="text_to_encrypt">
+  <input type="submit" name="do_encrypt" value="Encrypt">
+  </form>
 
-&lt;?php
+<?php
 
-<span style="color:Blue;">function</span> pad_data($data)
+function pad_data($data)
 {
-  $flag = <span style="color:#A31515;">&quot;flag{wouldnt_y0u_lik3_to_know}&quot;</span>; 
+  $flag = "flag{wouldnt_y0u_lik3_to_know}"; 
 
   $pad_len = (16 - (strlen($data.$flag) % 16));
-  <span style="color:Blue;">return</span> $data . $flag . str_repeat(chr($pad_len), $pad_len);
+  return $data . $flag . str_repeat(chr($pad_len), $pad_len);
 }
 
-<span style="color:Blue;">if</span>(<span style="color:Blue;">isset</span>($_POST[<span style="color:#A31515;">&quot;do_encrypt&quot;</span>]))
+if(isset($_POST["do_encrypt"]))
 {
-  $cipher = <span style="color:#A31515;">&quot;aes-128-ecb&quot;</span>;
-  $iv  = hex2bin(<span style="color:#A31515;">&#39;00000000000000000000000000000000&#39;</span>);
-  $key = hex2bin(<span style="color:#A31515;">&#39;74657374696E676B6579313233343536&#39;</span>);
-  <span style="color:Blue;">echo</span> <span style="color:#A31515;">&quot;&lt;/br&gt;&lt;br&gt;&lt;h2&gt;Encrypted Data:&lt;/h2&gt;&quot;</span>;
-  $ciphertext = openssl_encrypt(pad_data($_POST[<span style="color:#A31515;">&#39;text_to_encrypt&#39;</span>]), $cipher, $key, 0, $iv); 
+  $cipher = "aes-128-ecb";
+  $iv  = hex2bin('00000000000000000000000000000000');
+  $key = hex2bin('74657374696E676B6579313233343536');
+  echo "</br><br><h2>Encrypted Data:</h2>";
+  $ciphertext = openssl_encrypt(pad_data($_POST['text_to_encrypt']), $cipher, $key, 0, $iv); 
 
-  <span style="color:Blue;">echo</span> <span style="color:#A31515;">&quot;&lt;br/&gt;&quot;</span>;
-  <span style="color:Blue;">echo</span> <span style="color:#A31515;">&quot;&lt;b&gt;$ciphertext&lt;/b&gt;&quot;</span>;
+  echo "<br/>";
+  echo "<b>$ciphertext</b>";
 }
-?&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</pre></div>
-</div>
+?>
+</body>
+</html></code></pre>
 <p>I noticed that any text you input got encrypted and then the encrypted flag and padding were appended to it afterwards. My teammate and I then made the following script to decrypt one letter at a time by block width. This works because we could set the first block to anything we wanted and thus knew what it was:</p>
 <p>OURDATA|FLAG|PADDING</p>
-<div class="lang-python editor-colors">from Crypto.Cipher import AES
+<pre><code class="language-python">from Crypto.Cipher import AES
 import threading
 import requests
 import base64
@@ -165,10 +163,9 @@ for i in chars:
     t.start()
     threads.append(t)
 for i in threads:
-    i.join()
-</div>
+    i.join()</code></pre>
 <p>Each time this was run we got one more letter which we then added to the FLAG variable. We kept doing this until we had the entire first block of the flag, however the flag was split out over two blocks so we had to update the script to check the second block:</p>
-<div class="lang-python editor-colors">FLAG = 'flag{b4d_bl0cks_'
+<pre><code class="language-python">FLAG = 'flag{b4d_bl0cks_'
 i_len = 15+16-len(FLAG)
 
 
@@ -192,12 +189,9 @@ for i in chars:
     t.start()
     threads.append(t)
 for i in threads:
-    i.join()
-</div>
+    i.join()</code></pre>
 <p>Once fully decrypted we got:</p>
-<pre><code>flag{b4d_bl0cks_for_g0nks}
-</code></pre>
-
+<pre><code class="language-text">flag{b4d_bl0cks_for_g0nks}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -210,5 +204,6 @@ for i in threads:
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -78,43 +79,39 @@
 <p>Questy McQuestgiver is too wise to fall for your tricks. Did you think you could just lie to him? Did you think you could just take the scroll without actually killing all those saplings? Think again. That said... he did spill the beans on what the prize is... I wonder if there's another way to obtain it?</p>
 <h2 id="write-up">Write up:</h2>
 <p>This last pwntown hacking was really the only game hacking among these challenges. For this I used the metadata from the game files to create a dummy dll using ill2cpp dumper. I then used dnspy to look through until I found the item mail unlock function. I then hooked that function and bought the monster scroll rather than the potion. Using the scroll got the flag.</p>
-<div class="lang-c++ editor-colors"><div style="color:Black;background-color:White;"><pre>
-#include <span style="color:#A31515;">&quot;Hack.h&quot;</span>
+<pre><code class="language-text">#include "Hack.h"
 
 
-<span style="color:Blue;">typedef</span> <span style="color:Blue;">int</span>(__fastcall *tItemBuy)(<span style="color:Blue;">void</span>*, <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>, <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>);
+typedef int(__fastcall *tItemBuy)(void*, unsigned int, unsigned int);
 
 tItemBuy itemBuyGateway;
 
-<span style="color:Blue;">int</span> __fastcall buyCall(<span style="color:Blue;">void</span>* ecx, <span style="color:Blue;">void</span>* edx, <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> a2, <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> a3)
+int __fastcall buyCall(void* ecx, void* edx, unsigned int a2, unsigned int a3)
 {
 
-	<span style="color:Blue;">return</span> itemBuyGateway(ecx, 3, 0);
+	return itemBuyGateway(ecx, 3, 0);
 }
 
-<span style="color:Blue;">void</span> Pwntown(HANDLE h, HMODULE hMod)
+void Pwntown(HANDLE h, HMODULE hMod)
 {
 	AllocConsole();
 	FILE* f;
-	freopen_s(&amp;f, <span style="color:#A31515;">&quot;CONOUT$&quot;</span>, <span style="color:#A31515;">&quot;w&quot;</span>, stdout);
+	freopen_s(&f, "CONOUT$", "w", stdout);
 
 
-	Hook itemBuyHook((BYTE*)(((uintptr_t)GetModuleHandleW(L<span style="color:#A31515;">&quot;GameAssembly.dll&quot;</span>) + 0x251E40)), (BYTE*)buyCall, (BYTE*)&amp;itemBuyGateway, 15);
+	Hook itemBuyHook((BYTE*)(((uintptr_t)GetModuleHandleW(L"GameAssembly.dll") + 0x251E40)), (BYTE*)buyCall, (BYTE*)&itemBuyGateway, 15);
 
 	itemBuyHook.Enable();
 
-	<span style="color:Blue;">while</span> (<span style="color:Blue;">true</span>)
+	while (true)
 	{
-		<span style="color:Blue;">if</span> (GetAsyncKeyState(VK_SHIFT) &amp;&amp; GetAsyncKeyState(VK_ESCAPE)) { <span style="color:Blue;">break</span>; }
+		if (GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(VK_ESCAPE)) { break; }
 	}
 
 	itemBuyHook.Disable();
 	fclose(f);
 	FreeConsole();
-}
-</pre></div>
-</div>
-
+}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -127,5 +124,6 @@ tItemBuy itemBuyGateway;
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

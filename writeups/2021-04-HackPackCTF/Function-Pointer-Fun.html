@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -74,80 +75,71 @@
 <p>nc ctf2021.hackpack.club 10998</p>
 <h2 id="write-up">Write up:</h2>
 <p>I started by decompiling the function, the main function looked like:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">int</span> result; 
-  <span style="color:Blue;">bool</span> changed; 
-  <span style="color:Blue;">int</span> i;
-  <span style="color:Blue;">int</span> (*fp)(<span style="color:Blue;">void</span>);
-  <span style="color:Blue;">char</span> seed[5];
-  <span style="color:Blue;">unsigned</span> __int64 v8;
+  int result; 
+  bool changed; 
+  int i;
+  int (*fp)(void);
+  char seed[5];
+  unsigned __int64 v8;
 
   v8 = __readfsqword(0x28u);
   setvbuf(_bss_start, 0LL, 2, 0LL);
   *(_DWORD *)seed = 0;
   seed[4] = 0;
-  printf(<span style="color:#A31515;">&quot;Hello, Mr. Eusk. \nPassword &gt; &quot;</span>);
-  __isoc99_scanf(<span style="color:#A31515;">&quot;%4s&quot;</span>, seed);
+  printf("Hello, Mr. Eusk. \nPassword > ");
+  __isoc99_scanf("%4s", seed);
   changed = 0;
-  <span style="color:Blue;">for</span> ( i = 0; i &lt;= 3; ++i )
+  for ( i = 0; i <= 3; ++i )
   {
-    <span style="color:Blue;">if</span> ( seed[i] )
+    if ( seed[i] )
       changed = 1;
   }
-  <span style="color:Blue;">if</span> ( !changed )
+  if ( !changed )
   {
-    puts(<span style="color:#A31515;">&quot;You gotta give an input!&quot;</span>);
+    puts("You gotta give an input!");
     result = 1;
   }
-  <span style="color:Blue;">else</span>
+  else
   {
     fp = pickFunction(seed);
-    ((<span style="color:Blue;">void</span> (__fastcall *)(<span style="color:Blue;">char</span> *))fp)(seed);
+    ((void (__fastcall *)(char *))fp)(seed);
     result = 0;
   }
-  <span style="color:Blue;">return</span> result;
-}
-</pre></div>
-</div>
+  return result;
+}</code></pre>
 <p>I noticed the pickFunction function and decided to decompile that as well:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> (*__cdecl pickFunction(<span style="color:Blue;">char</span> *seed))(<span style="color:Blue;">void</span>)
+<pre><code class="language-c">int (*__cdecl pickFunction(char *seed))(void)
 {
-  <span style="color:Blue;">char</span> res; 
+  char res; 
 
-  res = (seed[2] | seed[3]) &amp; (*seed | seed[1]);
-  <span style="color:Blue;">if</span> ( res == 73 )
-    <span style="color:Blue;">return</span> funTwo;
-  <span style="color:Blue;">if</span> ( res &gt; 0 &amp;&amp; res &lt;= 31 )
-    <span style="color:Blue;">return</span> funOne;
-  <span style="color:Blue;">if</span> ( res &gt; 31 &amp;&amp; res &lt;= 63 )
-    <span style="color:Blue;">return</span> funThree;
-  <span style="color:Blue;">if</span> ( res &lt;= 63 || res &gt; 95 )
-    <span style="color:Blue;">return</span> funFive;
-  <span style="color:Blue;">return</span> funFour;
-}
-</pre></div>
-</div>
+  res = (seed[2] | seed[3]) & (*seed | seed[1]);
+  if ( res == 73 )
+    return funTwo;
+  if ( res > 0 && res <= 31 )
+    return funOne;
+  if ( res > 31 && res <= 63 )
+    return funThree;
+  if ( res <= 63 || res > 95 )
+    return funFive;
+  return funFour;
+}</code></pre>
 <p>This function took in a char array contianing 4 chars and then used those to pick a function. I then needed to check which function had what I needed. I found out that funcTwo had what I needed:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl funTwo()
+<pre><code class="language-c">int __cdecl funTwo()
 {
   FILE *fp; 
-  <span style="color:Blue;">char</span> flag[25]; 
-  <span style="color:Blue;">unsigned</span> __int64 v3; 
+  char flag[25]; 
+  unsigned __int64 v3; 
 
   v3 = __readfsqword(0x28u);
-  fp = fopen(<span style="color:#A31515;">&quot;flag&quot;</span>, <span style="color:#A31515;">&quot;r&quot;</span>);
+  fp = fopen("flag", "r");
   fgets(flag, 25, fp);
   puts(flag);
-  <span style="color:Blue;">return</span> 1;
-}
-</pre></div>
-</div>
+  return 1;
+}</code></pre>
 <p>I now needed to write a script to figure out what 4 characters I should send, I decided to use Z3:</p>
-<div class="lang-python editor-colors"># import z3
+<pre><code class="language-python"># import z3
 from z3 import *
 
 # instantiate solver
@@ -176,32 +168,27 @@ print(s.assertions())
 m = s.model()
 
 # print the model
-print(m)
-</div>
+print(m)</code></pre>
 <p>When run this output:</p>
-<pre><code>sat
-[a &lt; 127,
- b &lt; 127,
- c &lt; 127,
- d &lt; 127,
- a &gt; 32,
- b &gt; 32,
- c &gt; 32,
- d &gt; 32,
- (c | d) &amp; (a | b) == 73]
-[b = 48, a = 105, c = 64, d = 73]
-</code></pre>
+<pre><code class="language-text">sat
+[a < 127,
+ b < 127,
+ c < 127,
+ d < 127,
+ a > 32,
+ b > 32,
+ c > 32,
+ d > 32,
+ (c | d) & (a | b) == 73]
+[b = 48, a = 105, c = 64, d = 73]</code></pre>
 <p>From this I was able to figure out the four characters to send were:</p>
-<pre><code>i0@I
-</code></pre>
+<pre><code class="language-text">i0@I</code></pre>
 <p>I then connected to the server and tried my solve:</p>
-<pre><code>nc ctf2021.hackpack.club 10998
+<pre><code class="language-text">nc ctf2021.hackpack.club 10998
 
 Hello, Mr. Eusk. 
-Password &gt; i0@I
-flag{c1RcU1t5_R_fUn!2!}
-</code></pre>
-
+Password > i0@I
+flag{c1RcU1t5_R_fUn!2!}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -214,5 +201,6 @@ flag{c1RcU1t5_R_fUn!2!}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

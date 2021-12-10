@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,23 +74,22 @@
 <p>Comment: Brutus has planned something to kill ceaser and ceaser has dreamed to be k!lLed but brutus is hiding his mission code. Can you find that code?</p>
 <h2 id="write-up">Write up:</h2>
 <p>Running strings on the image provided me with the following:</p>
-<pre><code>strings img1.jpg
+<pre><code class="language-text">strings img1.jpg
 
 ...
 H'cC
-&quot;G      $
-m$F&gt;
-6&gt;'k
+"G      $
+m$F>
+6>'k
 uBUlYf
 J-YA
 /$00a
 [?\L
         mm[q
-flag{3oR1r$_h!iIba_(b@pb4}
-</code></pre>
+flag{3oR1r$_h!iIba_(b@pb4}</code></pre>
 <p>The flag seemed to be encrypted, using the comment on the challenge I surmised that the flag used a Caesar cipher.</p>
 <p>Running the cipher through a brute force decoder I got the follow:</p>
-<p><img src="./Photos/Cipher.PNG" alt="Cipher" /></p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2021-01-ShadowCTF/Brutus-Killer/Photos/Cipher.PNG" alt="Cipher" /></p>
 
         </article>
 
@@ -103,5 +103,6 @@ flag{3oR1r$_h!iIba_(b@pb4}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

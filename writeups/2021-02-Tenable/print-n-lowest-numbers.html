@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,84 +73,75 @@
 <p>Category: Code</p>
 <p>Comment:</p>
 <p>Below is some C/C++ code that reads a list of integers from stdin and calls &quot;PrintNLowestNumbers&quot;. Implement PrintNLowestNumbers, which takes an int array of these integers, an int representing the length of that integer array , and an unsigned short &quot;nLowest,&quot; which indicates how many of the lowest numbers in the integer array are to be printed to stdout. The printed integers must be printed in order (lowest to highest) and should each be seperated by a space character and nothing else.</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-#include &lt;iostream&gt;
+<pre><code class="language-c">#include <iostream>
 
-<span style="color:Blue;">void</span> PrintNLowestNumbers(<span style="color:Blue;">int</span> arr[], <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> length, <span style="color:Blue;">unsigned</span> <span style="color:Blue;">short</span> nLowest)
+void PrintNLowestNumbers(int arr[], unsigned int length, unsigned short nLowest)
 {
- <span style="color:Green;">// print the n lowest numbers to stdout seperated by space character, do not de-dupe</span>
+ // print the n lowest numbers to stdout seperated by space character, do not de-dupe
 }
 
-<span style="color:Blue;">int</span> main()
+int main()
 {
-	<span style="color:Blue;">char</span> input[0x100];
-	<span style="color:Blue;">int</span> integerList[0x100];
-	<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> length;
-	<span style="color:Blue;">unsigned</span> <span style="color:Blue;">short</span> nLowest;
-	std::cin &gt;&gt; nLowest;
-	std::cin &gt;&gt; length;
-	<span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i=0;i&lt;length;i++)
-		 std::cin &gt;&gt; integerList[i];
+	char input[0x100];
+	int integerList[0x100];
+	unsigned int length;
+	unsigned short nLowest;
+	std::cin >> nLowest;
+	std::cin >> length;
+	for (int i=0;i<length;i++)
+		 std::cin >> integerList[i];
 	PrintNLowestNumbers(integerList, length, nLowest);
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>stdin example:</p>
-<pre><code>5 8 0 22 -2000 8 62 -26 8 99
-</code></pre>
+<pre><code class="language-text">5 8 0 22 -2000 8 62 -26 8 99</code></pre>
 <p>stdout example:</p>
-<pre><code>-2000 -26 0 8 8
-</code></pre>
+<pre><code class="language-text">-2000 -26 0 8 8</code></pre>
 <p>You can ignore the default code below and instead use code above. Once function is implemented, simply copy/paste into box and run. Ensure not to print anything else besides your answer during your code execution!</p>
 <h2 id="write-up">Write up:</h2>
 <p>This challenge said we could use C or C++, I chose c++ but sadly the challenge did not allow the use of vector. Rather than attempting to mess with memory management I just wrote this ugly program to print out the smallest number while replacing it with the largest number. This destroyed the list but functioned as needed.</p>
-<div class="lang-c++ editor-colors"><div style="color:Black;background-color:White;"><pre>
-#include &lt;iostream&gt;
+<pre><code class="language-text">#include <iostream>
 
-<span style="color:Blue;">void</span> PrintNLowestNumbers(<span style="color:Blue;">int</span> arr[], <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> length, <span style="color:Blue;">unsigned</span> <span style="color:Blue;">short</span> nLowest)
+void PrintNLowestNumbers(int arr[], unsigned int length, unsigned short nLowest)
 {
-    <span style="color:Blue;">int</span> x = arr[0];
-    <span style="color:Blue;">int</span> max = arr[0];
-    <span style="color:Blue;">int</span> index = 0;
- 	<span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 0; i &lt; nLowest; i++)
+    int x = arr[0];
+    int max = arr[0];
+    int index = 0;
+ 	for (int i = 0; i < nLowest; i++)
  	{
-     	<span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> j = 0; j &lt; length; j++)
+     	for (int j = 0; j < length; j++)
     	{
-         	<span style="color:Blue;">if</span> (arr[j] &lt; x)
+         	if (arr[j] < x)
          	{
              	x = arr[j];
              	index = j;
          	}
-         	<span style="color:Blue;">if</span> (arr[j] &gt; max)
+         	if (arr[j] > max)
          	{
              	max = arr[j];
          	}
      	}
 
-     	std::cout &lt;&lt; x;
-     	std::cout &lt;&lt; <span style="color:#A31515;">&quot; &quot;</span>;
+     	std::cout << x;
+     	std::cout << " ";
      	arr[index] = max;
      	x = max;
  }
 
-std::cout &lt;&lt; std::endl;
+std::cout << std::endl;
 }
 
-<span style="color:Blue;">int</span> main()
+int main()
 {
-    <span style="color:Blue;">char</span> input[0x100];
-    <span style="color:Blue;">int</span> integerList[0x100];
-    <span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> length;
-    <span style="color:Blue;">unsigned</span> <span style="color:Blue;">short</span> nLowest;
-    std::cin &gt;&gt; nLowest;
-    std::cin &gt;&gt; length;
-    <span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i=0;i&lt;length;i++)
-         std::cin &gt;&gt; integerList[i];
+    char input[0x100];
+    int integerList[0x100];
+    unsigned int length;
+    unsigned short nLowest;
+    std::cin >> nLowest;
+    std::cin >> length;
+    for (int i=0;i<length;i++)
+         std::cin >> integerList[i];
     PrintNLowestNumbers(integerList, length, nLowest);
-}
-</pre></div>
-</div>
-
+}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -162,5 +154,6 @@ std::cout &lt;&lt; std::endl;
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

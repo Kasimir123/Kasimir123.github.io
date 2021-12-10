@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,16 +72,13 @@
 <p>Category: Reverse Engineering</p>
 <p>Points: 50</p>
 <p>Comments:</p>
-<pre><code>We uncovered an early version of Mike Tyson's Punch-Out! This is quite possibly the greatest fighting game ever released featuring a 2-D Mike Tyson.
+<pre><code class="language-text">We uncovered an early version of Mike Tyson's Punch-Out! This is quite possibly the greatest fighting game ever released featuring a 2-D Mike Tyson.
 
 Rumor has it that this version of the game had a few bugs impacting the difficulty... See if you can beat it!
 
-Flag format: the flag will be the sequence of actions you enter to win the game
-</code></pre>
-<h2 id="write-up">Write up:</h2>
+Flag format: the flag will be the sequence of actions you enter to win the game</code></pre><h2 id="write-up">Write up:</h2>
 <p>Opening the program in a decompiler I saw that the main function was:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
 
   dest[5] = __readfsqword(0x28u);
@@ -95,13 +93,13 @@ Flag format: the flag will be the sequence of actions you enter to win the game
   dest[3] = 0LL;
   srand(0x539u);
   puts(
-    <span style="color:#A31515;">&quot;=======================================================================\n&quot;</span>
-    <span style="color:#A31515;">&quot;                Mike Tyson&#39;s Puch-Out! (pre-alpha build)!              \n&quot;</span>
-    <span style="color:#A31515;">&quot;                (imagine this is flashing and looks cool)              \n&quot;</span>
-    <span style="color:#A31515;">&quot;                        &gt;&gt; graphics go here &lt;&lt;                         \n&quot;</span>
-    <span style="color:#A31515;">&quot;=======================================================================&quot;</span>);
+    "=======================================================================\n"
+    "                Mike Tyson's Puch-Out! (pre-alpha build)!              \n"
+    "                (imagine this is flashing and looks cool)              \n"
+    "                        >> graphics go here <<                         \n"
+    "=======================================================================");
   printf(
-    <span style="color:#A31515;">&quot;Choose your opponent: \n0:  %s\n1:  %s\n2:  %s\n3:  %s\n4:  %s\n5:  %s\n6:  %s\n7:  %s\n8:  %s\n9:  %s\n&gt;&gt; &quot;</span>,
+    "Choose your opponent: \n0:  %s\n1:  %s\n2:  %s\n3:  %s\n4:  %s\n5:  %s\n6:  %s\n7:  %s\n8:  %s\n9:  %s\n>> ",
     boxers,
     off_4028,
     off_4030,
@@ -112,98 +110,79 @@ Flag format: the flag will be the sequence of actions you enter to win the game
     off_4058,
     off_4060,
     off_4068);
-  *(_DWORD *)v6 = (<span style="color:Blue;">unsigned</span> __int8)getchar();
+  *(_DWORD *)v6 = (unsigned __int8)getchar();
   v3 = v6[0] - 48;
-  <span style="color:Blue;">if</span> ( v3 &lt;= 9 )
+  if ( v3 <= 9 )
     __asm { jmp     rax }
   v4 = strlen(src);
   memcpy(dest, src, v4);
-  puts(<span style="color:#A31515;">&quot;Sorry that boxer is not available. We&#39;re sending you in with Mike Tyson, smarty pants.&quot;</span>);
+  puts("Sorry that boxer is not available. We're sending you in with Mike Tyson, smarty pants.");
   getchar();
   printf(
-    <span style="color:#A31515;">&quot;\n&quot;</span>
-    <span style="color:#A31515;">&quot;Action list: \n&quot;</span>
-    <span style="color:#A31515;">&quot;0: Dodge and counter right punch.\n&quot;</span>
-    <span style="color:#A31515;">&quot;1: Dodge and counter left punch.\n&quot;</span>
-    <span style="color:#A31515;">&quot;2: Dodge and counter right kick.\n&quot;</span>
-    <span style="color:#A31515;">&quot;3: Dodge and counter left kick.\n&quot;</span>
-    <span style="color:#A31515;">&quot;\n&quot;</span>
-    <span style="color:#A31515;">&quot;%s&#39;s so fast, you need to pick your action before he does!\n&quot;</span>,
-    (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)dest);
-  <span style="color:Blue;">for</span> ( i = 0; i &lt;= 23; ++i )
+    "\n"
+    "Action list: \n"
+    "0: Dodge and counter right punch.\n"
+    "1: Dodge and counter left punch.\n"
+    "2: Dodge and counter right kick.\n"
+    "3: Dodge and counter left kick.\n"
+    "\n"
+    "%s's so fast, you need to pick your action before he does!\n",
+    (const char *)dest);
+  for ( i = 0; i <= 23; ++i )
   {
-    printf(<span style="color:#A31515;">&quot;Action: &quot;</span>);
+    printf("Action: ");
     fgets(s, 32, _bss_start);
-    __isoc99_sscanf(s, <span style="color:#A31515;">&quot;%u&quot;</span>, &amp;v6[1]);
-    <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)combatAction(dest, *(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> *)&amp;v6[1]) )
+    __isoc99_sscanf(s, "%u", &v6[1]);
+    if ( !(unsigned int)combatAction(dest, *(unsigned int *)&v6[1]) )
     {
-      printf(<span style="color:#A31515;">&quot;[Attack: %d] %s connects snd knocks you down! KO!\n\n&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(i + 1), (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)dest);
-      <span style="color:Blue;">return</span> 0;
+      printf("[Attack: %d] %s connects snd knocks you down! KO!\n\n", (unsigned int)(i + 1), (const char *)dest);
+      return 0;
     }
     printf(
-      <span style="color:#A31515;">&quot;[Attack: %d] You dodge %s&#39;s attack and connect with your own! Keep going!\n\n&quot;</span>,
-      (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(i + 1),
-      (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)dest);
+      "[Attack: %d] You dodge %s's attack and connect with your own! Keep going!\n\n",
+      (unsigned int)(i + 1),
+      (const char *)dest);
   }
-  puts(<span style="color:#A31515;">&quot;\nRoll credits. You win! Your flag is the winning comabt sequence. i.e. 020130112...\n&quot;</span>);
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  puts("\nRoll credits. You win! Your flag is the winning comabt sequence. i.e. 020130112...\n");
+  return 0;
+}</code></pre>
 <p>I noticed two things here, the first was that to get the right combination we would need to loop through 24 times return 1 from the combatAction function each time:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  <span style="color:Blue;">for</span> ( i = 0; i &lt;= 23; ++i )
+<pre><code class="language-c">  for ( i = 0; i <= 23; ++i )
   {
-    printf(<span style="color:#A31515;">&quot;Action: &quot;</span>);
+    printf("Action: ");
     fgets(s, 32, _bss_start);
-    __isoc99_sscanf(s, <span style="color:#A31515;">&quot;%u&quot;</span>, &amp;v6[1]);
-    <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)combatAction(dest, *(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> *)&amp;v6[1]) )
+    __isoc99_sscanf(s, "%u", &v6[1]);
+    if ( !(unsigned int)combatAction(dest, *(unsigned int *)&v6[1]) )
     {
-      printf(<span style="color:#A31515;">&quot;[Attack: %d] %s connects snd knocks you down! KO!\n\n&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(i + 1), (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)dest);
-      <span style="color:Blue;">return</span> 0;
+      printf("[Attack: %d] %s connects snd knocks you down! KO!\n\n", (unsigned int)(i + 1), (const char *)dest);
+      return 0;
     }
     printf(
-      <span style="color:#A31515;">&quot;[Attack: %d] You dodge %s&#39;s attack and connect with your own! Keep going!\n\n&quot;</span>,
-</pre></div>
-</div>
+      "[Attack: %d] You dodge %s's attack and connect with your own! Keep going!\n\n",</code></pre>
 <p>I also noticed that the program seeded rand:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  srand(0x539u);
-</pre></div>
-</div>
+<pre><code class="language-c">  srand(0x539u);</code></pre>
 <p>From here I decided to look more into the combatAction function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-_BOOL8 __fastcall combatAction(<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *a1, <span style="color:Blue;">int</span> a2)
+<pre><code class="language-c">_BOOL8 __fastcall combatAction(const char *a1, int a2)
 {
 
   v3 = artificialIntelligence();
-  printf(<span style="color:#A31515;">&quot;%s %s\n&quot;</span>, a1, (&amp;combatMoves)[v3]);
-  <span style="color:Blue;">return</span> a2 == v3;
-}
-</pre></div>
-</div>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 artificialIntelligence()
+  printf("%s %s\n", a1, (&combatMoves)[v3]);
+  return a2 == v3;
+}</code></pre><pre><code class="language-c">__int64 artificialIntelligence()
 {
-  <span style="color:Blue;">return</span> (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(rand() % 4);
-}
-</pre></div>
-</div>
+  return (unsigned int)(rand() % 4);
+}</code></pre>
 <p>a2 was the number that we input each time, so in order to get the correct number (move) we would need to predict the next rand number.</p>
 <p>The program looked like it was written in C so I decided to write a little program to populate srand and then predict all the numbers needed to win:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> main()
+<pre><code class="language-c">int main()
 {
 	srand(1337);
-	<span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 0; i &lt;= 23; i++) {
-		printf(<span style="color:#A31515;">&quot;%d&quot;</span>, rand() % 4);
+	for (int i = 0; i <= 23; i++) {
+		printf("%d", rand() % 4);
 	}
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>This output:</p>
-<pre><code>123322100333030310222003
-</code></pre>
+<pre><code class="language-text">123322100333030310222003</code></pre>
 <p>Which was the flag.</p>
 
         </article>
@@ -218,5 +197,6 @@ __int64 artificialIntelligence()
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

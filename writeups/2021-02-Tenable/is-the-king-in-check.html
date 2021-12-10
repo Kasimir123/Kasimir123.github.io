@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,7 +73,7 @@
 <p>Category: Code</p>
 <p>Comment:</p>
 <p>We have several chess matches on an 8x8 board needing to know if either king is in check or not. Below is some starter code that reads some chess board data from several chess matches.</p>
-<div class="lang-python editor-colors">'''
+<pre><code class="language-python">'''
 Takes '+' and ' ' delimited data of chess matches and parses into list of seperate matches
 ''' 
 def ParseMatches(chess_matches):
@@ -91,8 +92,7 @@ chess_matches = ParseMatches(raw_input())
 for chess_match in chess_matches:
     result.append(IsKingInCheck(chess_match))
     
-print result
-</div>
+print result</code></pre>
 <p>Impliment &quot;IsKingInCheck&quot; function which takes a single matches' chess data and returns True if the one of the Kings are in check (or checkmate), otherwise False. The single matches' chess data will be a list of pieces and their location on the board in the format of [&quot;color, rank, cordinates&quot;].</p>
 <p>Example [&quot;w,p,a2&quot;, &quot;w,q,b6&quot;, &quot;w,r,h2&quot;, &quot;w,k,c1&quot;, &quot;w,p,c7&quot;, &quot;w,p,g7&quot;, &quot;w,p,e6&quot;, &quot;b,k,d7&quot;, &quot;b,p,e6&quot;, &quot;b,r,a6&quot;,]</p>
 <p>Color</p>
@@ -112,17 +112,15 @@ print result
 </code></pre>
 <p>In this chess game, White opponent starts at the lower numbers of the board cordinates and Black opponent at higher cordinates.</p>
 <p>stdin example:</p>
-<pre><code>w,p,c6+w,q,c8+w,p,g7+w,k,e5+b,b,b2+b,p,f3+b,k,f1
-w,p,c4+w,r,a6+w,p,e6+w,p,h6+w,p,g7+w,k,h5+b,r,b2+b,p,f3+b,k,c2
-</code></pre>
+<pre><code class="language-text">w,p,c6+w,q,c8+w,p,g7+w,k,e5+b,b,b2+b,p,f3+b,k,f1
+w,p,c4+w,r,a6+w,p,e6+w,p,h6+w,p,g7+w,k,h5+b,r,b2+b,p,f3+b,k,c2</code></pre>
 <p>stdout example:</p>
-<pre><code>[True, False]
-</code></pre>
+<pre><code class="language-text">[True, False]</code></pre>
 <p>You can ignore the default code below and instead use code above. Once function is implemented, simply copy/paste into box and run. Ensure not to print anything else during your code execution!</p>
 <h2 id="write-up">Write up:</h2>
 <p>The challenge was given for python2 code.</p>
 <p>For this challenge I decided to find the kings and then branch out each way until they hit a piece, then checked if that piece would check it. I checked horizontal, vertical, diagonal, and for knight check. The code is not very neat and has a lot of duplicate code rather than complex design.</p>
-<div class="lang-python editor-colors">board = []
+<pre><code class="language-python">board = []
 
 # maps letters to numbers on the board i made
 postDict = {'a':1, 'b':2,'c':3, 'd':4, 'e':5, 'f':6, 'g':7, 'h':8}
@@ -501,9 +499,7 @@ for chess_match in chess_matches:
     resetBoard()
     result.append(IsKingInCheck(chess_match))
     
-print(result)
-</div>
-
+print(result)</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -516,5 +512,6 @@ print(result)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

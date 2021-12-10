@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,7 +73,7 @@
 <p>Category: Code</p>
 <p>Comment:</p>
 <p>Attached is a blob of data with a never-before-seen format. We need user_names extracted from all entries based on the group they're in. Direcly below, is some starter code. All we need is the function &quot;ParseNamesByGroup&quot; implemented which takes a blob of data (string) and the group name (string). This function should return all user_names belonging to that group.</p>
-<div class="lang-python editor-colors">'''
+<pre><code class="language-python">'''
 :param blob: blob of data to parse through (string)
 :param group_name: A single Group name ("Green", "Red", or "Yellow",etc...)
 
@@ -85,18 +86,15 @@ data = raw_input()
 group_name = data.split('|')[0]
 blob = data.split('|')[1]
 result_names_list = ParseNamesByGroup(blob, group_name)
-print result_names_list
-</div>
+print result_names_list</code></pre>
 <p>stdin example:</p>
-<pre><code>Black|+++,Bellhomes LLC.,[&quot;age&quot;:39, &quot;user_name&quot;:&quot;Reid Jolley&quot;, &quot;Group&quot;:&quot;Black&quot;],+++,Greek Ideas,[&quot;age&quot;:63, &quot;user_name&quot;:&quot;Lucius Chadwell&quot;, &quot;Group&quot;:&quot;Green&quot;],[&quot;age&quot;:63, &quot;user_name&quot;:&quot;Cary Rizzuto&quot;, &quot;Group&quot;:&quot;Black&quot;],[&quot;age&quot;:28, &quot;user_name&quot;:&quot;Shoshana Bickett&quot;, &quot;Group&quot;:&quot;Yellow&quot;],[&quot;age&quot;:69, &quot;user_name&quot;:&quot;Madeleine Swallow&quot;, &quot;Group&quot;:&quot;Green&quot;],[&quot;age&quot;:41, &quot;user_name&quot;:&quot;Buddy Etter&quot;, &quot;Group&quot;:&quot;Black&quot;],+++,God fire,[&quot;age&quot;:26, &quot;user_name&quot;:&quot;Carlene Caulder&quot;, &quot;Group&quot;:&quot;Green&quot;],[&quot;age&quot;:43, &quot;user_name&quot;:&quot;Napoleon Peay&quot;, &quot;Group&quot;:&quot;Purple&quot;],[&quot;age&quot;:44, &quot;user_name&quot;:&quot;Noemi Constant&quot;, &quot;Group&quot;:&quot;Green&quot;]
-</code></pre>
+<pre><code class="language-text">Black|+++,Bellhomes LLC.,["age":39, "user_name":"Reid Jolley", "Group":"Black"],+++,Greek Ideas,["age":63, "user_name":"Lucius Chadwell", "Group":"Green"],["age":63, "user_name":"Cary Rizzuto", "Group":"Black"],["age":28, "user_name":"Shoshana Bickett", "Group":"Yellow"],["age":69, "user_name":"Madeleine Swallow", "Group":"Green"],["age":41, "user_name":"Buddy Etter", "Group":"Black"],+++,God fire,["age":26, "user_name":"Carlene Caulder", "Group":"Green"],["age":43, "user_name":"Napoleon Peay", "Group":"Purple"],["age":44, "user_name":"Noemi Constant", "Group":"Green"]</code></pre>
 <p>stdout example:</p>
-<pre><code>['Reid Jolley', 'Cary Rizzuto', 'Buddy Etter']
-</code></pre>
+<pre><code class="language-text">['Reid Jolley', 'Cary Rizzuto', 'Buddy Etter']</code></pre>
 <p>You can ignore the default code below and instead use code above. Once function is implemented, simply copy/paste into box and run. Ensure not to print anything else during your code execution!</p>
 <h2 id="write-up">Write up:</h2>
 <p>This challenge was python2, pretty simple script so I'm just adding the commented scripts.</p>
-<div class="lang-python editor-colors">'''
+<pre><code class="language-python">'''
 :param blob: blob of data to parse through (string)
 :param group_name: A single Group name ("Green", "Red", or "Yellow",etc...)
 
@@ -129,9 +127,7 @@ data = raw_input()
 group_name = data.split('|')[0]
 blob = data.split('|')[1]
 result_names_list = ParseNamesByGroup(blob, group_name)
-print(result_names_list)
-</div>
-
+print(result_names_list)</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -144,5 +140,6 @@ print(result_names_list)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,67 +74,63 @@
 <p>I am trying to paint these windows; however, there seems to be some sort of password blocking my way to them. Can you help me figure out what the password is?</p>
 <h2 id="write-up">Write up:</h2>
 <p>I started by decompiling the main function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">int</span> result; 
-  <span style="color:Blue;">int</span> v4; 
+  int result; 
+  int v4; 
   __int64 v5;
   __int64 v6; 
   __int64 v7;
-  <span style="color:Blue;">int</span> v8; 
-  <span style="color:Blue;">char</span> *v9;
-  <span style="color:Blue;">char</span> String[512];
+  int v8; 
+  char *v9;
+  char String[512];
 
-  <span style="color:Blue;">if</span> ( IsDebuggerPresent() )
+  if ( IsDebuggerPresent() )
   {
-    sub_140001020(<span style="color:#A31515;">&quot;That is not allowed!\n&quot;</span>);
+    sub_140001020("That is not allowed!\n");
     result = 1;
   }
-  <span style="color:Blue;">else</span>
+  else
   {
-    sub_140001020(<span style="color:#A31515;">&quot;What is the password?\n&quot;</span>);
-    sub_140001080(<span style="color:#A31515;">&quot;%s&quot;</span>);
+    sub_140001020("What is the password?\n");
+    sub_140001080("%s");
     v4 = strnlen(String, 0x100ui64);
     v5 = 0i64;
     v6 = v4;
-    <span style="color:Blue;">if</span> ( v4 &lt;= 0 )
+    if ( v4 <= 0 )
     {
       v8 = 0;
     }
-    <span style="color:Blue;">else</span>
+    else
     {
       v7 = 0i64;
-      <span style="color:Blue;">do</span>
+      do
       {
         String[v7 + 256] = 2 * (String[v7] ^ 0xF);
         ++v7;
       }
-      <span style="color:Blue;">while</span> ( v7 &lt; v6 );
+      while ( v7 < v6 );
       v8 = 0;
-      <span style="color:Blue;">do</span>
+      do
       {
-        <span style="color:Blue;">if</span> ( String[v5 + 256] != byte_1400022D0[v5] )
+        if ( String[v5 + 256] != byte_1400022D0[v5] )
           v8 = 1;
         ++v5;
       }
-      <span style="color:Blue;">while</span> ( v5 &lt; v6 );
+      while ( v5 < v6 );
     }
-    v9 = <span style="color:#A31515;">&quot;Failed to unlock the Windows\n&quot;</span>;
-    <span style="color:Blue;">if</span> ( !v8 )
-      v9 = <span style="color:#A31515;">&quot;Successfully unlocked the Windows!\n&quot;</span>;
+    v9 = "Failed to unlock the Windows\n";
+    if ( !v8 )
+      v9 = "Successfully unlocked the Windows!\n";
     sub_140001020(v9);
     result = 0;
   }
-  <span style="color:Blue;">return</span> result;
-}
-</pre></div>
-</div>
+  return result;
+}</code></pre>
 <p>I extracted byte_1400022D0 from the executable:</p>
-<div class="lang-python editor-colors">flag = [0xB4, 0x84, 0x96, 0x98, 0xB6, 0x92, 0x44, 0xE8, 0xAC, 0x7E, 0xB4, 0xA0, 0xB8, 0xF6, 0xDC, 0xFA, 0xF6, 0x78, 0x96, 0xA0, 0xEC, 0x80, 0xF4, 0xBA, 0xA0, 0xB0, 0x7C, 0xC2, 0xD6, 0x7E, 0xF0, 0xB8, 0xA0, 0x8A, 0x7E, 0xB4, 0xBA, 0x82, 0xD4, 0xAC, 0xE4, 0x00, 0x00, 0x00]
-</div>
+<pre><code class="language-python">flag = [0xB4, 0x84, 0x96, 0x98, 0xB6, 0x92, 0x44, 0xE8, 0xAC, 0x7E, 0xB4, 0xA0, 0xB8, 0xF6, 0xDC, 0xFA, 0xF6, 0x78, 0x96, 0xA0, 0xEC, 0x80, 0xF4, 0xBA, 0xA0, 0xB0, 0x7C, 0xC2, 0xD6, 0x7E, 0xF0, 0xB8, 0xA0, 0x8A, 0x7E, 0xB4, 0xBA, 0x82, 0xD4, 0xAC, 0xE4, 0x00, 0x00, 0x00]</code></pre>
 <p>Then I made a script to go through and xor everything by 0xF:</p>
-<div class="lang-python editor-colors"># flag
+<pre><code class="language-python"># flag
 flag = [0xB4, 0x84, 0x96, 0x98, 0xB6, 0x92, 0x44, 0xE8, 0xAC, 0x7E, 0xB4, 0xA0, 0xB8, 0xF6, 0xDC, 0xFA, 0xF6, 0x78, 0x96, 0xA0, 0xEC, 0x80, 0xF4, 0xBA, 0xA0, 0xB0, 0x7C, 0xC2, 0xD6, 0x7E, 0xF0, 0xB8, 0xA0, 0x8A, 0x7E, 0xB4, 0xBA, 0x82, 0xD4, 0xAC, 0xE4, 0x00, 0x00, 0x00]
 
 s = ""
@@ -141,12 +138,9 @@ s = ""
 # decrypt
 for i in flag:
 	s += chr(int((i/2))^0xF)
-print(s)
-</div>
+print(s)</code></pre>
 <p>When run I got:</p>
-<pre><code>UMDCTF-{Y0U_Start3D_yOuR_W1nd0wS_J0URNeY}
-</code></pre>
-
+<pre><code class="language-text">UMDCTF-{Y0U_Start3D_yOuR_W1nd0wS_J0URNeY}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -159,5 +153,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

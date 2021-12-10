@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -77,34 +78,30 @@ I've been building a brand new Massively(?) Multiplayer(?) Online Role-Playing(?
 LD_LIBRARY_PATH=$(pwd) ./client <ip> <port></p>
 <h2 id="write-up">Write up:</h2>
 <p>Opening up the game and walking around a bit I saw that there was a door behind some walls:</p>
-<pre><code>│                X                                                                                  │
+<pre><code class="language-text">│                X                                                                                  │
 │                                                                                                   │
 │         ~~~~~~~~~~~~~~~      WWWWWW                                                               │
 │X        ~~~~~~~~~~~~~~~   *  W   XW                                                               │
 │         ~~~~~~~~~~~~~~~      WWWWWW                                                               │
 │                                                                                                   │
-│                X                                                                                            
-</code></pre>
+│                X                                                                                            </code></pre>
 <p>From this I knew that I would most likely need to overwrite some sort of move check so I looked into the function names for something along the lines of move and found the following function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-_BOOL8 __fastcall move_okay(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">int</span> a2)
+<pre><code class="language-c">_BOOL8 __fastcall move_okay(int a1, int a2)
 {
-  <span style="color:Blue;">bool</span> v3; 
-  <span style="color:Blue;">int</span> v4; 
+  bool v3; 
+  int v4; 
 
-  <span style="color:Blue;">if</span> ( wmove(stdscr__NCURSES6_TINFO_5_0_19991023, a1, a2) == -1 )
+  if ( wmove(stdscr__NCURSES6_TINFO_5_0_19991023, a1, a2) == -1 )
     v4 = -1;
-  <span style="color:Blue;">else</span>
+  else
     v4 = winch(stdscr__NCURSES6_TINFO_5_0_19991023);
-  v3 = 1; <span style="color:Green;">// set move to ok</span>
-  <span style="color:Blue;">if</span> ( v4 != 32 ) <span style="color:Green;">// if not an empty space we check if its a door or wall</span>
-    v3 = v4 == 88; <span style="color:Green;">// set move to not ok</span>
-  <span style="color:Blue;">return</span> v3;
-}
-</pre></div>
-</div>
+  v3 = 1; // set move to ok
+  if ( v4 != 32 ) // if not an empty space we check if its a door or wall
+    v3 = v4 == 88; // set move to not ok
+  return v3;
+}</code></pre>
 <p>While running a dynamic analysis I edited the registers so that it wouldn't set the check to false however that took too much time so the server locked me out. I then decided to edit the binary to remove the check for if we hit a wall. For this I took a look at the assembly:</p>
-<pre><code>.text:0000000000004970 55                                            push    rbp
+<pre><code class="language-text">.text:0000000000004970 55                                            push    rbp
 .text:0000000000004971 48 89 E5                                      mov     rbp, rsp
 .text:0000000000004974 48 83 EC 20                                   sub     rsp, 20h
 .text:0000000000004978 89 7D FC                                      mov     [rbp+var_4], edi
@@ -142,17 +139,13 @@ _BOOL8 __fastcall move_okay(<span style="color:Blue;">int</span> a1, <span style
 .text:00000000000049DB 0F B6 C0                                      movzx   eax, al
 .text:00000000000049DE 48 83 C4 20                                   add     rsp, 20h
 .text:00000000000049E2 5D                                            pop     rbp
-.text:00000000000049E3 C3                                            retn
-</code></pre>
+.text:00000000000049E3 C3                                            retn</code></pre>
 <p>I then used a hex editor and changed the follow bytes to all be 0x90:</p>
-<pre><code>.text:00000000000049CC 83 7D F4 58                                   cmp     [rbp+var_C], 58h ; 'X'
+<pre><code class="language-text">.text:00000000000049CC 83 7D F4 58                                   cmp     [rbp+var_C], 58h ; 'X'
 .text:00000000000049D0 0F 94 C0                                      setz    al
-.text:00000000000049D3 88 45 EF                                      mov     [rbp+var_11], al
-</code></pre>
+.text:00000000000049D3 88 45 EF                                      mov     [rbp+var_11], al</code></pre>
 <p>When I ran the game I was able to go through the wall and go to the flag which was:</p>
-<pre><code>rarctf{g4m3_h4ck1ng_f0r_n00b5!-75f8b0}
-</code></pre>
-
+<pre><code class="language-text">rarctf{g4m3_h4ck1ng_f0r_n00b5!-75f8b0}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -165,5 +158,6 @@ _BOOL8 __fastcall move_okay(<span style="color:Blue;">int</span> a1, <span style
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

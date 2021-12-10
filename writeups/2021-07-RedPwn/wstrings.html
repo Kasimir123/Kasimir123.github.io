@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,23 +72,20 @@
 <p>Category: Reverse Engineering</p>
 <h2 id="write-up">Write up:</h2>
 <p>Looking at the main function we see:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">wchar_t</span> ws[82]; 
-  <span style="color:Blue;">unsigned</span> __int64 v5; 
+  wchar_t ws[82]; 
+  unsigned __int64 v5; 
 
   v5 = __readfsqword(0x28u);
-  wprintf(U<span style="color:#A31515;">&quot;Welcome to flag checker 1.0.\nGive me a flag&gt; &quot;</span>, argv, envp);
+  wprintf(U"Welcome to flag checker 1.0.\nGive me a flag> ", argv, envp);
   fgetws(ws, 80, stdin);
-  <span style="color:Blue;">if</span> ( !wcscmp(flag, ws) )
-    fputws(U<span style="color:#A31515;">&quot;Correct!&quot;</span>, stdout);
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  if ( !wcscmp(flag, ws) )
+    fputws(U"Correct!", stdout);
+  return 0;
+}</code></pre>
 <p>Following to where flag is stored in the binary we see:</p>
-<pre><code>01 00 02 00 00 00 00 00  66 00 00 00 6C 00 00 00  ........f...l...
+<pre><code class="language-text">01 00 02 00 00 00 00 00  66 00 00 00 6C 00 00 00  ........f...l...
 61 00 00 00 67 00 00 00  7B 00 00 00 6E 00 00 00  a...g...{...n...
 30 00 00 00 74 00 00 00  5F 00 00 00 61 00 00 00  0...t..._...a...
 6C 00 00 00 31 00 00 00  5F 00 00 00 73 00 00 00  l...1..._...s...
@@ -95,12 +93,9 @@
 67 00 00 00 73 00 00 00  5F 00 00 00 61 00 00 00  g...s..._...a...
 72 00 00 00 33 00 00 00  5F 00 00 00 73 00 00 00  r...3..._...s...
 6B 00 00 00 31 00 00 00  6E 00 00 00 6E 00 00 00  k...1...n...n...
-79 00 00 00 7D 00 00 00  00 00 00 00 00 00 00 00  y...}...........
-</code></pre>
+79 00 00 00 7D 00 00 00  00 00 00 00 00 00 00 00  y...}...........</code></pre>
 <p>And we can see that the flag is:</p>
-<pre><code>flag{n0t_al1_str1ngs_ar3_sk1nny}
-</code></pre>
-
+<pre><code class="language-text">flag{n0t_al1_str1ngs_ar3_sk1nny}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -113,5 +108,6 @@
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

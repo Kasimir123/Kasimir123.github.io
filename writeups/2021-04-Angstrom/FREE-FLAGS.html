@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -75,53 +76,50 @@
 <p>Find it on the shell server at /problems/2021/free_flags or over netcat at nc shell.actf.co 21703.</p>
 <h2 id="write-up">Write up:</h2>
 <p>Decompiling the main function we get:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">int</span> v4; 
-  <span style="color:Blue;">int</span> v5;
-  <span style="color:Blue;">int</span> v6; 
-  <span style="color:Blue;">int</span> v7;
-  <span style="color:Blue;">char</span> s[264]; 
-  <span style="color:Blue;">unsigned</span> __int64 v9; 
+  int v4; 
+  int v5;
+  int v6; 
+  int v7;
+  char s[264]; 
+  unsigned __int64 v9; 
 
   v9 = __readfsqword(0x28u);
-  puts(<span style="color:#A31515;">&quot;Congratulations! You are the 1000th CTFer!!! Fill out this short survey to get FREE FLAGS!!!&quot;</span>);
-  puts(<span style="color:#A31515;">&quot;What number am I thinking of???&quot;</span>);
-  __isoc99_scanf(<span style="color:#A31515;">&quot;%d&quot;</span>, &amp;v7);
-  <span style="color:Blue;">if</span> ( v7 == 31337 )
+  puts("Congratulations! You are the 1000th CTFer!!! Fill out this short survey to get FREE FLAGS!!!");
+  puts("What number am I thinking of???");
+  __isoc99_scanf("%d", &v7);
+  if ( v7 == 31337 )
   {
-    puts(<span style="color:#A31515;">&quot;What two numbers am I thinking of???&quot;</span>);
-    __isoc99_scanf(<span style="color:#A31515;">&quot;%d %d&quot;</span>, &amp;v6, &amp;v5);
-    <span style="color:Blue;">if</span> ( v5 + v6 == 1142
-      &amp;&amp; v5 * v6 == 302937
-      &amp;&amp; (puts(<span style="color:#A31515;">&quot;What animal am I thinking of???&quot;</span>),
-          __isoc99_scanf(<span style="color:#A31515;">&quot; %256s&quot;</span>, s),
-          s[strcspn(s, <span style="color:#A31515;">&quot;\n&quot;</span>)] = 0,
-          !strcmp(s, <span style="color:#A31515;">&quot;banana&quot;</span>)) )
+    puts("What two numbers am I thinking of???");
+    __isoc99_scanf("%d %d", &v6, &v5);
+    if ( v5 + v6 == 1142
+      && v5 * v6 == 302937
+      && (puts("What animal am I thinking of???"),
+          __isoc99_scanf(" %256s", s),
+          s[strcspn(s, "\n")] = 0,
+          !strcmp(s, "banana")) )
     {
-      puts(<span style="color:#A31515;">&quot;Wow!!! Now I can sell your information to the Russian government!!!&quot;</span>);
-      puts(<span style="color:#A31515;">&quot;Oh yeah, here&#39;s the FREE FLAG:&quot;</span>);
+      puts("Wow!!! Now I can sell your information to the Russian government!!!");
+      puts("Oh yeah, here's the FREE FLAG:");
       print_flag();
       v4 = 0;
     }
-    <span style="color:Blue;">else</span>
+    else
     {
-      puts(<span style="color:#A31515;">&quot;Wrong &gt;:((((&quot;</span>);
+      puts("Wrong >:((((");
       v4 = 1;
     }
   }
-  <span style="color:Blue;">else</span>
+  else
   {
-    puts(<span style="color:#A31515;">&quot;Wrong &gt;:((((&quot;</span>);
+    puts("Wrong >:((((");
     v4 = 1;
   }
-  <span style="color:Blue;">return</span> v4;
-}
-</pre></div>
-</div>
+  return v4;
+}</code></pre>
 <p>We can see that we need to answer a few questions. The first one we need to answer 31337, the second one we need to find two numbers that match the equation, I chose 723 and 419, and for the last one we need to answer banana. When I ran the server and entered the answers I got:</p>
-<pre><code>Congratulations! You are the 1000th CTFer!!! Fill out this short survey to get FREE FLAGS!!!
+<pre><code class="language-text">Congratulations! You are the 1000th CTFer!!! Fill out this short survey to get FREE FLAGS!!!
 What number am I thinking of???
 31337
 What two numbers am I thinking of???
@@ -130,9 +128,7 @@ What animal am I thinking of???
 banana
 Wow!!! Now I can sell your information to the Russian government!!!
 Oh yeah, here's the FREE FLAG:
-actf{what_do_you_mean_bananas_arent_animals}
-</code></pre>
-
+actf{what_do_you_mean_bananas_arent_animals}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -145,5 +141,6 @@ actf{what_do_you_mean_bananas_arent_animals}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -75,37 +76,34 @@
 <p>Find it on the shell server at /problems/2021/jailbreak over over netcat at nc shell.actf.co 21701</p>
 <h2 id="write-up">Write up:</h2>
 <p>My first step was to take the function that generated text and comment each of the returns for the proper text. I then started working backwards from the flag printing.</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  <span style="color:Blue;">if</span> ( v5 != 1337 || (v25 = (<span style="color:Blue;">char</span> *)sub_15A0(23LL), v26 = strcmp(v37, v25), free(v25), v26) )
+<pre><code class="language-c">  if ( v5 != 1337 || (v25 = (char *)sub_15A0(23LL), v26 = strcmp(v37, v25), free(v25), v26) )
   {
-    v15 = (<span style="color:Blue;">char</span> *)sub_15A0(19LL);
+    v15 = (char *)sub_15A0(19LL);
     v16 = strcmp(v37, v15);
     free(v15);
-    <span style="color:Blue;">if</span> ( v16 )
+    if ( v16 )
     {
-      v17 = (<span style="color:Blue;">char</span> *)sub_15A0(20LL);
+      v17 = (char *)sub_15A0(20LL);
       v18 = strcmp(v37, v17);
       free(v17);
       v8 = 4LL;
-      <span style="color:Blue;">if</span> ( !v18 )
+      if ( !v18 )
       {
         v5 = 2 * v5 + 1;
         v8 = 22LL;
       }
     }
-    <span style="color:Blue;">else</span>
+    else
     {
       v5 *= 2;
       v8 = 21LL;
     }
-    <span style="color:Blue;">goto</span> LABEL_5;
-  }
-</pre></div>
-</div>
+    goto LABEL_5;
+  }</code></pre>
 <p>The last check before the flag was printed was the above. v5 needed to go from 1 to 1337 by either typing press the red button or press the green button. I did some math and found the pattern to do this was:</p>
 <p>R, G, R, R, G, G, G, R, R, G</p>
 <p>Looking through the code some more I noticed that a compare had to be correct to get to this code. To get to that one we had to do another string first, which we could only get to if we do two before that as well. I ended up writing the following script:</p>
-<div class="lang-python editor-colors"># import pwntools
+<pre><code class="language-python"># import pwntools
 from pwn import *
 
 # connect to remote
@@ -139,11 +137,10 @@ for i in x:
 
 r.send("bananarama\n")
 print(r.recvline())
-print(r.recvline())
-</div>
+print(r.recvline())</code></pre>
 <p>Running the script we get:</p>
-<pre><code>[+] Opening connection to shell.actf.co on port 21701: Done
-b&quot;Welcome to clam's daring jailbreak! Please keep your hands and feet inside the jail at all times.\n&quot;
+<pre><code class="language-text">[+] Opening connection to shell.actf.co on port 21701: Done
+b"Welcome to clam's daring jailbreak! Please keep your hands and feet inside the jail at all times.\n"
 b'What would you like to do?\n'
 b'You pick the snake up.\n'
 b'What would you like to do?\n'
@@ -151,7 +148,7 @@ b'You throw the snake at kmh and watch as he runs in fear.\n'
 b'What would you like to do?\n'
 b'You start prying the prison bars open. A wide gap opens and you slip through.\n'
 b'What would you like to do?\n'
-b'You look around and see that kmh has already made the jail contrived! There\'s a red button and a green button with a sign that says &quot;pres butons 2 get fleg&quot;.\n'
+b'You look around and see that kmh has already made the jail contrived! There\'s a red button and a green button with a sign that says "pres butons 2 get fleg".\n'
 b'What would you like to do?\n'
 press the red button
 
@@ -194,9 +191,7 @@ press the green button
 b'You pressed the green button. Nothing changed.\n'
 b'What would you like to do?\n'
 b'For some reason, a flag popped out of the wall, and you walk closer to read it.\n'
-b'actf{guess_kmh_still_has_unintended_solutions}\n'
-</code></pre>
-
+b'actf{guess_kmh_still_has_unintended_solutions}\n'</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -209,5 +204,6 @@ b'actf{guess_kmh_still_has_unintended_solutions}\n'
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

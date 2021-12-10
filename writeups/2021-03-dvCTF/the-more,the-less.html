@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,11 +73,10 @@
 <p>Category: crypto</p>
 <h2 id="write-up">Write up:</h2>
 <p>Opening up the file I saw an e, n, and cipher text showing that this was obviously RSA. I then used alpertron to find the prime factors of n:</p>
-<div class="lang-python editor-colors"># prime factors
-x = [2152978987,2178670709,2292487361,2367104263,2563604567,2571500203,2715012803,2788319507,2823467653,2903526499,2936894063,2989253341,3035960167,3068856233,3165948211,3391790461,3592739747,3613621433,3852924077,3876487189,3890394553,3898886171,3910833851,3961066927,3989645813,4014542803,4024893437,4029819973,4068148789,4109794417,4130412409,4226418397]
-</div>
+<pre><code class="language-python"># prime factors
+x = [2152978987,2178670709,2292487361,2367104263,2563604567,2571500203,2715012803,2788319507,2823467653,2903526499,2936894063,2989253341,3035960167,3068856233,3165948211,3391790461,3592739747,3613621433,3852924077,3876487189,3890394553,3898886171,3910833851,3961066927,3989645813,4014542803,4024893437,4029819973,4068148789,4109794417,4130412409,4226418397]</code></pre>
 <p>From here I wrote a python script to find phi(n), d, and then finally the answer:</p>
-<div class="lang-python editor-colors"># all prime factors
+<pre><code class="language-python"># all prime factors
 x = [2152978987,2178670709,2292487361,2367104263,2563604567,2571500203,2715012803,2788319507,2823467653,2903526499,2936894063,2989253341,3035960167,3068856233,3165948211,3391790461,3592739747,3613621433,3852924077,3876487189,3890394553,3898886171,3910833851,3961066927,3989645813,4014542803,4024893437,4029819973,4068148789,4109794417,4130412409,4226418397]
 
 # n
@@ -102,12 +102,9 @@ d = pow(e, -1, i)
 ans = pow(ct, d, n)
 
 # print the answer
-print(bytes.fromhex(hex(ans)[2:]).decode('ascii'))
-</div>
+print(bytes.fromhex(hex(ans)[2:]).decode('ascii'))</code></pre>
 <p>Once run the output was:</p>
-<pre><code>dvCTF{rs4_f4ctor1z4t10n!!!}
-</code></pre>
-
+<pre><code class="language-text">dvCTF{rs4_f4ctor1z4t10n!!!}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -120,5 +117,6 @@ print(bytes.fromhex(hex(ans)[2:]).decode('ascii'))
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,7 +73,7 @@
 <p>Category: Reversing</p>
 <h2 id="write-up">Write up:</h2>
 <p>This challenge gave me a .pyc file so I knew that I would need to use uncompyle:</p>
-<div class="lang-python editor-colors">uncompyle6 checker.pyc 
+<pre><code class="language-python">uncompyle6 checker.pyc 
 # uncompyle6 version 3.7.4
 # Python bytecode 3.6 (3379)
 # Decompiled from: Python 3.8.6 (default, Sep 25 2020, 09:36:53) 
@@ -121,12 +122,11 @@ if __name__ == '__main__':
     else:
         print('Incorrect, sorry. :(')
 # okay decompiling checker.pyc
-
-</div>
+</code></pre>
 <p>The array (a) was massive so I shortened with ..., After seeing this I copied the python and put it in a file.</p>
 <p>I ran a few tests and found out that a had a length of 58. Looking into the validate function I saw that this meant that the flag would need to be 57 characters long.</p>
 <p>I then decided that my best course of action would be to simply use the python code to semi-brute force the correct values:</p>
-<div class="lang-python editor-colors">from random import randint
+<pre><code class="language-python">from random import randint
 
 def make_correct_array(s):
     from itertools import accumulate
@@ -169,14 +169,11 @@ if __name__ == '__main__':
                 flag_str += chr(i)
             i += 1
 
-    print(flag_str)
-</div>
+    print(flag_str)</code></pre>
 <p>I had done some testing so I knew that first part of the flag was justCTF{ which was the flag format. I then modified the validate function so that it no longer cared about the length of the input and instead only checked if it was correct.</p>
 <p>I then went through for the length of the flag and added each possible char to the end of the string and &quot;hashed&quot; the string using their equation. I then checked each combination until I got the correct character, at which point I went to the next one.</p>
 <p>The program then spit out the following flag:</p>
-<pre><code>justCTF{this_is_very_simple_flag_afer_so_big_polynomails}
-</code></pre>
-
+<pre><code class="language-text">justCTF{this_is_very_simple_flag_afer_so_big_polynomails}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -189,5 +186,6 @@ if __name__ == '__main__':
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

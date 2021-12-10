@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -74,21 +75,16 @@
 <p>When I was making Roolang, of course I took a look at the mother of all esolangs! So, have some bf code. Run it here (<a href="https://copy.sh/brainfuck/">https://copy.sh/brainfuck/</a>) with 32 bit cells and dynamic memory enabled. Run the program to get the flag, and then some.</p>
 <h2 id="write-up">Write up:</h2>
 <p>When we first ran the brainfuck we got that the output was:</p>
-<pre><code>iccttttffffffff{{{{{{{{{{{{{{{{00000000000000000000000000000000nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnÿ
-</code></pre>
+<pre><code class="language-text">iccttttffffffff{{{{{{{{{{{{{{{{00000000000000000000000000000000nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnÿ</code></pre>
 <p>We then removed the following brainfuck from the end of the code:</p>
-<div class="lang-bf editor-colors">[>[->+>++<<]
->>[-<<+>>]<[[<]<[<]>.[>]>[>]<-][<]<[<]<[<]>[-]>[>]>-]
-</div>
+<pre><code class="language-text">[>[->+>++<<]
+>>[-<<+>>]<[[<]<[<]>.[>]>[>]<-][<]<[<]<[<]>[-]>[>]>-]</code></pre>
 <p>When looking at the memory dump we then saw:</p>
-<pre><code>00000:  000  105  099  116  102  123  048  110  051  095  099  104  .ictf{0n3_ch
+<pre><code class="language-text">00000:  000  105  099  116  102  123  048  110  051  095  099  104  .ictf{0n3_ch
 00012:  064  114  064  099  116  051  114  095  048  102  095  100  @r@ct3r_0f_d
-00024:  049  102  051  114  051  110  099  101  125  000  032  001  1f3r3nce}...
-</code></pre>
+00024:  049  102  051  114  051  110  099  101  125  000  032  001  1f3r3nce}...</code></pre>
 <p>The flag was:</p>
-<pre><code>ictf{0n3_ch@r@ct3r_0f_d1f3r3nce}
-</code></pre>
-
+<pre><code class="language-text">ictf{0n3_ch@r@ct3r_0f_d1f3r3nce}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -101,5 +97,6 @@
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

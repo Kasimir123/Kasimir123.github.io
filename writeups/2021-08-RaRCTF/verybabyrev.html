@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,13 +74,12 @@
 <p>Comments: fun fact: verybabyrev backwards is verybabyrev</p>
 <h2 id="write-up">Write up:</h2>
 <p>Opening up the main function in a decompiler I saw this:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl __noreturn main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
 {
   __int64 s1[12];
-  <span style="color:Blue;">char</span> v4;
-  <span style="color:Blue;">char</span> s[140];
-  <span style="color:Blue;">int</span> v6; 
+  char v4;
+  char s[140];
+  int v6; 
 
   setvbuf(stdout, 0LL, 2, 0LL);
   memset(s, 0, 0x80uLL);
@@ -96,34 +96,31 @@
   s1[10] = 0x60450073B26111FLL;
   s1[11] = 0xA774803050B0D04LL;
   v4 = 0;
-  printf(<span style="color:#A31515;">&quot;Enter your flag: &quot;</span>);
+  printf("Enter your flag: ");
   fgets(s, 128, stdin);
   v6 = 0;
-  <span style="color:Blue;">if</span> ( s[0] != 114 )
+  if ( s[0] != 114 )
   {
-    puts(<span style="color:#A31515;">&quot;Nope!&quot;</span>);
+    puts("Nope!");
     exit(0);
   }
-  <span style="color:Blue;">while</span> ( v6 &lt;= 126 )
+  while ( v6 <= 126 )
   {
     s[v6] ^= s[v6 + 1];
     ++v6;
   }
-  <span style="color:Blue;">if</span> ( !memcmp(s1, s, 0x61uLL) )
+  if ( !memcmp(s1, s, 0x61uLL) )
   {
-    puts(<span style="color:#A31515;">&quot;Correct!&quot;</span>);
+    puts("Correct!");
     exit(1);
   }
-  puts(<span style="color:#A31515;">&quot;Nope!&quot;</span>);
+  puts("Nope!");
   exit(0);
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>The first thing I did was extract s1 since that was going to be the encrypted flag:</p>
-<div class="lang-python editor-colors">[0x13, 0x13, 0x11, 0x17, 0x12, 0x1D, 0x48, 0x45, 0x45, 0x41, 0x0B, 0x26, 0x2C, 0x42, 0x5F, 0x09, 0x0B, 0x5F, 0x6C, 0x3D, 0x56, 0x56, 0x1B, 0x54, 0x5F, 0x41, 0x45, 0x29, 0x3C, 0x0B, 0x5C, 0x58, 0x00, 0x5F, 0x5D, 0x09, 0x54, 0x6C, 0x2A, 0x40, 0x06, 0x06, 0x6A, 0x27, 0x48, 0x42, 0x5F, 0x4B, 0x56, 0x42, 0x2D, 0x2C, 0x43, 0x5D, 0x5E, 0x6C, 0x2D, 0x41, 0x07, 0x47, 0x43, 0x5E, 0x31, 0x6B, 0x5A, 0x0A, 0x3B, 0x6E, 0x1C, 0x49, 0x54, 0x5E, 0x1A, 0x2B, 0x34, 0x05, 0x5E, 0x47, 0x28, 0x28, 0x1F, 0x11, 0x26, 0x3B, 0x07, 0x50, 0x04, 0x06, 0x04, 0x0D, 0x0B, 0x05, 0x03, 0x48, 0x77, 0x0A]
-</div>
+<pre><code class="language-python">[0x13, 0x13, 0x11, 0x17, 0x12, 0x1D, 0x48, 0x45, 0x45, 0x41, 0x0B, 0x26, 0x2C, 0x42, 0x5F, 0x09, 0x0B, 0x5F, 0x6C, 0x3D, 0x56, 0x56, 0x1B, 0x54, 0x5F, 0x41, 0x45, 0x29, 0x3C, 0x0B, 0x5C, 0x58, 0x00, 0x5F, 0x5D, 0x09, 0x54, 0x6C, 0x2A, 0x40, 0x06, 0x06, 0x6A, 0x27, 0x48, 0x42, 0x5F, 0x4B, 0x56, 0x42, 0x2D, 0x2C, 0x43, 0x5D, 0x5E, 0x6C, 0x2D, 0x41, 0x07, 0x47, 0x43, 0x5E, 0x31, 0x6B, 0x5A, 0x0A, 0x3B, 0x6E, 0x1C, 0x49, 0x54, 0x5E, 0x1A, 0x2B, 0x34, 0x05, 0x5E, 0x47, 0x28, 0x28, 0x1F, 0x11, 0x26, 0x3B, 0x07, 0x50, 0x04, 0x06, 0x04, 0x0D, 0x0B, 0x05, 0x03, 0x48, 0x77, 0x0A]</code></pre>
 <p>The &quot;encryption&quot; was simply using the current character and xor'ing it with the next one. I knew the start of the flag would be rarctf{ so I wrote the following script:</p>
-<div class="lang-python editor-colors"># encrypted flag
+<pre><code class="language-python"># encrypted flag
 enc = [0x13, 0x13, 0x11, 0x17, 0x12, 0x1D, 0x48, 0x45, 0x45, 0x41, 0x0B, 0x26, 0x2C, 0x42, 0x5F, 0x09, 0x0B, 0x5F, 0x6C, 0x3D, 0x56, 0x56, 0x1B, 0x54, 0x5F, 0x41, 0x45, 0x29, 0x3C, 0x0B, 0x5C, 0x58, 0x00, 0x5F, 0x5D, 0x09, 0x54, 0x6C, 0x2A, 0x40, 0x06, 0x06, 0x6A, 0x27, 0x48, 0x42, 0x5F, 0x4B, 0x56, 0x42, 0x2D, 0x2C, 0x43, 0x5D, 0x5E, 0x6C, 0x2D, 0x41, 0x07, 0x47, 0x43, 0x5E, 0x31, 0x6B, 0x5A, 0x0A, 0x3B, 0x6E, 0x1C, 0x49, 0x54, 0x5E, 0x1A, 0x2B, 0x34, 0x05, 0x5E, 0x47, 0x28, 0x28, 0x1F, 0x11, 0x26, 0x3B, 0x07, 0x50, 0x04, 0x06, 0x04, 0x0D, 0x0B, 0x05, 0x03, 0x48, 0x77, 0x0A]
 
 # input flag, with known parts
@@ -143,12 +140,9 @@ for i in range(len(s)-1, len(enc) - 1):
 			break
 
 # print the flag
-print(s)
-</div>
+print(s)</code></pre>
 <p>When run this printed out:</p>
-<pre><code>rarctf{3v3ry_s1ngl3_b4by-r3v_ch4ll3ng3_u535_x0r-f0r_s0m3_r34s0n_4nd_1-d0nt_kn0w_why_dc37158365}
-</code></pre>
-
+<pre><code class="language-text">rarctf{3v3ry_s1ngl3_b4by-r3v_ch4ll3ng3_u535_x0r-f0r_s0m3_r34s0n_4nd_1-d0nt_kn0w_why_dc37158365}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -161,5 +155,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

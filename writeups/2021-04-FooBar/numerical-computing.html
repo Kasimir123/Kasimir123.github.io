@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,59 +72,56 @@
 <p>Category: Reverse Engineerings</p>
 <h2 id="write-up">Write up:</h2>
 <p>After some reversing I found the following code which checked the flag:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  f = 0;
-  qmemcpy(enc, <span style="color:#A31515;">&quot;QWERTYUIOPASDFGHJK&quot;</span>, <span style="color:Blue;">sizeof</span>(enc));
+<pre><code class="language-c">  f = 0;
+  qmemcpy(enc, "QWERTYUIOPASDFGHJK", sizeof(enc));
   *(_QWORD *)num = A_0_3887;
-  *(_QWORD *)&amp;num[2] = 0x5400000100LL;
-  *(_QWORD *)&amp;num[4] = 0xA0000002F0LL;
-  *(_QWORD *)&amp;num[6] = 0x1E000000670LL;
-  *(_QWORD *)&amp;num[8] = 0xCC000007B0LL;
-  *(_QWORD *)&amp;num[10] = 0x19400000250LL;
-  *(_QWORD *)&amp;num[12] = 0x1C800000700LL;
-  *(_QWORD *)&amp;num[14] = 0xA800000240LL;
-  *(_QWORD *)&amp;num[16] = 0xD8000007B0LL;
-  v3 = <span style="color:#A31515;">&quot;/home/abhi/try2/main.f90&quot;</span>;
+  *(_QWORD *)&num[2] = 0x5400000100LL;
+  *(_QWORD *)&num[4] = 0xA0000002F0LL;
+  *(_QWORD *)&num[6] = 0x1E000000670LL;
+  *(_QWORD *)&num[8] = 0xCC000007B0LL;
+  *(_QWORD *)&num[10] = 0x19400000250LL;
+  *(_QWORD *)&num[12] = 0x1C800000700LL;
+  *(_QWORD *)&num[14] = 0xA800000240LL;
+  *(_QWORD *)&num[16] = 0xD8000007B0LL;
+  v3 = "/home/abhi/try2/main.f90";
   v4 = 14;
   v1 = 128;
   v2 = 6;
-  _gfortran_st_write(&amp;v1);
-  _gfortran_transfer_character_write(&amp;v1, <span style="color:#A31515;">&quot;Enter the flag : you got itWrong&quot;</span>, 17LL);
-  _gfortran_st_write_done(&amp;v1);
-  v3 = <span style="color:#A31515;">&quot;/home/abhi/try2/main.f90&quot;</span>;
+  _gfortran_st_write(&v1);
+  _gfortran_transfer_character_write(&v1, "Enter the flag : you got itWrong", 17LL);
+  _gfortran_st_write_done(&v1);
+  v3 = "/home/abhi/try2/main.f90";
   v4 = 15;
   v1 = 128;
   v2 = 5;
-  _gfortran_st_read(&amp;v1);
-  _gfortran_transfer_character(&amp;v1, inp, 18LL);
-  _gfortran_st_read_done(&amp;v1);
-  <span style="color:Blue;">for</span> ( n = 1; n &lt;= 18; ++n )
+  _gfortran_st_read(&v1);
+  _gfortran_transfer_character(&v1, inp, 18LL);
+  _gfortran_st_read_done(&v1);
+  for ( n = 1; n <= 18; ++n )
   {
-    c1[0] = *(&amp;v10 + n);
-    c2[0] = *(&amp;v8 + n);
-    x1 = (<span style="color:Blue;">unsigned</span> __int8)c1[0];
-    x2 = (<span style="color:Blue;">unsigned</span> __int8)c2[0];
-    num2[n - 1] = (<span style="color:Blue;">unsigned</span> __int8)c2[0] ^ (<span style="color:Blue;">unsigned</span> __int8)c1[0];
+    c1[0] = *(&v10 + n);
+    c2[0] = *(&v8 + n);
+    x1 = (unsigned __int8)c1[0];
+    x2 = (unsigned __int8)c2[0];
+    num2[n - 1] = (unsigned __int8)c2[0] ^ (unsigned __int8)c1[0];
   }
-  <span style="color:Blue;">for</span> ( n = 1; n &lt;= 18; ++n )
+  for ( n = 1; n <= 18; ++n )
   {
-    <span style="color:Blue;">if</span> ( (n - 1) % 2 == 1 )
+    if ( (n - 1) % 2 == 1 )
       v0 = 4 * num2[n - 1];
-    <span style="color:Blue;">else</span>
+    else
       v0 = 16 * num2[n - 1];
     num1[n - 1] = v0;
   }
-  <span style="color:Blue;">for</span> ( n = 1; n &lt;= 18; ++n )
+  for ( n = 1; n <= 18; ++n )
   {
-    <span style="color:Blue;">if</span> ( num1[n - 1] == num[n - 1] )
+    if ( num1[n - 1] == num[n - 1] )
       ++f;
   }
-  v3 = <span style="color:#A31515;">&quot;/home/abhi/try2/main.f90&quot;</span>;
-  <span style="color:Blue;">if</span> ( f == 18 )
-</pre></div>
-</div>
+  v3 = "/home/abhi/try2/main.f90";
+  if ( f == 18 )</code></pre>
 <p>C1 ends up being the encoding string that we copy at the beginning and C2 is the input we give. These get xored and added into an array which is then used to check against the num1 array which gets instantiated at the start. If all 18 are the same then it print out that we were right. I then wrote the following python script:</p>
-<div class="lang-python editor-colors"># num 1 array
+<pre><code class="language-python"># num 1 array
 num = [0x00000160, 0x0000006C, 0x00000100, 0x00000054, 0x000002F0, 0x000000A0, 0x00000670, 0x000001E0, 0x000007B0, 0x000000CC, 0x00000250, 0x00000194, 0x00000700, 0x000001C8, 0x00000240, 0x000000A8, 0x000007B0, 0x000000D8]
 
 # c1 array
@@ -151,10 +149,9 @@ for i in range(0, 18):
 		if x == num[i]:
 			s += chr(j)
 			print(s)
-            break
-</div>
+            break</code></pre>
 <p>This then output:</p>
-<pre><code>G
+<pre><code class="language-text">G
 GL
 GLU
 GLUG
@@ -171,9 +168,7 @@ GLUG{q214cd644
 GLUG{q214cd644c
 GLUG{q214cd644cb
 GLUG{q214cd644cb1
-GLUG{q214cd644cb1}
-</code></pre>
-
+GLUG{q214cd644cb1}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -186,5 +181,6 @@ GLUG{q214cd644cb1}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

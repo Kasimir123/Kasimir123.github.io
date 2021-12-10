@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -75,13 +76,12 @@
 <h2 id="write-up">Write up:</h2>
 <p>After this challenge we kind of gave up on this CTF because it showed the lack of attention and effort put into these challenges. For this challenge we were given the interpreter and then a file named bin.</p>
 <p>Running the interpreter by itself you got:</p>
-<pre><code>./interpreter
+<pre><code class="language-text">./interpreter
 
 Usage:
-./interpreter &lt;program you want to run&gt;
-</code></pre>
+./interpreter <program you want to run></code></pre>
 <p>So then I ran the program with the bin file and got:</p>
-<pre><code>./interpreter bin
+<pre><code class="language-text">./interpreter bin
 
 I
 n
@@ -122,12 +122,9 @@ _
 i
 d
 e
-a
-</code></pre>
+a</code></pre>
 <p>And the flag was:</p>
-<pre><code>dctf{Interpreter_written_in_C_is_a_great_idea}
-</code></pre>
-
+<pre><code class="language-text">dctf{Interpreter_written_in_C_is_a_great_idea}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -140,5 +137,6 @@ a
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

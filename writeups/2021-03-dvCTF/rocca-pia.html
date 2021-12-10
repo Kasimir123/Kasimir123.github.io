@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,51 +74,44 @@
 <h2 id="write-up">Write up:</h2>
 <p>First I checked what type of file this was, it was a 64 bit elf file, so I went and opened it in a decompiler.</p>
 <p>The main function was:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">int</span> result; <span style="color:Green;">// eax</span>
+  int result; // eax
 
-  <span style="color:Blue;">if</span> ( argc == 2 )
+  if ( argc == 2 )
   {
-    <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)transform(argv[1], argv, envp) )
-      puts(<span style="color:#A31515;">&quot;Nice try&quot;</span>);
-    <span style="color:Blue;">else</span>
-      puts(<span style="color:#A31515;">&quot;Nice flag&quot;</span>);
+    if ( (unsigned int)transform(argv[1], argv, envp) )
+      puts("Nice try");
+    else
+      puts("Nice flag");
     result = 0;
   }
-  <span style="color:Blue;">else</span>
+  else
   {
-    printf(<span style="color:#A31515;">&quot;Usage: %s &lt;password&gt;\n&quot;</span>, *argv);
+    printf("Usage: %s <password>\n", *argv);
     result = 1;
   }
-  <span style="color:Blue;">return</span> result;
-}
-</pre></div>
-</div>
+  return result;
+}</code></pre>
 <p>It was fairly obvious that I would need to look into the transform function so thats where I started off.</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __fastcall transform(__int64 a1)
+<pre><code class="language-c">int __fastcall transform(__int64 a1)
 {
-  <span style="color:Blue;">int</span> i; <span style="color:Green;">// [rsp+14h] [rbp-1Ch]</span>
-  <span style="color:Blue;">char</span> *s2; <span style="color:Green;">// [rsp+18h] [rbp-18h]</span>
+  int i; // [rsp+14h] [rbp-1Ch]
+  char *s2; // [rsp+18h] [rbp-18h]
 
-  <span style="color:Blue;">for</span> ( i = 0; i &lt; strlen(PASSWD); ++i )
+  for ( i = 0; i < strlen(PASSWD); ++i )
   {
-    <span style="color:Blue;">if</span> ( (i &amp; 1) != 0 )
+    if ( (i & 1) != 0 )
       s2[i] = *(_BYTE *)(i + a1) ^ 0x37;
-    <span style="color:Blue;">else</span>
+    else
       s2[i] = *(_BYTE *)(i + a1) ^ 0x13;
   }
-  <span style="color:Blue;">return</span> strncmp(PASSWD, s2, 0x16uLL);
-}
-</pre></div>
-</div>
+  return strncmp(PASSWD, s2, 0x16uLL);
+}</code></pre>
 <p>This function took the input and then xor'ed it to get a new string, that string was then compared against PASSWD. Looking into the file data I saw that the passwd string was:</p>
-<div class="lang-python editor-colors">[0x77, 0x41, 0x50, 0x63, 0x55, 0x4C, 0x5A, 0x68, 0x7F, 0x06, 0x78, 0x04, 0x4C, 0x44, 0x64, 0x06, 0x7E, 0x5A, 0x22, 0x59, 0x74, 0x4A]
-</div>
+<pre><code class="language-python">[0x77, 0x41, 0x50, 0x63, 0x55, 0x4C, 0x5A, 0x68, 0x7F, 0x06, 0x78, 0x04, 0x4C, 0x44, 0x64, 0x06, 0x7E, 0x5A, 0x22, 0x59, 0x74, 0x4A]</code></pre>
 <p>I then wrote a python script to work backwards from the passwd string to get the output:</p>
-<div class="lang-python editor-colors"># passwd string bytes
+<pre><code class="language-python"># passwd string bytes
 passw = [0x77, 0x41, 0x50, 0x63, 0x55, 0x4C, 0x5A, 0x68, 0x7F, 0x06, 0x78, 0x04, 0x4C, 0x44, 0x64, 0x06, 0x7E, 0x5A, 0x22, 0x59, 0x74, 0x4A]
 
 # empty flag to write to
@@ -134,12 +128,9 @@ for x in range(0, len(passw)):
 		flag += chr(passw[x]^0x13)
 
 # print the flag
-print(flag)
-</div>
+print(flag)</code></pre>
 <p>Once run the script returned:</p>
-<pre><code>dvCTF{I_l1k3_sw1mm1ng}
-</code></pre>
-
+<pre><code class="language-text">dvCTF{I_l1k3_sw1mm1ng}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -152,5 +143,6 @@ print(flag)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

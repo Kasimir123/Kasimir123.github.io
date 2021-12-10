@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -74,88 +75,82 @@
 <p>The evil presidential candidate Et3rnos is now forcing this poor game's players to vote on him in order to access the flag room. Can you teach him a lesson and get access to it without voting on him? The flag is in the format ICTF{[A-Z_]+}</p>
 <h2 id="write-up">Write up:</h2>
 <p>I opened up the Assembly dll in dnyspy and edited the C# to turn off coliisions and set y velocity to 0. I was then able to just no clip through the walls and saw the flag:</p>
-<div class="lang-c# editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">using</span> System;
-<span style="color:Blue;">using</span> UnityEngine;
+<pre><code class="language-text">using System;
+using UnityEngine;
 
-<span style="color:Green;">// Token: 0x02000007 RID: 7</span>
-<span style="color:Blue;">public</span> <span style="color:Blue;">class</span> PlayerController : MonoBehaviour
+// Token: 0x02000007 RID: 7
+public class PlayerController : MonoBehaviour
 {
-	<span style="color:Green;">// Token: 0x06000016 RID: 22 RVA: 0x00002116 File Offset: 0x00000316</span>
-	<span style="color:Blue;">private</span> <span style="color:Blue;">void</span> Start()
+	// Token: 0x06000016 RID: 22 RVA: 0x00002116 File Offset: 0x00000316
+	private void Start()
 	{
-		<span style="color:Blue;">this</span>.rb = <span style="color:Blue;">base</span>.GetComponent&lt;Rigidbody&gt;();
-		<span style="color:Blue;">this</span>.rb.detectCollisions = <span style="color:Blue;">false</span>;
+		this.rb = base.GetComponent<Rigidbody>();
+		this.rb.detectCollisions = false;
 	}
 
-	<span style="color:Green;">// Token: 0x06000017 RID: 23 RVA: 0x00002130 File Offset: 0x00000330</span>
-	<span style="color:Blue;">private</span> <span style="color:Blue;">void</span> Update()
+	// Token: 0x06000017 RID: 23 RVA: 0x00002130 File Offset: 0x00000330
+	private void Update()
 	{
-		<span style="color:Blue;">if</span> (Input.GetKeyDown(KeyCode.Space))
+		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			<span style="color:Blue;">this</span>.rb.AddForce(Vector3.up * <span style="color:Blue;">this</span>.jumpPower * 10f);
+			this.rb.AddForce(Vector3.up * this.jumpPower * 10f);
 		}
 	}
 
-	<span style="color:Green;">// Token: 0x06000018 RID: 24 RVA: 0x00002160 File Offset: 0x00000360</span>
-	<span style="color:Blue;">private</span> <span style="color:Blue;">void</span> FixedUpdate()
+	// Token: 0x06000018 RID: 24 RVA: 0x00002160 File Offset: 0x00000360
+	private void FixedUpdate()
 	{
-		<span style="color:Blue;">this</span>.Sprint();
-		<span style="color:Blue;">this</span>.Move();
+		this.Sprint();
+		this.Move();
 	}
 
-	<span style="color:Green;">// Token: 0x06000019 RID: 25 RVA: 0x0000216E File Offset: 0x0000036E</span>
-	<span style="color:Blue;">private</span> <span style="color:Blue;">void</span> Sprint()
+	// Token: 0x06000019 RID: 25 RVA: 0x0000216E File Offset: 0x0000036E
+	private void Sprint()
 	{
-		<span style="color:Blue;">if</span> (Input.GetKey(KeyCode.LeftShift))
+		if (Input.GetKey(KeyCode.LeftShift))
 		{
-			<span style="color:Blue;">this</span>.movementSpeed = <span style="color:Blue;">this</span>.baseMovementSpeed * 2f;
-			<span style="color:Blue;">return</span>;
+			this.movementSpeed = this.baseMovementSpeed * 2f;
+			return;
 		}
-		<span style="color:Blue;">this</span>.movementSpeed = <span style="color:Blue;">this</span>.baseMovementSpeed;
+		this.movementSpeed = this.baseMovementSpeed;
 	}
 
-	<span style="color:Green;">// Token: 0x0600001A RID: 26 RVA: 0x000022F0 File Offset: 0x000004F0</span>
-	<span style="color:Blue;">private</span> <span style="color:Blue;">void</span> Move()
+	// Token: 0x0600001A RID: 26 RVA: 0x000022F0 File Offset: 0x000004F0
+	private void Move()
 	{
-		Vector3 vector = <span style="color:Blue;">default</span>(Vector3);
-		<span style="color:Blue;">if</span> (Input.GetKey(KeyCode.W))
+		Vector3 vector = default(Vector3);
+		if (Input.GetKey(KeyCode.W))
 		{
 			vector += Vector3.forward;
 		}
-		<span style="color:Blue;">if</span> (Input.GetKey(KeyCode.S))
+		if (Input.GetKey(KeyCode.S))
 		{
 			vector += Vector3.back;
 		}
-		<span style="color:Blue;">if</span> (Input.GetKey(KeyCode.D))
+		if (Input.GetKey(KeyCode.D))
 		{
 			vector += Vector3.right;
 		}
-		<span style="color:Blue;">if</span> (Input.GetKey(KeyCode.A))
+		if (Input.GetKey(KeyCode.A))
 		{
 			vector += Vector3.left;
 		}
-		vector = <span style="color:Blue;">this</span>.rb.rotation * vector * <span style="color:Blue;">this</span>.movementSpeed;
-		<span style="color:Blue;">this</span>.rb.velocity = <span style="color:Blue;">new</span> Vector3(vector.x, 0f, vector.z);
+		vector = this.rb.rotation * vector * this.movementSpeed;
+		this.rb.velocity = new Vector3(vector.x, 0f, vector.z);
 	}
 
-	<span style="color:Green;">// Token: 0x0400000E RID: 14</span>
-	<span style="color:Blue;">public</span> <span style="color:Blue;">float</span> baseMovementSpeed;
+	// Token: 0x0400000E RID: 14
+	public float baseMovementSpeed;
 
-	<span style="color:Green;">// Token: 0x0400000F RID: 15</span>
-	<span style="color:Blue;">private</span> <span style="color:Blue;">float</span> movementSpeed;
+	// Token: 0x0400000F RID: 15
+	private float movementSpeed;
 
-	<span style="color:Green;">// Token: 0x04000010 RID: 16</span>
-	<span style="color:Blue;">public</span> <span style="color:Blue;">float</span> jumpPower;
+	// Token: 0x04000010 RID: 16
+	public float jumpPower;
 
-	<span style="color:Green;">// Token: 0x04000011 RID: 17</span>
-	<span style="color:Blue;">private</span> Rigidbody rb;
-}
-</pre></div>
-</div>
-<pre><code>spy_kids_assemble
-</code></pre>
-
+	// Token: 0x04000011 RID: 17
+	private Rigidbody rb;
+}</code></pre><pre><code class="language-text">spy_kids_assemble</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -168,5 +163,6 @@
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

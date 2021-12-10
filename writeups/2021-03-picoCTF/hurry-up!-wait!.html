@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,8 +73,7 @@
 <p>Category: Reverse Engineering</p>
 <h2 id="write-up">Write up:</h2>
 <p>This challenge annoyed me a little since it used an older version of libgnat which I had to download and set the path to include. After having done that I started reversing the file and found the following function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 sub_298A()
+<pre><code class="language-c">__int64 sub_298A()
 {
   ada__calendar__delays__delay_for(1000000000000000LL);
   sub_2616();
@@ -102,18 +102,13 @@ __int64 sub_298A()
   sub_2372();
   sub_2206();
   sub_23A6();
-  <span style="color:Blue;">return</span> sub_2956();
-}
-</pre></div>
-</div>
+  return sub_2956();
+}</code></pre>
 <p>I then looked at the opcodes and address for the time and function:</p>
-<pre><code>.text:000000000000298E 48 BF 00 80 C6 A4 7E 8D 03 00                 mov     rdi, 38D7EA4C68000h
-.text:0000000000002998 E8 D3 F1 FF FF                                call    _ada__calendar__delays__delay_for
-</code></pre>
+<pre><code class="language-text">.text:000000000000298E 48 BF 00 80 C6 A4 7E 8D 03 00                 mov     rdi, 38D7EA4C68000h
+.text:0000000000002998 E8 D3 F1 FF FF                                call    _ada__calendar__delays__delay_for</code></pre>
 <p>And set all of the values for the number, 00 - 00, to 00 and ran the new file:</p>
-<pre><code>picoCTF{d15a5m_ftw_dfbdc5d}
-</code></pre>
-
+<pre><code class="language-text">picoCTF{d15a5m_ftw_dfbdc5d}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -126,5 +121,6 @@ __int64 sub_298A()
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

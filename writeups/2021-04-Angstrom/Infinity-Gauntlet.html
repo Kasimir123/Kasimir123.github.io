@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -75,110 +76,107 @@
 <p>Find it on the shell server at /problems/2021/infinity_gauntlet or over netcat at nc shell.actf.co 21700</p>
 <h2 id="write-up">Write up:</h2>
 <p>Reversing the main function we get:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-  v32 = __readfsqword(0x28u);
+<pre><code class="language-c">  v32 = __readfsqword(0x28u);
   setvbuf(_bss_start, 0LL, 2, 0LL);
-  v3 = fopen(<span style="color:#A31515;">&quot;flag.txt&quot;</span>, <span style="color:#A31515;">&quot;r&quot;</span>);
-  <span style="color:Blue;">if</span> ( v3 )
+  v3 = fopen("flag.txt", "r");
+  if ( v3 )
   {
     v4 = v3;
     fgets(s, 256, v3);
     fclose(v4);
-    v5 = strcspn(s, <span style="color:#A31515;">&quot;\n&quot;</span>);
+    v5 = strcspn(s, "\n");
     v6 = v5;
     s[v5] = 0;
-    <span style="color:Blue;">if</span> ( v5 )
+    if ( v5 )
     {
       v7 = s;
       v8 = 17 * v5;
       v9 = 0;
-      <span style="color:Blue;">do</span>
+      do
       {
         *v7 ^= v9;
         v9 += 17;
         ++v7;
       }
-      <span style="color:Blue;">while</span> ( (_BYTE)v9 != v8 );
+      while ( (_BYTE)v9 != v8 );
     }
     v10 = 1;
     v11 = time(0LL);
     srand(v11);
-    puts(<span style="color:#A31515;">&quot;Welcome to the infinity gauntlet!&quot;</span>);
-    puts(<span style="color:#A31515;">&quot;If you complete the gauntlet, you&#39;ll get the flag!&quot;</span>);
-    <span style="color:Blue;">while</span> ( 1 )
+    puts("Welcome to the infinity gauntlet!");
+    puts("If you complete the gauntlet, you'll get the flag!");
+    while ( 1 )
     {
-      printf(<span style="color:#A31515;">&quot;=== ROUND %d ===\n&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v10);
+      printf("=== ROUND %d ===\n", (unsigned int)v10);
       v14 = rand();
-      v15 = v10 &gt; 49 ? (<span style="color:Blue;">unsigned</span> __int8)s[v14 % v6] | ((<span style="color:Blue;">unsigned</span> __int8)(v14 % v6 + v10) &lt;&lt; 8) : rand() % 0x10000;
-      <span style="color:Blue;">if</span> ( (rand() &amp; 1) != 0 )
+      v15 = v10 > 49 ? (unsigned __int8)s[v14 % v6] | ((unsigned __int8)(v14 % v6 + v10) << 8) : rand() % 0x10000;
+      if ( (rand() & 1) != 0 )
       {
         v12 = rand() % 3;
-        <span style="color:Blue;">if</span> ( v12 )
+        if ( v12 )
         {
-          <span style="color:Blue;">if</span> ( v12 == 1 )
+          if ( v12 == 1 )
           {
             v22 = rand();
-            printf(<span style="color:#A31515;">&quot;foo(%u, ?) = %u\n&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(v22 % 1337), (v22 % 1337) ^ (v15 + 1) ^ 0x539);
+            printf("foo(%u, ?) = %u\n", (unsigned int)(v22 % 1337), (v22 % 1337) ^ (v15 + 1) ^ 0x539);
           }
-          <span style="color:Blue;">else</span>
+          else
           {
             v13 = rand();
-            printf(<span style="color:#A31515;">&quot;foo(%u, %u) = ?\n&quot;</span>, v15 ^ (v13 % 1337 + 1) ^ 0x539, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(v13 % 1337));
+            printf("foo(%u, %u) = ?\n", v15 ^ (v13 % 1337 + 1) ^ 0x539, (unsigned int)(v13 % 1337));
           }
         }
-        <span style="color:Blue;">else</span>
+        else
         {
           v19 = rand();
-          printf(<span style="color:#A31515;">&quot;foo(?, %u) = %u\n&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(v19 % 1337), v15 ^ (v19 % 1337 + 1) ^ 0x539);
+          printf("foo(?, %u) = %u\n", (unsigned int)(v19 % 1337), v15 ^ (v19 % 1337 + 1) ^ 0x539);
         }
       }
-      <span style="color:Blue;">else</span>
+      else
       {
         v16 = rand();
-        <span style="color:Blue;">if</span> ( (v16 &amp; 3) != 0 )
+        if ( (v16 & 3) != 0 )
         {
           v17 = v16 % 4;
-          <span style="color:Blue;">if</span> ( v17 == 1 )
+          if ( v17 == 1 )
           {
             v24 = rand() % 1337;
             v25 = rand();
-            v26 = (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(v25 &gt;&gt; 31);
+            v26 = (unsigned int)(v25 >> 31);
             LODWORD(v26) = v25 % 1337;
-            printf(<span style="color:#A31515;">&quot;bar(%u, ?, %u) = %u\n&quot;</span>, v24, v26, v24 + v15 * (v25 % 1337 + 1));
+            printf("bar(%u, ?, %u) = %u\n", v24, v26, v24 + v15 * (v25 % 1337 + 1));
           }
-          <span style="color:Blue;">else</span> <span style="color:Blue;">if</span> ( v17 == 2 )
+          else if ( v17 == 2 )
           {
             v27 = rand() % 1337;
             v28 = rand();
-            v29 = (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(v28 &gt;&gt; 31);
+            v29 = (unsigned int)(v28 >> 31);
             LODWORD(v29) = v28 % 1337;
-            printf(<span style="color:#A31515;">&quot;bar(%u, %u, ?) = %u\n&quot;</span>, v27, v29, v27 + v28 % 1337 * (v15 + 1));
+            printf("bar(%u, %u, ?) = %u\n", v27, v29, v27 + v28 % 1337 * (v15 + 1));
           }
-          <span style="color:Blue;">else</span>
+          else
           {
-            v18 = v15 &lt;= 0x539 ? rand() % v15 : rand() % 1337;
-            printf(<span style="color:#A31515;">&quot;bar(%u, %u, %u) = ?\n&quot;</span>, v15 % v18, v18, v15 / v18 - 1);
+            v18 = v15 <= 0x539 ? rand() % v15 : rand() % 1337;
+            printf("bar(%u, %u, %u) = ?\n", v15 % v18, v18, v15 / v18 - 1);
           }
         }
-        <span style="color:Blue;">else</span>
+        else
         {
           v20 = rand() % 1337;
           v21 = rand();
-          printf(<span style="color:#A31515;">&quot;bar(?, %u, %u) = %u\n&quot;</span>, v20, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)(v21 % 1337), v15 + v20 * (v21 % 1337 + 1));
+          printf("bar(?, %u, %u) = %u\n", v20, (unsigned int)(v21 % 1337), v15 + v20 * (v21 % 1337 + 1));
         }
       }
-      __isoc99_scanf(<span style="color:#A31515;">&quot;%u&quot;</span>, &amp;v30);
-      <span style="color:Blue;">if</span> ( v30 != v15 )
-        <span style="color:Blue;">break</span>;
-      printf(<span style="color:#A31515;">&quot;Correct! Maybe round %d will get you the flag ;)\n&quot;</span>, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)++v10);
+      __isoc99_scanf("%u", &v30);
+      if ( v30 != v15 )
+        break;
+      printf("Correct! Maybe round %d will get you the flag ;)\n", (unsigned int)++v10);
     }
-    puts(<span style="color:#A31515;">&quot;Wrong!&quot;</span>);
+    puts("Wrong!");
     result = 0;
-  }
-</pre></div>
-</div>
+  }</code></pre>
 <p>The first thing I did was reverse the various foo and bar functions to figure out what value I needed to type:</p>
-<div class="lang-python editor-colors">def foo1(a, c):
+<pre><code class="language-python">def foo1(a, c):
 	return (a^c^0x539)-1
 
 def foo2(a, b):
@@ -200,36 +198,29 @@ def bar3(a, b, c):
 	return ((c+1)*b)+a
 
 def bar4(b, c, d):
-	return d-(b*(c+1))
-</div>
+	return d-(b*(c+1))</code></pre>
 <p>v15 was the value that we got each time, this value was set on this line:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-v15 = v10 &gt; 49 ? (<span style="color:Blue;">unsigned</span> __int8)s[v14 % v6] | ((<span style="color:Blue;">unsigned</span> __int8)(v14 % v6 + v10) &lt;&lt; 8) : rand() % 0x10000;
-</pre></div>
-</div>
+<pre><code class="language-c">v15 = v10 > 49 ? (unsigned __int8)s[v14 % v6] | ((unsigned __int8)(v14 % v6 + v10) << 8) : rand() % 0x10000;</code></pre>
 <p>Using this we can get the original value from s as well as the position value. So if we do a bunch of iterations of the problems we can theoretically solve for all the values.</p>
 <p>s is the encrypted flag that gets set here:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-    v5 = strcspn(s, <span style="color:#A31515;">&quot;\n&quot;</span>);
+<pre><code class="language-c">    v5 = strcspn(s, "\n");
     v6 = v5;
     s[v5] = 0;
-    <span style="color:Blue;">if</span> ( v5 )
+    if ( v5 )
     {
       v7 = s;
       v8 = 17 * v5;
       v9 = 0;
-      <span style="color:Blue;">do</span>
+      do
       {
         *v7 ^= v9;
         v9 += 17;
         ++v7;
       }
-      <span style="color:Blue;">while</span> ( (_BYTE)v9 != v8 );
-    }
-</pre></div>
-</div>
+      while ( (_BYTE)v9 != v8 );
+    }</code></pre>
 <p>Which can be reversed fairly simply by using the position value plus 1 times 17 xor'ed with the value we received. I then made the following script:</p>
-<div class="lang-python editor-colors"># pwntools import
+<pre><code class="language-python"># pwntools import
 from pwn import *
 
 # reversed functions
@@ -321,12 +312,11 @@ while True:
             # decrypt and print
 			solved.append(chr(0xFF&(((a+1)*17)^b)))
 			new4[a] = chr(0xFF&(((a+1)*17)^b))
-			print(new4)
-</div>
+			print(new4)</code></pre>
 <p>After letting it run for a few seconds we get:</p>
-<pre><code>[+] Opening connection to shell.actf.co on port 21700: Done
+<pre><code class="language-text">[+] Opening connection to shell.actf.co on port 21700: Done
 b'Welcome to the infinity gauntlet!\n'
-b&quot;If you complete the gauntlet, you'll get the flag!\n&quot;
+b"If you complete the gauntlet, you'll get the flag!\n"
 [0, 0, 0, '{', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 [0, 0, 0, '{', 0, 0, 0, 0, 'p', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 [0, 0, 0, '{', 0, 0, 0, 0, 'p', 0, 0, 0, 'a', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -351,12 +341,9 @@ b&quot;If you complete the gauntlet, you'll get the flag!\n&quot;
 [0, 't', 'f', '{', 's', 'n', 'a', 'p', 'p', 'e', 'd', '_', 'a', 'w', 'a', 'y', '_', 't', 'h', 'e', '_', 0, 'n', 0, '}', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 [0, 't', 'f', '{', 's', 'n', 'a', 'p', 'p', 'e', 'd', '_', 'a', 'w', 'a', 'y', '_', 't', 'h', 'e', '_', 0, 'n', 'd', '}', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 [0, 't', 'f', '{', 's', 'n', 'a', 'p', 'p', 'e', 'd', '_', 'a', 'w', 'a', 'y', '_', 't', 'h', 'e', '_', 'e', 'n', 'd', '}', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
 </code></pre>
 <p>The flag ended up being:</p>
-<pre><code>actf{snapped_away_the_end}
-</code></pre>
-
+<pre><code class="language-text">actf{snapped_away_the_end}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -369,5 +356,6 @@ b&quot;If you complete the gauntlet, you'll get the flag!\n&quot;
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

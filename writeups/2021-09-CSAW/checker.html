@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,35 +74,31 @@
 <p>What's up with all the zeros and ones? Where are my letters and numbers? (This is a reversing challenge.)</p>
 <h2 id="write-up">Write up:</h2>
 <p>The first thing I did was look at the encode function:</p>
-<div class="lang-py editor-colors">def encode(plain):
+<pre><code class="language-text">def encode(plain):
     d = 24
     x = up(plain)
     x = right(x,d)
     x = down(x)
     x = left(x,d)
-    return x
-</div>
+    return x</code></pre>
 <p>I saw that I would have to do these function calls in reverse to decode the string. So I then started looking into the individual functions to see which ones I could just call and which ones I would have to rewrite.</p>
-<div class="lang-py editor-colors">def right(x,d):
+<pre><code class="language-text">def right(x,d):
     x = x[d:] + x[0:d]
     return x
 
 def left(x,d):
     x = right(x,len(x)-d)
-    return x[::-1]
-</div>
+    return x[::-1]</code></pre>
 <p>The functions left and right just reorganized the flag based on the length and the d value so these would not need to be rewritten.</p>
-<div class="lang-py editor-colors">def down(x):
+<pre><code class="language-text">def down(x):
     x = ''.join(['1' if x[i] == '0' else '0' for i in range(len(x))])
-    return x
-</div>
+    return x</code></pre>
 <p>The down function just reversed the bits so that also would not need to be rewritten.</p>
-<div class="lang-py editor-colors">def up(x):
+<pre><code class="language-text">def up(x):
     x = [f"{ord(x[i]) << 1:08b}" for i in range(len(x))]
-    return ''.join(x)
-</div>
+    return ''.join(x)</code></pre>
 <p>The up function however converted the flag to bits so I would need to rewrite that. I then added the decode function to the script:</p>
-<div class="lang-py editor-colors">def up(x):
+<pre><code class="language-text">def up(x):
     x = [f"{ord(x[i]) << 1:08b}" for i in range(len(x))]
     return ''.join(x)
 
@@ -145,16 +142,12 @@ def main():
 
 
 if __name__ == "__main__":
-  main()
-</div>
+  main()</code></pre>
 <p>When run this printed out:</p>
-<pre><code>What does this mean?
-3vers!nG_w@rm_Up}flag{r
-</code></pre>
+<pre><code class="language-text">What does this mean?
+3vers!nG_w@rm_Up}flag{r</code></pre>
 <p>The flag was:</p>
-<pre><code>flag{r3vers!nG_w@rm_Up}
-</code></pre>
-
+<pre><code class="language-text">flag{r3vers!nG_w@rm_Up}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -167,5 +160,6 @@ if __name__ == "__main__":
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

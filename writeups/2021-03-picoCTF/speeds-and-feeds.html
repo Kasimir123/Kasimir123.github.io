@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -74,7 +75,7 @@
 <p>There is something on my shop network running at mercury.picoctf.net:53740, but I can't tell what it is. Can you?</p>
 <h2 id="write-up">Write up:</h2>
 <p>Going to the webpage we see:</p>
-<div class="lang-gcode editor-colors">G17 G21 G40 G90 G64 P0.003 F50
+<pre><code class="language-text">G17 G21 G40 G90 G64 P0.003 F50
 G0Z0.1
 G0Z0.1
 G0X0.8276Y3.8621
@@ -1196,10 +1197,9 @@ G1X198.7586Y-0.8276
 G1X198.4828Y-1.3793
 G1X198.2069Y-1.6552
 G1X197.6552Y-1.9310
-G0Z0.1
-</div>
+G0Z0.1</code></pre>
 <p>Having done a good amount of gcode work I recognized it right away and opened up a gcode viewer and entered the code, this gave me the flag:</p>
-<p><img src="./Photos/Flag.PNG" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2021-03-picoCTF/speeds-and-feeds/Photos/Flag.PNG" alt="" /></p>
 
         </article>
 
@@ -1213,5 +1213,6 @@ G0Z0.1
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

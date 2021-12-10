@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,47 +73,40 @@
 <p>Category: Reversing</p>
 <h2 id="write-up">Write up:</h2>
 <p>The first thing I did once downloading the file was run the file and then check to see what type of file it was:</p>
-<div class="lang-bash editor-colors">./x-and-or   
+<pre><code class="language-bash">./x-and-or   
 
-Enter the flag: 
-</div>
-<div class="lang-bash editor-colors">file x-and-or     
+Enter the flag: </code></pre><pre><code class="language-bash">file x-and-or     
 
-x-and-or: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=d75c2db8d7b1c77fd65762741f73b19aba4f2815, for GNU/Linux 3.2.0, not stripped
-</div>
+x-and-or: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=d75c2db8d7b1c77fd65762741f73b19aba4f2815, for GNU/Linux 3.2.0, not stripped</code></pre>
 <p>Seeing as this was an ELF 64 bit file I opened the file in IDA and navigated to the pseudocode for the main function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
-  <span style="color:Blue;">char</span> s[8]; <span style="color:Green;">// [rsp+Ch] [rbp-114h] BYREF</span>
-  <span style="color:Blue;">unsigned</span> __int64 v5; <span style="color:Green;">// [rsp+118h] [rbp-8h]</span>
+  char s[8]; // [rsp+Ch] [rbp-114h] BYREF
+  unsigned __int64 v5; // [rsp+118h] [rbp-8h]
 
-  v5 = __readfsqword(&#39;(&#39;);
-  printf(<span style="color:#A31515;">&quot;Enter the flag: &quot;</span>);
-  fgets(&amp;s[4], 256, _bss_start);
-  s[strcspn(&amp;s[4], <span style="color:#A31515;">&quot;\r\n&quot;</span>) + 4] = 0;
-  *(_DWORD *)s = strnlen(&amp;s[4], &#39;\x01\0&#39;);
-  <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)code(&amp;s[4], *(<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span> *)s) )
-    puts(<span style="color:#A31515;">&quot;That is not the flag.&quot;</span>);
-  <span style="color:Blue;">else</span>
-    puts(<span style="color:#A31515;">&quot;That is the flag!!!!&quot;</span>);
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  v5 = __readfsqword('(');
+  printf("Enter the flag: ");
+  fgets(&s[4], 256, _bss_start);
+  s[strcspn(&s[4], "\r\n") + 4] = 0;
+  *(_DWORD *)s = strnlen(&s[4], '\x01\0');
+  if ( (unsigned int)code(&s[4], *(unsigned int *)s) )
+    puts("That is not the flag.");
+  else
+    puts("That is the flag!!!!");
+  return 0;
+}</code></pre>
 <p>The main function prints out &quot;Enter the flag:&quot; and then reads in what the user writes. Since this file links a .so file I needed to debug through in order to see the rest of the code so I set up the remote linux debugger and set a breakpoint on the if statement.</p>
 <p>Once prompted for the flag I simply put in flag{, this way I would know the length and it would match the flag format. Once the debugger hit the if statement I stepped into the called function and got the following assembly:</p>
-<p><img src="./Photos/FirstFunction.PNG" alt="First Function" /></p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2021-01-OffShift/x-and-or/Photos/FirstFunction.PNG" alt="First Function" /></p>
 <p>Looking through the values I noticed that rdi contained the string I inputted (flag{) and esi contained the length of the string (5).</p>
 <p>xor eax, eax simply sets eax to 0 since anything xor'ed with itself it 0.</p>
 <p>The assembly then goes through and puts a string into rbp. After stepping through up until the cmp instruction I went to rbp-30h and saw:</p>
-<p><img src="./Photos/Encrypted.PNG" alt="Encrypted" /></p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2021-01-OffShift/x-and-or/Photos/Encrypted.PNG" alt="Encrypted" /></p>
 <p>I then extracted this under the assumption that this was the encrypted password.</p>
-<div class="lang-python editor-colors">enc = [0x66, 0x6D, 0x69, 0x7C, 0x3B, 0x48, 0x36, 0x31, 0x3E, 0x28, 0x77, 0x19, 0x63, 0x31, 0x6C, 0x78, 0x24, 0x4E, 0x33, 0x63, 0x3D, 0x7D, 0x26, 0x4E, 0x37, 0x39, 0x30, 0x2B, 0x23, 0x1C, 0x31, 0x31, 0x6A, 0x29, 0x74, 0x1B, 0x62, 0x7C]
-</div>
+<pre><code class="language-python">enc = [0x66, 0x6D, 0x69, 0x7C, 0x3B, 0x48, 0x36, 0x31, 0x3E, 0x28, 0x77, 0x19, 0x63, 0x31, 0x6C, 0x78, 0x24, 0x4E, 0x33, 0x63, 0x3D, 0x7D, 0x26, 0x4E, 0x37, 0x39, 0x30, 0x2B, 0x23, 0x1C, 0x31, 0x31, 0x6A, 0x29, 0x74, 0x1B, 0x62, 0x7C]</code></pre>
 <p>I then went back to the assembly. The cmp compared eax to [rbp-4Ch]. After some looking I noticed that [rbp-4Ch] contained 5 (string length) while eax contained 26h, meaning the flag should be 38 characters long. This reaffirmed my suspicions that enc was the encrypted password as end was 38 characters long.</p>
 <p>I then set eax to be 5 so I could continue debugging and jumped through a few functions till I reached:</p>
-<pre><code>loc_7F6C28CE808C:                       ; CODE XREF: debug003:00007F6C28CE8147↓j
+<pre><code class="language-text">loc_7F6C28CE808C:                       ; CODE XREF: debug003:00007F6C28CE8147↓j
 debug003:00007F6C28CE808C     mov     eax, [rbp-38h]
 debug003:00007F6C28CE808F     cdqe
 debug003:00007F6C28CE8091     movzx   eax, byte ptr [rbp+rax-30h]
@@ -184,8 +178,7 @@ debug003:00007F6C28CE8141     loc_7F6C28CE8141:                       ; CODE XRE
 debug003:00007F6C28CE8141     mov     eax, [rbp-38h]
 debug003:00007F6C28CE8144     cmp     eax, [rbp-34h]
 debug003:00007F6C28CE8147     jl      loc_7F6C28CE808C
-debug003:00007F6C28CE814D     mov     eax, 0
-</code></pre>
+debug003:00007F6C28CE814D     mov     eax, 0</code></pre>
 <p>This loops back around for the length of the input so I put a breakpoint on the xor line and checked the values of edi and eax. edi ended up being each char from my input string while eax changed each time:</p>
 <p>Run 1: 0</p>
 <p>Run 2: 1</p>
@@ -194,7 +187,7 @@ debug003:00007F6C28CE814D     mov     eax, 0
 <p>Run 5: 40 (64)</p>
 <p>Run 6: 7D (125)</p>
 <p>From this I get that the key is either 0, 1, 8, 27, 64, 125 or that there is one key value for each value in the password. I chose to try using just those values and wrote the following python script:</p>
-<div class="lang-python editor-colors"># encrypted password value
+<pre><code class="language-python"># encrypted password value
 enc = [0x66, 0x6D, 0x69, 0x7C, 0x3B, 0x48, 0x36, 0x31, 0x3E, 0x28, 0x77, 0x19, 0x63, 0x31, 0x6C, 0x78, 0x24, 0x4E, 0x33, 0x63, 0x3D, 0x7D, 0x26, 0x4E, 0x37, 0x39, 0x30, 0x2B, 0x23, 0x1C, 0x31, 0x31, 0x6A, 0x29, 0x74, 0x1B, 0x62, 0x7C]
 
 # key array
@@ -209,12 +202,9 @@ for i in range(len(enc)):
     flag += chr(enc[i]^key[i%len(key)])
 
 # prints out value
-print(flag)
-</div>
+print(flag)</code></pre>
 <p>This printed out the following key which was accepted by the challenge:</p>
-<pre><code>flag{560637dc0dcd33b5ff37880ca10b24fb}
-</code></pre>
-
+<pre><code class="language-text">flag{560637dc0dcd33b5ff37880ca10b24fb}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -227,5 +217,6 @@ print(flag)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

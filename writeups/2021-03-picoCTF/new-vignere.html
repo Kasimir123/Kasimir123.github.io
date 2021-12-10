@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,13 +72,11 @@
 <p>Jeopardy style CTF</p>
 <p>Category: Cryptography</p>
 <p>Comments: Another slight twist on a classic, see if you can recover the flag. (Wrap with picoCTF)</p>
-<pre><code>bkglibgkhghkijphhhejggikgjkbhefgpienefjdioghhchffhmmhhbjgclpjfkp
-</code></pre>
-<h2 id="write-up">Write up:</h2>
+<pre><code class="language-text">bkglibgkhghkijphhhejggikgjkbhefgpienefjdioghhchffhmmhhbjgclpjfkp</code></pre><h2 id="write-up">Write up:</h2>
 <p>Looking at the code I noticed that this encryption was similar to new caesar but with a longer key length. Because of this I was able to reuse some of the old code I had.</p>
 <p>Looking at the code we can see that the key will always be less than 15, given that the encrypted text is 64 characters, plain text is 32, that means that the key will wrap around so there should be repeats. Based on this we can generate a set of possible keys for each set of encrypted values. After we have the values we can then use the Kasiski examination method to check for the key length, and then we can &quot;brute force&quot; the cipher.</p>
 <p>For that I wrote the following code:</p>
-<div class="lang-python editor-colors"># encrypted text
+<pre><code class="language-python"># encrypted text
 enc = "bkglibgkhghkijphhhejggikgjkbhefgpienefjdioghhchffhmmhhbjgclpjfkp"
 
 
@@ -111,10 +110,9 @@ for a in ALPHABET:
 
 # print the possible key pairs
 for key in keys:
-	print(key)
-</div>
+	print(key)</code></pre>
 <p>Which when run generated:</p>
-<pre><code>['le', 'lf', 'lg', 'lh', 'li', 'lj', 'ob', 'oc', 'od', 'oe', 'of', 'og', 'oh', 'oi', 'oj', 'ok']
+<pre><code class="language-text">['le', 'lf', 'lg', 'lh', 'li', 'lj', 'ob', 'oc', 'od', 'oe', 'of', 'og', 'oh', 'oi', 'oj', 'ok']
 ['af', 'ag', 'ah', 'ai', 'aj', 'ak', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj', 'dk', 'dl']
 ['ca', 'cl', 'cm', 'cn', 'co', 'cp', 'fa', 'fb', 'fi', 'fj', 'fk', 'fl', 'fm', 'fn', 'fo', 'fp']
 ['ae', 'af', 'ag', 'ah', 'ai', 'aj', 'db', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj', 'dk']
@@ -145,11 +143,10 @@ for key in keys:
 ['aa', 'ab', 'am', 'an', 'ao', 'ap', 'da', 'db', 'dc', 'dj', 'dk', 'dl', 'dm', 'dn', 'do', 'dp']
 ['fj', 'fk', 'fl', 'fm', 'fn', 'fo', 'ig', 'ih', 'ii', 'ij', 'ik', 'il', 'im', 'in', 'io', 'ip']
 ['da', 'db', 'dc', 'dd', 'de', 'dp', 'ga', 'gb', 'gc', 'gd', 'ge', 'gf', 'gm', 'gn', 'go', 'gp']
-['ej', 'ek', 'el', 'em', 'en', 'eo', 'hg', 'hh', 'hi', 'hj', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp']
-</code></pre>
+['ej', 'ek', 'el', 'em', 'en', 'eo', 'hg', 'hh', 'hi', 'hj', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp']</code></pre>
 <p>Looking through this it became fairly obvious that the key pairs repeated every 9 times making the key length 9.</p>
 <p>I then wrote a decryption script to recursively add together the key pairs as well as add one last letter and then test all the possible 9 length keys:</p>
-<div class="lang-python editor-colors"># import string
+<pre><code class="language-python"># import string
 import string
 
 # constants
@@ -235,12 +232,9 @@ for key in keys:
 	print(key)
 
 # decrypt the code
-get_key("", keys[0:5])
-</div>
+get_key("", keys[0:5])</code></pre>
 <p>When run this output:</p>
-<pre><code>698987ddce418c11e9aa564229c50fda
-</code></pre>
-
+<pre><code class="language-text">698987ddce418c11e9aa564229c50fda</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -253,5 +247,6 @@ get_key("", keys[0:5])
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,21 +73,17 @@
 <p>Category: Stega</p>
 <h2 id="write-up">Write up:</h2>
 <p>Since this was stegonography, my first step was to binwalk the pdf to see if there was any hidden data:</p>
-<pre><code>binwalk super_secret.pdf 
+<pre><code class="language-text">binwalk super_secret.pdf 
 
 DECIMAL       HEXADECIMAL     DESCRIPTION
 --------------------------------------------------------------------------------
-0             0x0             PDF document, version: &quot;1.3&quot;
+0             0x0             PDF document, version: "1.3"
 106           0x6A            Zlib compressed data, default compression
-
 </code></pre>
 <p>I then extracted the data with</p>
-<pre><code>binwalk -D=&quot;.*&quot; super_secret.pdf
-</code></pre>
+<pre><code class="language-text">binwalk -D=".*" super_secret.pdf</code></pre>
 <p>In the extracted data there was a txt file that contained:</p>
-<pre><code>dvCTF{look_at_the_files}
-</code></pre>
-
+<pre><code class="language-text">dvCTF{look_at_the_files}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -99,5 +96,6 @@ DECIMAL       HEXADECIMAL     DESCRIPTION
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

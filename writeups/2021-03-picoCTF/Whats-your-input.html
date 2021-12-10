@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -74,7 +75,7 @@
 <h2 id="write-up">Write up:</h2>
 <p>Looking at the python we can see that it is python 2 and that this is obviously a print format vulnerability.</p>
 <p>Looking into the vulnerability a bit more I saw that I can simply type the name of the variable I want to print and it will print it. I then connected to the server and tried my &quot;exploit&quot;:</p>
-<pre><code>nc mercury.picoctf.net 61858                                         1 ⨯
+<pre><code class="language-text">nc mercury.picoctf.net 61858                                         1 ⨯
 What's your favorite number?
 Number? city
 You said: Round Lake Beach
@@ -83,12 +84,9 @@ What's the best city to visit?
 City? city
 You said: Round Lake Beach
 I agree!
-picoCTF{v4lua4bl3_1npu7_7607377}
-</code></pre>
+picoCTF{v4lua4bl3_1npu7_7607377}</code></pre>
 <p>The flag was:</p>
-<pre><code>picoCTF{v4lua4bl3_1npu7_7607377}
-</code></pre>
-
+<pre><code class="language-text">picoCTF{v4lua4bl3_1npu7_7607377}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -101,5 +99,6 @@ picoCTF{v4lua4bl3_1npu7_7607377}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,7 +73,7 @@
 <p>Category: Code</p>
 <p>Comment:</p>
 <p>Below is some starter code that reads in 3D points (x,y,z) from stdin and calls FindLargestTriangleArea. You just need to impliment the &quot;FindLargestTriangleArea&quot; function. This function should find the largest triangle area (2D) you can make using any three points. The function simply takes a list of 3D points and returns the area of the largest triangle found. The code then prints that result rounded to the nearest whole number.</p>
-<div class="lang-python editor-colors"># points is a list of 3D points
+<pre><code class="language-python"># points is a list of 3D points
 # ie: [[2, 9, -15], [0, 33, -20], ...]
 def FindLargestTriangleArea(points):
   # return largest area
@@ -87,18 +88,15 @@ for point in points_data.split(' '):
 
 # Compute Largest Triangle and Print Area rounded to nearest whole number
 area = FindLargestTriangleArea(points)
-print int(round(area))
-</div>
+print int(round(area))</code></pre>
 <p>stdin example:</p>
-<pre><code>-21,59,-93 -4,91,-2 1,61,2, 0,44,1
-</code></pre>
+<pre><code class="language-text">-21,59,-93 -4,91,-2 1,61,2, 0,44,1</code></pre>
 <p>stdout example:</p>
-<pre><code>2241
-</code></pre>
+<pre><code class="language-text">2241</code></pre>
 <p>You can ignore the default code below and instead use code above. Once function is implimented, simply copy/paste into box and run. Ensure not to print anything else during your code execution!</p>
 <h2 id="write-up">Write up:</h2>
 <p>This challenge was made using python 2 so I created the following python script, comments here are better than an explanation after so thats what I did:</p>
-<div class="lang-python editor-colors">import math
+<pre><code class="language-python">import math
 
 # Gets the area based on 3 3D points using the following formula:
 # A=0.5*|(B-A)X(C-A)|
@@ -146,9 +144,7 @@ for point in points_data.split(' '):
 
 # Compute Largest Triangle and Print Area rounded to nearest whole number
 area = FindLargestTriangleArea(points)
-print(int(round(area)))
-</div>
-
+print(int(round(area)))</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -161,5 +157,6 @@ print(int(round(area)))
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

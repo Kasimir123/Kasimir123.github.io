@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -74,30 +75,29 @@
 <h2 id="write-up">Write up:</h2>
 <p>Running file on the provided program I was able to see that the .8xp file was a program for a tI-83 Graphing Calculator. I then did a bit of googling and came across the following <a href="https://github.com/benbalter/ti-83-programs">tool</a>.</p>
 <p>After running the tool I got the following output:</p>
-<pre><code>BASIC
+<pre><code class="language-text">BASIC
 not protected
 Single file dated Thu Oct 21 03:37:38 20
 ClrHome
-&amp;statClrList &amp;L4
-&quot;F4X67ENQPK0{MTJRHL}O3G59UB-ZAWV8S2YI1CD&quot;-&gt;Str2
-{26,25,38,10,6,35,6,12,13,2,14,17,27,38,18,29,23,23,27,30,2,33,27,26,11,16,37,7,22,19}-&gt;&amp;L4
-Input &quot;GUESS: &quot;,Str7
+&statClrList &L4
+"F4X67ENQPK0{MTJRHL}O3G59UB-ZAWV8S2YI1CD"->Str2
+{26,25,38,10,6,35,6,12,13,2,14,17,27,38,18,29,23,23,27,30,2,33,27,26,11,16,37,7,22,19}->&L4
+Input "GUESS: ",Str7
 If length(Str7)!=30:Then
-Disp &quot;WRONG&quot;
+Disp "WRONG"
 Stop
 End
 For(I,1,30,1)
-If sub(Str7,I,1)!=sub(Str2,&amp;L4(I),1)
+If sub(Str7,I,1)!=sub(Str2,&L4(I),1)
 Then
-Disp &quot;WRONG&quot;
+Disp "WRONG"
 Stop
 End
 End
-Disp &quot;CORRECT&quot;   
-</code></pre>
+Disp "CORRECT"   </code></pre>
 <p>This program loops through the input which needs to be of length 30. It then compares the current character to a character in Str2 by getting an index from L4.</p>
 <p>I then wrote the following solve script:</p>
-<div class="lang-py editor-colors"># Str2 string from the program
+<pre><code class="language-text"># Str2 string from the program
 str2 = "F4X67ENQPK0{MTJRHL}O3G59UB-ZAWV8S2YI1CD"
 
 # Array with all the indices
@@ -113,12 +113,9 @@ for i in range(0, 30):
 	s += chr(ord(str2[L4[i]-1]))
 
 # print out string
-print(s)
-</div>
+print(s)</code></pre>
 <p>When run this output:</p>
-<pre><code>BUCKEYE{M4TH-CLA55-W4S-B0R1NG}
-</code></pre>
-
+<pre><code class="language-text">BUCKEYE{M4TH-CLA55-W4S-B0R1NG}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -131,5 +128,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

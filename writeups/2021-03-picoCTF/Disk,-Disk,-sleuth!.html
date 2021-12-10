@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,11 +74,9 @@
 <p>Comments: Use <code>srch_strings</code> from the sleuthkit and some terminal-fu to find a flag in this disk image: dds1-alpine.flag.img.gz</p>
 <h2 id="write-up">Write up:</h2>
 <p>This was a pretty straitforward challenge, after extracting the zip file I ran the search string command and piped that into grep:</p>
-<pre><code>srch_strings -a dds1-alpine.flag.img| grep picoCTF
+<pre><code class="language-text">srch_strings -a dds1-alpine.flag.img| grep picoCTF
 
-  SAY picoCTF{f0r3ns1c4t0r_n30phyt3_ad5c96c0}
-</code></pre>
-
+  SAY picoCTF{f0r3ns1c4t0r_n30phyt3_ad5c96c0}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -90,5 +89,6 @@
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

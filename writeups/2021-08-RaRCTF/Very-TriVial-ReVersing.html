@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,8 +74,7 @@
 <p>Comments: Hey, at least it's not Haskell!</p>
 <h2 id="write-up">Write up:</h2>
 <p>Looking into the main function of the program I saw a call to a function called main__main:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 main__main()
+<pre><code class="language-c">__int64 main__main()
 {
   __int64 v0;
   __int64 result; 
@@ -86,18 +86,15 @@ __int64 main__main()
   v2[0] = os__input(L_1252, 0x10000000ELL);
   v2[1] = v0;
   memmove_plt(v3, v2, 16LL);
-  result = (<span style="color:Blue;">unsigned</span> __int8)main__check(v3[0], v3[1]);
-  <span style="color:Blue;">if</span> ( (_BYTE)result )
+  result = (unsigned __int8)main__check(v3[0], v3[1]);
+  if ( (_BYTE)result )
     result = println(L_1254, 0x100000003LL);
-  <span style="color:Blue;">return</span> result;
-}
-</pre></div>
-</div>
+  return result;
+}</code></pre>
 <p>This function read the user input into v2 as a pointer and then called main__check:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall main__check(__int64 a1, __int64 a2)
+<pre><code class="language-c">__int64 __fastcall main__check(__int64 a1, __int64 a2)
 {
-  <span style="color:Blue;">int</span> v2; 
+  int v2; 
 ...
   __int64 v57;
 
@@ -109,38 +106,38 @@ __int64 __fastcall main__check(__int64 a1, __int64 a2)
   v51[1] = 55;
   new_array_from_c_array(v52, 2LL, 2LL, 4LL, v51);
   memmove_plt(v53, v52, 32LL);
-  <span style="color:Blue;">for</span> ( i = 0; i &lt; (<span style="color:Blue;">int</span>)v57; ++i ) <span style="color:Green;">// loop through the length of the input</span>
+  for ( i = 0; i < (int)v57; ++i ) // loop through the length of the input
   {
     v49 = *(_BYTE *)(i + v56);
-    v47 = &amp;v29;
-    memmove_plt(&amp;v29, v53, 32LL);
-    v6 = (_DWORD *)array_get(0, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v53, v2, v3, v4, v5, v29, v30, v31); <span style="color:Green;">// get a value</span>
-    v46 = *v6 ^ v49; <span style="color:Green;">// xor that value</span>
-    v47 = &amp;v29;
-    memmove_plt(&amp;v29, v53, 32LL);
-    v11 = (_DWORD *)array_get(1, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v53, v7, v8, v9, v10, v29, v30, v31); <span style="color:Green;">// get another value</span>
-    v48 = *v11 + v46; <span style="color:Green;">// add that value</span>
-    array_push(v55, &amp;v48);
-    v47 = &amp;v29;
-    memmove_plt(&amp;v29, v53, 32LL);
-    v44[0] = *(_DWORD *)array_get(1, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v53, v12, v13, v14, v15, v29, v30, v31);
-    v47 = &amp;v29;
-    memmove_plt(&amp;v29, v53, 32LL);
-    v44[1] = *(_DWORD *)array_get(0, (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v53, v16, v17, v18, v19, v29, v30, v31);
-    new_array_from_c_array(v45, 2LL, 2LL, 4LL, v44); <span style="color:Green;">// swap the locations of the two values</span>
+    v47 = &v29;
+    memmove_plt(&v29, v53, 32LL);
+    v6 = (_DWORD *)array_get(0, (unsigned int)v53, v2, v3, v4, v5, v29, v30, v31); // get a value
+    v46 = *v6 ^ v49; // xor that value
+    v47 = &v29;
+    memmove_plt(&v29, v53, 32LL);
+    v11 = (_DWORD *)array_get(1, (unsigned int)v53, v7, v8, v9, v10, v29, v30, v31); // get another value
+    v48 = *v11 + v46; // add that value
+    array_push(v55, &v48);
+    v47 = &v29;
+    memmove_plt(&v29, v53, 32LL);
+    v44[0] = *(_DWORD *)array_get(1, (unsigned int)v53, v12, v13, v14, v15, v29, v30, v31);
+    v47 = &v29;
+    memmove_plt(&v29, v53, 32LL);
+    v44[1] = *(_DWORD *)array_get(0, (unsigned int)v53, v16, v17, v18, v19, v29, v30, v31);
+    new_array_from_c_array(v45, 2LL, 2LL, 4LL, v44); // swap the locations of the two values
     memmove_plt(v53, v45, 32LL);
   }
   memmove_plt(v41, v55, 32LL);
   v40 = v43;
   _new_array(v38, 0LL, v43, 4LL);
   memmove_plt(v39, v38, 32LL);
-  <span style="color:Blue;">for</span> ( j = 0; j &lt; v40; ++j )
+  for ( j = 0; j < v40; ++j )
   {
     v36 = *(_BYTE *)(j + v42);
     v35 = anon_fn_e2d96d4126f6333f_byte__int_215(v36);
-    array_push(v39, &amp;v35);
+    array_push(v39, &v35);
   }
-  v33[0] = 152; <span style="color:Green;">// create encrypted flag</span>
+  v33[0] = 152; // create encrypted flag
   v33[1] = 105;
   v33[2] = 152;
   v33[3] = 103;
@@ -178,13 +175,13 @@ __int64 __fastcall main__check(__int64 a1, __int64 a2)
   v33[35] = 102;
   v33[36] = 165;
   new_array_from_c_array(v34, 37LL, 37LL, 4LL, v33);
-  v47 = &amp;v29;
-  memmove_plt(&amp;v29, v34, 32LL);
-  v47 = &amp;v25;
-  memmove_plt(&amp;v25, v39, 32LL);
-  <span style="color:Blue;">if</span> ( !(<span style="color:Blue;">unsigned</span> __int8)Array_int_arr_eq(
-                           (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)&amp;v25,
-                           (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v39,
+  v47 = &v29;
+  memmove_plt(&v29, v34, 32LL);
+  v47 = &v25;
+  memmove_plt(&v25, v39, 32LL);
+  if ( !(unsigned __int8)Array_int_arr_eq(
+                           (unsigned int)&v25,
+                           (unsigned int)v39,
                            v20,
                            v21,
                            v22,
@@ -195,15 +192,13 @@ __int64 __fastcall main__check(__int64 a1, __int64 a2)
                            v28,
                            v29,
                            v30,
-                           v31) ) <span style="color:Green;">// check the flag</span>
-    <span style="color:Blue;">return</span> 0LL;
+                           v31) ) // check the flag
+    return 0LL;
   v32 = 1;
-  <span style="color:Blue;">return</span> 1LL;
-}
-</pre></div>
-</div>
+  return 1LL;
+}</code></pre>
 <p>The program went through the entire input we had and xor'ed it by a, then added by b, then swapped a and b for the next one. From this I made the following script:</p>
-<div class="lang-python editor-colors"># encrypted flag
+<pre><code class="language-python"># encrypted flag
 x = [152, 105, 152, 103, 158, 100, 159, 119, 173, 101, 118, 118, 178, 105, 158, 115, 169, 87, 180, 35, 158, 119, 179, 146, 169, 88, 174, 45, 89, 101, 168, 21, 89, 33, 173, 102, 165]
 
 # a and b
@@ -224,12 +219,9 @@ for i in range(len(x)):
 	b = c
 
 # print flag
-print(s)
-</div>
+print(s)</code></pre>
 <p>Once run I got:</p>
-<pre><code>rarctf{See,ThatWasn'tSoHard-1eb519ed}
-</code></pre>
-
+<pre><code class="language-text">rarctf{See,ThatWasn'tSoHard-1eb519ed}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -242,5 +234,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

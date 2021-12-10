@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,9 +74,9 @@
 <p>Comments: Can you find the flag?</p>
 <h2 id="write-up">Write up:</h2>
 <p>I opened the pcap file in wireshark, the first thing I did was go to Statistics-&gt; Protocol Hierarchy. Here I saw that there were packets of lined based text data. I right clicked and selected to apply filter to that type of packets. I noticed that the first packet had:</p>
-<pre><code>0000   02 3b c6 1a ae f5 02 fb 68 4c e9 41 08 00 45 00   .;......hL.A..E.
+<pre><code class="language-text">0000   02 3b c6 1a ae f5 02 fb 68 4c e9 41 08 00 45 00   .;......hL.A..E.
 0010   01 72 b7 8b 40 00 24 06 7e 86 12 de 25 86 c0 a8   .r..@.$.~...%...
-0020   26 68 00 50 fa 5d 67 a1 ef 44 dd 29 e1 5b 50 18   &amp;h.P.]g..D.).[P.
+0020   26 68 00 50 fa 5d 67 a1 ef 44 dd 29 e1 5b 50 18   &h.P.]g..D.).[P.
 0030   01 e7 d7 f5 00 00 48 54 54 50 2f 31 2e 31 20 32   ......HTTP/1.1 2
 0040   30 30 20 4f 4b 0d 0a 44 61 74 65 3a 20 4d 6f 6e   00 OK..Date: Mon
 0050   2c 20 31 30 20 41 75 67 20 32 30 32 30 20 30 31   , 10 Aug 2020 01
@@ -85,8 +86,8 @@
 0090   2d 4d 6f 64 69 66 69 65 64 3a 20 46 72 69 2c 20   -Modified: Fri, 
 00a0   30 37 20 41 75 67 20 32 30 32 30 20 30 30 3a 34   07 Aug 2020 00:4
 00b0   35 3a 30 32 20 47 4d 54 0d 0a 45 54 61 67 3a 20   5:02 GMT..ETag: 
-00c0   22 32 66 2d 35 61 63 33 65 65 61 34 66 63 66 30   &quot;2f-5ac3eea4fcf0
-00d0   31 22 0d 0a 41 63 63 65 70 74 2d 52 61 6e 67 65   1&quot;..Accept-Range
+00c0   22 32 66 2d 35 61 63 33 65 65 61 34 66 63 66 30   "2f-5ac3eea4fcf0
+00d0   31 22 0d 0a 41 63 63 65 70 74 2d 52 61 6e 67 65   1"..Accept-Range
 00e0   73 3a 20 62 79 74 65 73 0d 0a 43 6f 6e 74 65 6e   s: bytes..Conten
 00f0   74 2d 4c 65 6e 67 74 68 3a 20 34 37 0d 0a 4b 65   t-Length: 47..Ke
 0100   65 70 2d 41 6c 69 76 65 3a 20 74 69 6d 65 6f 75   ep-Alive: timeou
@@ -96,10 +97,9 @@
 0140   70 65 3a 20 74 65 78 74 2f 68 74 6d 6c 0d 0a 0d   pe: text/html...
 0150   0a 47 75 72 20 73 79 6e 74 20 76 66 20 63 76 70   .Gur synt vf cvp
 0160   62 50 47 53 7b 63 33 33 78 6e 6f 30 30 5f 31 5f   bPGS{c33xno00_1_
-0170   66 33 33 5f 68 5f 71 72 6e 71 6f 72 72 73 7d 0a   f33_h_qrnqorrs}.
-</code></pre>
+0170   66 33 33 5f 68 5f 71 72 6e 71 6f 72 72 73 7d 0a   f33_h_qrnqorrs}.</code></pre>
 <p>So I then right clicked and chose to follow the packet as http stream:</p>
-<pre><code>GET / HTTP/1.1
+<pre><code class="language-text">GET / HTTP/1.1
 Host: 18.222.37.134
 Connection: keep-alive
 Cache-Control: max-age=0
@@ -113,19 +113,16 @@ HTTP/1.1 200 OK
 Date: Mon, 10 Aug 2020 01:51:45 GMT
 Server: Apache/2.4.29 (Ubuntu)
 Last-Modified: Fri, 07 Aug 2020 00:45:02 GMT
-ETag: &quot;2f-5ac3eea4fcf01&quot;
+ETag: "2f-5ac3eea4fcf01"
 Accept-Ranges: bytes
 Content-Length: 47
 Keep-Alive: timeout=5, max=100
 Connection: Keep-Alive
 Content-Type: text/html
 
-Gur synt vf cvpbPGS{c33xno00_1_f33_h_qrnqorrs}
-</code></pre>
+Gur synt vf cvpbPGS{c33xno00_1_f33_h_qrnqorrs}</code></pre>
 <p>There was not enough there for a substitution cipher so I decided to try caesar cipher and got:</p>
-<pre><code>The flag is picoCTF{p33kab00_1_s33_u_deadbeef}
-</code></pre>
-
+<pre><code class="language-text">The flag is picoCTF{p33kab00_1_s33_u_deadbeef}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -138,5 +135,6 @@ Gur synt vf cvpbPGS{c33xno00_1_f33_h_qrnqorrs}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

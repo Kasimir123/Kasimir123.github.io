@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,49 +74,44 @@
 <p>Unfortunately, you have been forced to use Java, but you are only given a single class file which doesn't seem to work.</p>
 <h2 id="write-up">Write up:</h2>
 <p>I decompiled the .class file and got:</p>
-<div class="lang-java editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">public</span> <span style="color:Blue;">class</span> Challenge {
-   <span style="color:Blue;">public</span> <span style="color:Blue;">static</span> String f1(String s) {
-      StringBuilder b = <span style="color:Blue;">new</span> StringBuilder();
-      <span style="color:Blue;">char</span>[] arr = s.toCharArray();
+<pre><code class="language-java">public class Challenge {
+   public static String f1(String s) {
+      StringBuilder b = new StringBuilder();
+      char[] arr = s.toCharArray();
 
-      <span style="color:Blue;">for</span>(<span style="color:Blue;">int</span> i = 0; i &lt; arr.length; ++i) {
-         b.append((<span style="color:Blue;">char</span>)(arr[i] + i));
+      for(int i = 0; i < arr.length; ++i) {
+         b.append((char)(arr[i] + i));
       }
 
-      <span style="color:Blue;">return</span> b.toString();
+      return b.toString();
    }
 
-   <span style="color:Blue;">public</span> <span style="color:Blue;">static</span> String f1_rev(String s) {
-      StringBuilder b = <span style="color:Blue;">new</span> StringBuilder();
-      <span style="color:Blue;">char</span>[] arr = s.toCharArray();
+   public static String f1_rev(String s) {
+      StringBuilder b = new StringBuilder();
+      char[] arr = s.toCharArray();
 
-      <span style="color:Blue;">for</span>(<span style="color:Blue;">int</span> i = 0; i &lt; arr.length; ++i) {
-         b.append((<span style="color:Blue;">char</span>)(arr[i] - i));
+      for(int i = 0; i < arr.length; ++i) {
+         b.append((char)(arr[i] - i));
       }
 
-      <span style="color:Blue;">return</span> b.toString();
+      return b.toString();
    }
 
-   <span style="color:Blue;">public</span> <span style="color:Blue;">static</span> String f2(String s) {
-      <span style="color:Blue;">int</span> half = s.length() / 2;
-      <span style="color:Blue;">return</span> s.substring(half + 1) + s.substring(0, half + 1);
+   public static String f2(String s) {
+      int half = s.length() / 2;
+      return s.substring(half + 1) + s.substring(0, half + 1);
    }
 
-   <span style="color:Blue;">public</span> <span style="color:Blue;">static</span> String f3() {
-      <span style="color:Blue;">return</span> f1(f2(<span style="color:#A31515;">&quot;$aQ\&quot;cNP `_\u001d[eULB@PA&#39;thpj]&quot;</span>));
+   public static String f3() {
+      return f1(f2("$aQ\"cNP `_\u001d[eULB@PA'thpj]"));
    }
 
-   <span style="color:Blue;">public</span> <span style="color:Blue;">static</span> <span style="color:Blue;">void</span> main(String[] args) {
-      System.out.println(<span style="color:#A31515;">&quot;You really thought finding the flag would be so easy?&quot;</span>);
+   public static void main(String[] args) {
+      System.out.println("You really thought finding the flag would be so easy?");
    }
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>I then created a java file and simply changed the call to f3() in main. Compiled and ran and got:</p>
-<pre><code>UMDCTF-{pyth0n_1s_b3tt3r}
-</code></pre>
-
+<pre><code class="language-text">UMDCTF-{pyth0n_1s_b3tt3r}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -128,5 +124,6 @@
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

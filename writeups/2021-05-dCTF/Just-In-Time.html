@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,40 +74,35 @@
 <p>Comments: Don't fall in (rabbit) holes</p>
 <h2 id="write-up">Write up:</h2>
 <p>I started by decompiling the main function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall main(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">char</span> **a2, <span style="color:Blue;">char</span> **a3)
+<pre><code class="language-c">__int64 __fastcall main(int a1, char **a2, char **a3)
 {
-  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *v3;
-  <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *v4; 
-  <span style="color:Blue;">char</span> src[8]; 
-  <span style="color:Blue;">char</span> *v7;
-  <span style="color:Blue;">char</span> *v8; 
-  <span style="color:Blue;">char</span> *dest; 
+  const char *v3;
+  const char *v4; 
+  char src[8]; 
+  char *v7;
+  char *v8; 
+  char *dest; 
 
-  dest = (<span style="color:Blue;">char</span> *)malloc(8uLL);
-  v3 = (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)sub_126A(*a2);
+  dest = (char *)malloc(8uLL);
+  v3 = (const char *)sub_126A(*a2);
   strncpy(dest, v3, 8uLL);
-  strcpy(src, <span style="color:#A31515;">&quot;\x1B&amp;8 yegHr($g1bKu{\&quot;f5`N}t#331Nv/%`11F#1&quot;</span>);
-  v8 = (<span style="color:Blue;">char</span> *)malloc(0x27uLL);
+  strcpy(src, "\x1B&8 yegHr($g1bKu{\"f5`N}t#331Nv/%`11F#1");
+  v8 = (char *)malloc(0x27uLL);
   strncpy(v8, src, 0x27uLL);
   sub_1372(v8);
-  puts(<span style="color:#A31515;">&quot;Decryption finished.&quot;</span>);
-  v7 = (<span style="color:Blue;">char</span> *)malloc(0x27uLL);
-  v4 = (<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)sub_11C5(src, dest);
+  puts("Decryption finished.");
+  v7 = (char *)malloc(0x27uLL);
+  v4 = (const char *)sub_11C5(src, dest);
   strncpy(v7, v4, 0x27uLL);
-  v7 = (<span style="color:Blue;">char</span> *)sub_11C5(v7, dest);
+  v7 = (char *)sub_11C5(v7, dest);
   sub_1460(v7);
   free(v8);
   free(v7);
   free(dest);
-  <span style="color:Blue;">return</span> 0LL;
-}
-</pre></div>
-</div>
+  return 0LL;
+}</code></pre>
 <p>Rather than trying to do their decryption I decided to see if I cuold get the flag with dynamic analysis which worked out. I set a breakpoint on the strncpy line and saw that the flag was:</p>
-<pre><code>dctf{df77dbe0c407dd4a188e12013ccb009f}
-</code></pre>
-
+<pre><code class="language-text">dctf{df77dbe0c407dd4a188e12013ccb009f}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -119,5 +115,6 @@ __int64 __fastcall main(<span style="color:Blue;">int</span> a1, <span style="co
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,29 +72,28 @@
 <p>Category: Reverse Engineering</p>
 <h2 id="write-up">Write up:</h2>
 <p>This was a .net Dll so I used dnSpy to decompile:</p>
-<div class="lang-c# editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">using</span> System;
+<pre><code class="language-text">using System;
 
-<span style="color:Blue;">namespace</span> win
+namespace win
 {
-	<span style="color:Green;">// Token: 0x02000002 RID: 2</span>
-	<span style="color:Blue;">internal</span> <span style="color:Blue;">class</span> Program
+	// Token: 0x02000002 RID: 2
+	internal class Program
 	{
-		<span style="color:Green;">// Token: 0x06000001 RID: 1 RVA: 0x00002050 File Offset: 0x00000250</span>
-		<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">int</span> sum_all(<span style="color:Blue;">string</span> password)
+		// Token: 0x06000001 RID: 1 RVA: 0x00002050 File Offset: 0x00000250
+		private static int sum_all(string password)
 		{
-			<span style="color:Blue;">int</span> num = 0;
-			<span style="color:Blue;">foreach</span> (<span style="color:Blue;">char</span> c <span style="color:Blue;">in</span> password)
+			int num = 0;
+			foreach (char c in password)
 			{
-				num += (<span style="color:Blue;">int</span>)c;
+				num += (int)c;
 			}
-			<span style="color:Blue;">return</span> num;
+			return num;
 		}
 
-		<span style="color:Green;">// Token: 0x06000002 RID: 2 RVA: 0x0000208C File Offset: 0x0000028C</span>
-		<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">int</span> check(<span style="color:Blue;">int</span>[] values)
+		// Token: 0x06000002 RID: 2 RVA: 0x0000208C File Offset: 0x0000028C
+		private static int check(int[] values)
 		{
-			<span style="color:Blue;">int</span>[] array = <span style="color:Blue;">new</span> <span style="color:Blue;">int</span>[]
+			int[] array = new int[]
 			{
 				2410,
 				2404,
@@ -122,63 +122,61 @@
 				2377,
 				2391
 			};
-			<span style="color:Blue;">int</span> result = 0;
-			<span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 0; i &lt; array.Length; i++)
+			int result = 0;
+			for (int i = 0; i < array.Length; i++)
 			{
-				<span style="color:Blue;">bool</span> flag = array[i] == values[i];
-				<span style="color:Blue;">if</span> (!flag)
+				bool flag = array[i] == values[i];
+				if (!flag)
 				{
 					result = 0;
-					<span style="color:Blue;">break</span>;
+					break;
 				}
 				result = 1;
 			}
-			<span style="color:Blue;">return</span> result;
+			return result;
 		}
 
-		<span style="color:Green;">// Token: 0x06000003 RID: 3 RVA: 0x000020E4 File Offset: 0x000002E4</span>
-		<span style="color:Blue;">private</span> <span style="color:Blue;">static</span> <span style="color:Blue;">void</span> Main(<span style="color:Blue;">string</span>[] args)
+		// Token: 0x06000003 RID: 3 RVA: 0x000020E4 File Offset: 0x000002E4
+		private static void Main(string[] args)
 		{
-			Console.WriteLine(<span style="color:#A31515;">&quot;Hello there mate \nJust enter the flag to check : &quot;</span>);
-			<span style="color:Blue;">string</span> text = Console.ReadLine();
-			<span style="color:Blue;">int</span>[] array = <span style="color:Blue;">new</span> <span style="color:Blue;">int</span>[26];
-			<span style="color:Blue;">bool</span> flag = text.Length != 26;
-			<span style="color:Blue;">if</span> (flag)
+			Console.WriteLine("Hello there mate \nJust enter the flag to check : ");
+			string text = Console.ReadLine();
+			int[] array = new int[26];
+			bool flag = text.Length != 26;
+			if (flag)
 			{
-				Console.WriteLine(<span style="color:#A31515;">&quot;Input length error&quot;</span>);
+				Console.WriteLine("Input length error");
 				Console.ReadLine();
 			}
-			<span style="color:Blue;">else</span>
+			else
 			{
-				<span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> i = 0; i &lt; text.Length; i++)
+				for (int i = 0; i < text.Length; i++)
 				{
-					array[i] = (<span style="color:Blue;">int</span>)text[i];
+					array[i] = (int)text[i];
 				}
-				<span style="color:Blue;">int</span>[] array2 = <span style="color:Blue;">new</span> <span style="color:Blue;">int</span>[26];
-				<span style="color:Blue;">for</span> (<span style="color:Blue;">int</span> j = 0; j &lt; 26; j++)
+				int[] array2 = new int[26];
+				for (int j = 0; j < 26; j++)
 				{
 					array2[j] = (array[j] - (j % 2 * 2 + j % 3) ^ Program.sum_all(text));
 				}
-				<span style="color:Blue;">int</span> num = Program.check(array2);
-				<span style="color:Blue;">bool</span> flag2 = num == 1;
-				<span style="color:Blue;">if</span> (flag2)
+				int num = Program.check(array2);
+				bool flag2 = num == 1;
+				if (flag2)
 				{
-					Console.WriteLine(<span style="color:#A31515;">&quot;Your flag : &quot;</span> + text);
+					Console.WriteLine("Your flag : " + text);
 					Console.ReadLine();
 				}
-				<span style="color:Blue;">else</span>
+				else
 				{
-					Console.WriteLine(<span style="color:#A31515;">&quot;try harder&quot;</span>);
+					Console.WriteLine("try harder");
 					Console.ReadLine();
 				}
 			}
 		}
 	}
-}
-</pre></div>
-</div>
+}</code></pre>
 <p>For this challenge I assumed that the flag started with the correct flag text and used that to find the sum of the total text which was 2349. I then wrote a python script for reverse the key:</p>
-<div class="lang-python editor-colors"># key in code
+<pre><code class="language-python"># key in code
 key = [2410, 2404, 2430, 2408, 2391, 2381, 2333, 2396, 2369, 2332, 2398, 2422, 2332, 2397, 2416, 2370, 2393, 2304, 2393, 2333, 2416, 2376, 2371, 2305, 2377, 2391]
 
 # string to store result
@@ -191,12 +189,9 @@ for i in range(0, 26):
 	s += chr((key[i]^2349)+((i%2)*2 + (i%3)))
 
 # print
-print(s)
-</div>
+print(s)</code></pre>
 <p>This gave me the following:</p>
-<pre><code>GLUG{d0tn3t_1s_qu1t3_go0d}
-</code></pre>
-
+<pre><code class="language-text">GLUG{d0tn3t_1s_qu1t3_go0d}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -209,5 +204,6 @@ print(s)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

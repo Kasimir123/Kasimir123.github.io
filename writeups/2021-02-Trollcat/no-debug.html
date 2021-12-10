@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,88 +73,78 @@
 <p>Category: Reversing</p>
 <h2 id="write-up">Write up:</h2>
 <p>This challenge also gave me a 64 bit executable:</p>
-<pre><code>file crackme
+<pre><code class="language-text">file crackme
 
-crackme: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=f4599ab6673e44ee040c43849f7af66cd81a3d45, for GNU/Linux 3.2.0, stripped
-</code></pre>
+crackme: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=f4599ab6673e44ee040c43849f7af66cd81a3d45, for GNU/Linux 3.2.0, stripped</code></pre>
 <p>After throwing it into IDA I found the main function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall main(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">char</span> **a2, <span style="color:Blue;">char</span> **a3)
+<pre><code class="language-c">__int64 __fastcall main(int a1, char **a2, char **a3)
 {
-  <span style="color:Blue;">int</span> v3; <span style="color:Green;">// eax</span>
-  <span style="color:Blue;">char</span> buf[264]; <span style="color:Green;">// [rsp+0h] [rbp-110h] BYREF</span>
-  ssize_t v6; <span style="color:Green;">// [rsp+108h] [rbp-8h]</span>
+  int v3; // eax
+  char buf[264]; // [rsp+0h] [rbp-110h] BYREF
+  ssize_t v6; // [rsp+108h] [rbp-8h]
 
-  printf(<span style="color:#A31515;">&quot;Enter key: &quot;</span>);
+  printf("Enter key: ");
   v6 = read(0, buf, 0xFFuLL);
-  <span style="color:Blue;">if</span> ( v6 )
+  if ( v6 )
     buf[v6 - 1] = 0;
-  <span style="color:Blue;">if</span> ( (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)sub_1738(buf, v6 - 1) )
+  if ( (unsigned int)sub_1738(buf, v6 - 1) )
   {
-    printf(<span style="color:#A31515;">&quot;Congrats here is your flag: &quot;</span>);
-    v3 = open(<span style="color:#A31515;">&quot;/flag&quot;</span>, 0);
+    printf("Congrats here is your flag: ");
+    v3 = open("/flag", 0);
     sendfile(1, v3, 0LL, 0x100uLL);
   }
-  <span style="color:Blue;">else</span>
+  else
   {
-    puts(<span style="color:#A31515;">&quot;Invalid key&quot;</span>);
+    puts("Invalid key");
   }
-  <span style="color:Blue;">return</span> 0LL;
-}
-</pre></div>
-</div>
+  return 0LL;
+}</code></pre>
 <p>However, running the program in a debugger I realized that the program was not getting to this function. Running the program normally I got Invalid key when I input the wrong function however when I was in debug mode I would get Wrong password. I did a string search and found the following function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> sub_55DD312E91E5()
+<pre><code class="language-c">int sub_55DD312E91E5()
 {
-  <span style="color:Blue;">int</span> v0; <span style="color:Green;">// eax</span>
-  <span style="color:Blue;">char</span> buf[32]; <span style="color:Green;">// [rsp+0h] [rbp-130h] BYREF</span>
-  __int64 s1[33]; <span style="color:Green;">// [rsp+20h] [rbp-110h] BYREF</span>
-  <span style="color:Blue;">int</span> v4; <span style="color:Green;">// [rsp+128h] [rbp-8h]</span>
-  <span style="color:Blue;">int</span> fd; <span style="color:Green;">// [rsp+12Ch] [rbp-4h]</span>
+  int v0; // eax
+  char buf[32]; // [rsp+0h] [rbp-130h] BYREF
+  __int64 s1[33]; // [rsp+20h] [rbp-110h] BYREF
+  int v4; // [rsp+128h] [rbp-8h]
+  int fd; // [rsp+12Ch] [rbp-4h]
 
   s1[0] = 0LL;
   ...
   s1[31] = 0LL;
-  fd = open(<span style="color:#A31515;">&quot;/dev/urandom&quot;</span>, 0);
+  fd = open("/dev/urandom", 0);
   read(fd, buf, 0x20uLL);
   close(fd);
   v4 = 0;
-  printf(<span style="color:#A31515;">&quot;Enter key: &quot;</span>);
+  printf("Enter key: ");
   v4 = read(0, s1, 0xFFuLL);
-  <span style="color:Blue;">if</span> ( v4 &gt; 0 )
+  if ( v4 > 0 )
     *((_BYTE *)s1 + v4 - 1) = 0;
-  <span style="color:Blue;">if</span> ( memcmp(s1, buf, 0x1FuLL) )
-    <span style="color:Blue;">return</span> puts(<span style="color:#A31515;">&quot;Wrong password&quot;</span>);
-  puts(<span style="color:#A31515;">&quot;Congrats you are a super eleet hacker, here is your flag: &quot;</span>);
-  v0 = open((<span style="color:Blue;">const</span> <span style="color:Blue;">char</span> *)s1, 0);
-  <span style="color:Blue;">return</span> sendfile(1, v0, 0LL, 0x100uLL);
-}
-</pre></div>
-</div>
+  if ( memcmp(s1, buf, 0x1FuLL) )
+    return puts("Wrong password");
+  puts("Congrats you are a super eleet hacker, here is your flag: ");
+  v0 = open((const char *)s1, 0);
+  return sendfile(1, v0, 0LL, 0x100uLL);
+}</code></pre>
 <p>I shortened the string assignment with ... but it sinply iterates from 0-31 assigning 0LL to everything.</p>
 <p>Following the xrefs I found a function that called this function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 sub_55DD312E941A()
+<pre><code class="language-c">__int64 sub_55DD312E941A()
 {
-  __int64 result; <span style="color:Green;">// rax</span>
+  __int64 result; // rax
 
   setvbuf(stdin, 0LL, 2, 0LL);
   setvbuf(stdout, 0LL, 2, 0LL);
   setvbuf(stderr, 0LL, 2, 0LL);
   alarm(0x30u);
   result = ptrace(PTRACE_TRACEME, 0LL, 0LL, 0LL);
-  <span style="color:Blue;">if</span> ( result &lt; 0 )
+  if ( result < 0 )
   {
     sub_55DD312E91E5();
     exit(0);
   }
-  <span style="color:Blue;">return</span> result;
-}
-</pre></div>
-</div>
+  return result;
+}</code></pre>
 <p>After rebasing the program to 0 and checking out the hex you see:</p>
-<pre><code>.text:000000000000148C BE 00 00 00 00    mov     esi, 0
+<pre><code class="language-text">.text:000000000000148C BE 00 00 00 00    mov     esi, 0
 .text:0000000000001491 BF 00 00 00 00    mov     edi, 0          ; request
 .text:0000000000001496 B8 00 00 00 00    mov     eax, 0
 .text:000000000000149B E8 00 FC FF FF    call    _ptrace
@@ -162,86 +153,74 @@ __int64 sub_55DD312E941A()
 .text:00000000000014A5 B8 00 00 00 00    mov     eax, 0
 .text:00000000000014AA E8 36 FD FF FF    call    sub_11E5
 .text:00000000000014AF BF 00 00 00 00    mov     edi, 0          ; status
-.text:00000000000014B4 E8 27 FC FF FF    call   
-</code></pre>
+.text:00000000000014B4 E8 27 FC FF FF    call   </code></pre>
 <p>From here you just needed to NOP the instruction you didn't want, then I put the patched program into IDA and ran through the debugger again, this time it went where I wanted it to.</p>
 <p>The function called in main was:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall sub_559D5B597738(__int64 a1, <span style="color:Blue;">unsigned</span> __int64 a2)
+<pre><code class="language-c">__int64 __fastcall sub_559D5B597738(__int64 a1, unsigned __int64 a2)
 {
-  <span style="color:Blue;">int</span> i; <span style="color:Green;">// [rsp+1Ch] [rbp-4h]</span>
+  int i; // [rsp+1Ch] [rbp-4h]
 
   sub_559D5B5974BC((__int64)aWarasg47Npgis9, 0x20uLL);
   sub_559D5B5975F8((__int64)byte_559D5B59A0D0, a2);
-  <span style="color:Blue;">for</span> ( i = 0; a2 &gt; i; ++i )
+  for ( i = 0; a2 > i; ++i )
   {
-    <span style="color:Blue;">if</span> ( *(_BYTE *)(i + a1) != byte_559D5B59A0D0[i] )
-      <span style="color:Blue;">return</span> 0LL;
+    if ( *(_BYTE *)(i + a1) != byte_559D5B59A0D0[i] )
+      return 0LL;
   }
-  <span style="color:Blue;">return</span> 1LL;
-}
-</pre></div>
-</div>
+  return 1LL;
+}</code></pre>
 <p>Normally I would go into those functions to see what was needed but I noticed that the first function didn't depend on user input at all so I just looked a at the second function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">unsigned</span> __int64 __fastcall sub_561B729415F8(__int64 a1, <span style="color:Blue;">unsigned</span> __int64 a2)
+<pre><code class="language-c">unsigned __int64 __fastcall sub_561B729415F8(__int64 a1, unsigned __int64 a2)
 {
-  __int64 v2; <span style="color:Green;">// kr00_8</span>
-  __int64 v3; <span style="color:Green;">// kr08_8</span>
-  <span style="color:Blue;">unsigned</span> __int64 result; <span style="color:Green;">// rax</span>
-  <span style="color:Blue;">char</span> v5; <span style="color:Green;">// [rsp+1Bh] [rbp-15h]</span>
-  <span style="color:Blue;">unsigned</span> __int64 i; <span style="color:Green;">// [rsp+20h] [rbp-10h]</span>
-  <span style="color:Blue;">int</span> v7; <span style="color:Green;">// [rsp+28h] [rbp-8h]</span>
-  <span style="color:Blue;">int</span> v8; <span style="color:Green;">// [rsp+2Ch] [rbp-4h]</span>
+  __int64 v2; // kr00_8
+  __int64 v3; // kr08_8
+  unsigned __int64 result; // rax
+  char v5; // [rsp+1Bh] [rbp-15h]
+  unsigned __int64 i; // [rsp+20h] [rbp-10h]
+  int v7; // [rsp+28h] [rbp-8h]
+  int v8; // [rsp+2Ch] [rbp-4h]
 
   v8 = 0;
   v7 = 0;
-  <span style="color:Blue;">for</span> ( i = 0LL; ; ++i )
+  for ( i = 0LL; ; ++i )
   {
     result = i;
-    <span style="color:Blue;">if</span> ( i &gt;= a2 )
-      <span style="color:Blue;">break</span>;
+    if ( i >= a2 )
+      break;
     v8 = (v8 + 1) % 256;
-    v2 = *(<span style="color:Blue;">char</span> *)(qword_561B72944130 + v8) + v7;
-    v7 = (<span style="color:Blue;">unsigned</span> __int8)(HIBYTE(v2) + *(_BYTE *)(qword_561B72944130 + v8) + v7) - HIBYTE(HIDWORD(v2));
+    v2 = *(char *)(qword_561B72944130 + v8) + v7;
+    v7 = (unsigned __int8)(HIBYTE(v2) + *(_BYTE *)(qword_561B72944130 + v8) + v7) - HIBYTE(HIDWORD(v2));
     v5 = *(_BYTE *)(qword_561B72944130 + v8);
     *(_BYTE *)(qword_561B72944130 + v8) = *(_BYTE *)(qword_561B72944130 + v7);
     *(_BYTE *)(v7 + qword_561B72944130) = v5;
-    v3 = *(<span style="color:Blue;">char</span> *)(qword_561B72944130 + v8) + *(<span style="color:Blue;">char</span> *)(qword_561B72944130 + v7);
+    v3 = *(char *)(qword_561B72944130 + v8) + *(char *)(qword_561B72944130 + v7);
     *(_BYTE *)(a1 + i) ^= *(_BYTE *)(qword_561B72944130
-                                   + (<span style="color:Blue;">unsigned</span> __int8)(HIBYTE(v3)
+                                   + (unsigned __int8)(HIBYTE(v3)
                                                      + *(_BYTE *)(qword_561B72944130 + v8)
                                                      + *(_BYTE *)(qword_561B72944130 + v7))
                                    - HIBYTE(HIDWORD(v3)));
   }
-  <span style="color:Blue;">return</span> result;
-}
-</pre></div>
-</div>
+  return result;
+}</code></pre>
 <p>This used the length of the input to iterate through, so I just put in 32 a's and then I simply stepped to the for loop and looked at what byte_559D5B59A0D0 contained since that was being compared with the string.</p>
 <p>Using lazy ida I got that the string was:</p>
-<div class="lang-python editor-colors">[0x64, 0x75, 0x6D, 0x62, 0x68, 0x61, 0x63, 0x6B, 0x65, 0x72, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6F, 0x72, 0x64, 0x00]
-</div>
+<pre><code class="language-python">[0x64, 0x75, 0x6D, 0x62, 0x68, 0x61, 0x63, 0x6B, 0x65, 0x72, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6F, 0x72, 0x64, 0x00]</code></pre>
 <p>I then made a small python script to print that out:</p>
-<div class="lang-python editor-colors">key = [0x64, 0x75, 0x6D, 0x62, 0x68, 0x61, 0x63, 0x6B, 0x65, 0x72, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6F, 0x72, 0x64, 0x00]
+<pre><code class="language-python">key = [0x64, 0x75, 0x6D, 0x62, 0x68, 0x61, 0x63, 0x6B, 0x65, 0x72, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6F, 0x72, 0x64, 0x00]
 
 s = ""
 
 for i in key:  
     s += chr(i)
 
-print(s)
-</div>
+print(s)</code></pre>
 <p>This printed out:</p>
-<pre><code>dumbhackerpassword
-</code></pre>
+<pre><code class="language-text">dumbhackerpassword</code></pre>
 <p>I then used this key:</p>
-<pre><code>nc 157.230.33.195 3333
+<pre><code class="language-text">nc 157.230.33.195 3333
 
 Enter key: dumbhackerpassword
-Congrats here is your flag: Trollcat{y0u_ptr4c3d_m3}
-</code></pre>
-
+Congrats here is your flag: Trollcat{y0u_ptr4c3d_m3}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -254,5 +233,6 @@ Congrats here is your flag: Trollcat{y0u_ptr4c3d_m3}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -71,71 +72,66 @@
 <p>Category: Reverse Engineering</p>
 <p>Points: 200</p>
 <p>Comments:</p>
-<pre><code>Heard you liked debugging... Try this ;)
+<pre><code class="language-text">Heard you liked debugging... Try this ;)
 
-The flag will be revealed when you pass in the correct input
-</code></pre>
-<h2 id="write-up">Write up:</h2>
+The flag will be revealed when you pass in the correct input</code></pre><h2 id="write-up">Write up:</h2>
 <p>Opening the main function in a decompiler I see:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-<span style="color:Blue;">int</span> __cdecl main(<span style="color:Blue;">int</span> argc, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **argv, <span style="color:Blue;">const</span> <span style="color:Blue;">char</span> **envp)
+<pre><code class="language-c">int __cdecl main(int argc, const char **argv, const char **envp)
 {
 
   v3 = alloca(16);
   __main();
   patchAttach();
-  <span style="color:Blue;">if</span> ( findAndDetach() != 5 || debugged() == 1 || (<span style="color:Blue;">unsigned</span> __int8)checkForOlly() )
+  if ( findAndDetach() != 5 || debugged() == 1 || (unsigned __int8)checkForOlly() )
   {
-    printf(<span style="color:#A31515;">&quot;Debugger Detected\n&quot;</span>);
+    printf("Debugger Detected\n");
   }
-  <span style="color:Blue;">else</span>
+  else
   {
     lpAddress[0] = (LPVOID)getRetAddress();
-    VirtualProtect(lpAddress[0], 0x10u, 4u, &amp;flOldProtect);
+    VirtualProtect(lpAddress[0], 0x10u, 4u, &flOldProtect);
     *(_DWORD *)(getRetAddress() + 391) = 36859568;
   }
   v4 = GlobalAlloc(0x42u, 0xA000u);
   v16 = GlobalLock(v4);
   VirtualProtect(v16, 0xA000u, 4u, (PDWORD)lpAddress);
-  v5 = (<span style="color:Blue;">void</span> *)findPointer(v16);
-  qmemcpy(v5, (<span style="color:Blue;">const</span> <span style="color:Blue;">void</span> *)(getRetAddress() + 25), 0xA000u);
-  v6 = (<span style="color:Blue;">void</span> (__stdcall *)(<span style="color:Blue;">int</span>))findPointer(v16);
+  v5 = (void *)findPointer(v16);
+  qmemcpy(v5, (const void *)(getRetAddress() + 25), 0xA000u);
+  v6 = (void (__stdcall *)(int))findPointer(v16);
   v6(v11);
-  printf(<span style="color:#A31515;">&quot;Serial: &quot;</span>);
+  printf("Serial: ");
   fgets(Buffer, 100, (FILE *)__iob[0]._ptr);
-  <span style="color:Blue;">if</span> ( debugged() != 1 &amp;&amp; getRetAddress() &lt; (<span style="color:Blue;">unsigned</span> <span style="color:Blue;">int</span>)v16 + 0x4000 )
+  if ( debugged() != 1 && getRetAddress() < (unsigned int)v16 + 0x4000 )
   {
-    printf(<span style="color:#A31515;">&quot;Checking serial...\n&quot;</span>);
+    printf("Checking serial...\n");
     *(_DWORD *)(findPointer(checkPass) + 83) = 42468652;
-    v14 = (<span style="color:Blue;">unsigned</span> __int8 (__cdecl *)(<span style="color:Blue;">char</span> *))findPointer(checkPass);
-    <span style="color:Blue;">if</span> ( v14(Buffer) )
+    v14 = (unsigned __int8 (__cdecl *)(char *))findPointer(checkPass);
+    if ( v14(Buffer) )
     {
-      qmemcpy(Str, &amp;unk_40303C, 0x2Cu);
-      <span style="color:Blue;">for</span> ( i = 0; ; ++i )
+      qmemcpy(Str, &unk_40303C, 0x2Cu);
+      for ( i = 0; ; ++i )
       {
         v7 = strlen(Str);
-        <span style="color:Blue;">if</span> ( i &gt;= v7 )
-          <span style="color:Blue;">break</span>;
-        v8 = &amp;Str[i];
+        if ( i >= v7 )
+          break;
+        v8 = &Str[i];
         v9 = Str[i] ^ 0x80;
         *v8 = v9;
         *v8 = v9;
       }
-      printf(<span style="color:#A31515;">&quot;%s\n&quot;</span>, Str);
+      printf("%s\n", Str);
     }
-    <span style="color:Blue;">else</span>
+    else
     {
-      printf(<span style="color:#A31515;">&quot;Serial Incorrect.\n&quot;</span>);
+      printf("Serial Incorrect.\n");
     }
-    printf(<span style="color:#A31515;">&quot;press a key to quit.&quot;</span>);
+    printf("press a key to quit.");
     getchar();
   }
-  <span style="color:Blue;">return</span> 0;
-}
-</pre></div>
-</div>
+  return 0;
+}</code></pre>
 <p>I wanted to debug this, especially since it's obvious they put lots of antidebugger checks in so I rebased the program and then started nopping out instructions that checked for debugging:</p>
-<pre><code>0000132A E8 16 03 00 00                                call    _findAndDetach
+<pre><code class="language-text">0000132A E8 16 03 00 00                                call    _findAndDetach
 
 00001334 E8 1E 02 00 00                                call    _debugged
 
@@ -143,40 +139,30 @@ The flag will be revealed when you pass in the correct input
 
 00001407 FF D0                                         call    eax
 
-0000143C E8 16 01 00 00                                call    _debugged
-</code></pre>
+0000143C E8 16 01 00 00                                call    _debugged</code></pre>
 <p>After nopping out these instructions I was able to debug, and by changing the z flag as I went I was able to go into the following:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
- <span style="color:Blue;">if</span> ( v12(Buffer) )
-</pre></div>
-</div>
+<pre><code class="language-c"> if ( v12(Buffer) )</code></pre>
 <p>This resolved to the following function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-BOOL __cdecl checkPass(<span style="color:Blue;">char</span> *Str2)
+<pre><code class="language-c">BOOL __cdecl checkPass(char *Str2)
 {
 
   *(_DWORD *)Str = dword_403113;
   v5 = dword_403117;
   v6 = word_40311B;
   v7 = byte_40311D;
-  <span style="color:Blue;">for</span> ( i = 0; i &lt; strlen(Str); ++i )
+  for ( i = 0; i < strlen(Str); ++i )
   {
     Str[i] -= 5;
     Str[i] ^= 0x6Eu;
   }
   v1 = strlen(Str);
-  <span style="color:Blue;">return</span> strncmp(Str, Str2, v1) == 0;
-}
-</pre></div>
-</div>
+  return strncmp(Str, Str2, v1) == 0;
+}</code></pre>
 <p>Str ended up resolving to: youFoundMe.</p>
 <p>When I used that in the program I got:</p>
-<pre><code>Correct. user = part6 pass = unpackedSerial
-</code></pre>
+<pre><code class="language-text">Correct. user = part6 pass = unpackedSerial</code></pre>
 <p>The flag ended up being:</p>
-<pre><code>unpackedSerial
-</code></pre>
-
+<pre><code class="language-text">unpackedSerial</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -189,5 +175,6 @@ BOOL __cdecl checkPass(<span style="color:Blue;">char</span> *Str2)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

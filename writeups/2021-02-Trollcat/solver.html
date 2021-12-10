@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,70 +73,63 @@
 <p>Category: Reversing</p>
 <h2 id="write-up">Write up:</h2>
 <p>This challenge gave me a 64 bit executable file:</p>
-<pre><code>file crackme\ \(2\) 
+<pre><code class="language-text">file crackme\ \(2\) 
 
-crackme (2): ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=6c8f4137ce00dd9571d3b551dc81d8d4354e4d91, for GNU/Linux 3.2.0, stripped
-</code></pre>
+crackme (2): ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=6c8f4137ce00dd9571d3b551dc81d8d4354e4d91, for GNU/Linux 3.2.0, stripped</code></pre>
 <p>I then put the file into IDA and found the main function:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-__int64 __fastcall main(<span style="color:Blue;">int</span> a1, <span style="color:Blue;">char</span> **a2, <span style="color:Blue;">char</span> **a3)
+<pre><code class="language-c">__int64 __fastcall main(int a1, char **a2, char **a3)
 {
-  <span style="color:Blue;">int</span> v3; <span style="color:Green;">// eax</span>
-  <span style="color:Blue;">char</span> buf[264]; <span style="color:Green;">// [rsp+0h] [rbp-110h] BYREF</span>
-  ssize_t v6; <span style="color:Green;">// [rsp+108h] [rbp-8h]</span>
+  int v3; // eax
+  char buf[264]; // [rsp+0h] [rbp-110h] BYREF
+  ssize_t v6; // [rsp+108h] [rbp-8h]
 
-  printf(<span style="color:#A31515;">&quot;Enter key: &quot;</span>);
+  printf("Enter key: ");
   v6 = read(0, buf, 0xFFuLL);
   buf[v6 - 1] = 0;
-  <span style="color:Blue;">if</span> ( sub_5585577D6200(buf, v6 - 1) )
+  if ( sub_5585577D6200(buf, v6 - 1) )
   {
-    printf(<span style="color:#A31515;">&quot;Congrats here is your flag: &quot;</span>);
-    v3 = open(<span style="color:#A31515;">&quot;/flag&quot;</span>, 0);
+    printf("Congrats here is your flag: ");
+    v3 = open("/flag", 0);
     sendfile(1, v3, 0LL, 0x100uLL);
   }
-  <span style="color:Blue;">else</span>
+  else
   {
-    puts(<span style="color:#A31515;">&quot;Invalid key&quot;</span>);
+    puts("Invalid key");
   }
-  <span style="color:Blue;">return</span> 0LL;
-}
-</pre></div>
-</div>
+  return 0LL;
+}</code></pre>
 <p>The program read in a value and then checked it with sub_5585577D6200, this function looked like:</p>
-<div class="lang-c editor-colors"><div style="color:Black;background-color:White;"><pre>
-_BOOL8 __fastcall sub_5585577D6200(<span style="color:Blue;">char</span> *a1, <span style="color:Blue;">unsigned</span> __int64 a2)
+<pre><code class="language-c">_BOOL8 __fastcall sub_5585577D6200(char *a1, unsigned __int64 a2)
 {
-  <span style="color:Blue;">int</span> i; <span style="color:Green;">// [rsp+1Ch] [rbp-4h]</span>
+  int i; // [rsp+1Ch] [rbp-4h]
 
-  <span style="color:Blue;">for</span> ( i = 0; a2 &gt; i; ++i )
+  for ( i = 0; a2 > i; ++i )
   {
-    <span style="color:Blue;">if</span> ( a1[i] &lt;= 47 || a1[i] &gt; 122 )
-      <span style="color:Blue;">return</span> 0LL;
+    if ( a1[i] <= 47 || a1[i] > 122 )
+      return 0LL;
   }
-  <span style="color:Blue;">if</span> ( *a1 + a1[3] != 100 )
-    <span style="color:Blue;">return</span> 0LL;
-  <span style="color:Blue;">if</span> ( a1[1] + a1[18] != 214 )
-    <span style="color:Blue;">return</span> 0LL;
-  <span style="color:Blue;">if</span> ( a1[2] + a1[4] != 178 )
-    <span style="color:Blue;">return</span> 0LL;
-  <span style="color:Blue;">if</span> ( ((<span style="color:Blue;">unsigned</span> __int8)a1[5] ^ (<span style="color:Blue;">unsigned</span> __int8)a1[6]) != 76 )
-    <span style="color:Blue;">return</span> 0LL;
-  <span style="color:Blue;">if</span> ( a1[8] - a1[7] != 17 )
-    <span style="color:Blue;">return</span> 0LL;
-  <span style="color:Blue;">if</span> ( a1[10] - a1[9] != 59 )
-    <span style="color:Blue;">return</span> 0LL;
-  <span style="color:Blue;">if</span> ( a1[12] + a1[11] - a1[13] != 69 )
-    <span style="color:Blue;">return</span> 0LL;
-  <span style="color:Blue;">if</span> ( a1[15] + a1[14] - a1[16] != 31 )
-    <span style="color:Blue;">return</span> 0LL;
-  <span style="color:Blue;">if</span> ( a1[16] + a1[17] - a1[18] == 88 )
-    <span style="color:Blue;">return</span> ((<span style="color:Blue;">unsigned</span> __int8)(a1[20] ^ a1[19]) ^ (<span style="color:Blue;">unsigned</span> __int8)a1[21]) == 69;
-  <span style="color:Blue;">return</span> 0LL;
-}
-</pre></div>
-</div>
+  if ( *a1 + a1[3] != 100 )
+    return 0LL;
+  if ( a1[1] + a1[18] != 214 )
+    return 0LL;
+  if ( a1[2] + a1[4] != 178 )
+    return 0LL;
+  if ( ((unsigned __int8)a1[5] ^ (unsigned __int8)a1[6]) != 76 )
+    return 0LL;
+  if ( a1[8] - a1[7] != 17 )
+    return 0LL;
+  if ( a1[10] - a1[9] != 59 )
+    return 0LL;
+  if ( a1[12] + a1[11] - a1[13] != 69 )
+    return 0LL;
+  if ( a1[15] + a1[14] - a1[16] != 31 )
+    return 0LL;
+  if ( a1[16] + a1[17] - a1[18] == 88 )
+    return ((unsigned __int8)(a1[20] ^ a1[19]) ^ (unsigned __int8)a1[21]) == 69;
+  return 0LL;
+}</code></pre>
 <p>From this I knew that I would need a string that was 22 characters long and matched the compares, I decided to use the z3 library to create a python script:</p>
-<div class="lang-python editor-colors">from z3 import *
+<pre><code class="language-python">from z3 import *
 
 # Creates solver
 s = Solver()
@@ -179,19 +173,15 @@ for i in [BitVec(f"flag_{i}", 8) for i in range(0, 22)]:
     s += chr(int(t[str(i)]))
 
 # prints the string
-print(s)
-</div>
+print(s)</code></pre>
 <p>Running the script I got:</p>
-<pre><code>sat
-4wj0Hp&lt;9J9ty=qI?iN_gXz
-</code></pre>
+<pre><code class="language-text">sat
+4wj0Hp<9J9ty=qI?iN_gXz</code></pre>
 <p>I then entered this key through netcat and got the flag:</p>
-<pre><code>nc 157.230.33.195 4444   
+<pre><code class="language-text">nc 157.230.33.195 4444   
 
-Enter key: 4wj0Hp&lt;9J9ty=qI?iN_gXz
-Congrats here is your flag: Trollcat{z3_b4by}
-</code></pre>
-
+Enter key: 4wj0Hp<9J9ty=qI?iN_gXz
+Congrats here is your flag: Trollcat{z3_b4by}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -204,5 +194,6 @@ Congrats here is your flag: Trollcat{z3_b4by}
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

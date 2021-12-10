@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -70,7 +71,7 @@
 <p>Jeopardy style CTF</p>
 <p>Category: Reverse Engineering</p>
 <p>Comments:</p>
-<pre><code>Tasteless Shores
+<pre><code class="language-text">Tasteless Shores
 The tasteless MMO
 
 Registration
@@ -98,7 +99,7 @@ Known Issues
 PVP is broken, sorry for that.
 Kali VM is not working for the game, appearently
 VMWare mouse (thx to idkkkkkkkkkkkkk!): https://stackoverflow.com/questions/45390414/3d-acceleration-vmware-drag-mouse-issues
-Under general mouse and keyboard settings set Gaming to &quot;Always optimize mouse for games&quot; . So VMware options -&gt; keyboard + mouse settings, edit the profile, then click on the General tab.
+Under general mouse and keyboard settings set Gaming to "Always optimize mouse for games" . So VMware options -> keyboard + mouse settings, edit the profile, then click on the General tab.
 
 Controls
 Mouse to look around
@@ -139,44 +140,40 @@ MD5 (tasteless-shores.x86_64) = 9fd25146e339cba3c91a414e9865d19e
 MD5 (server) = ac2ef6a92052ebe1e25a26785103f495
 MD5 (server.exe) = fece04b8dfd3fe316f55b69f63a18be9
 MD5 (server.osx) = 43cde1b4d1bc6124793f8b036d06dcf8
-Transparency: we updated the server binary due to a stability bug. Old one is available at https://s3.eu-central-1.amazonaws.com/tstlss.tasteless.eu/server_old. This does not affect the game at all. MD5 (server_old) = 20c3924fe9b6be1c662f33805481e781
-</code></pre>
-<h2 id="write-up">Write up:</h2>
+Transparency: we updated the server binary due to a stability bug. Old one is available at https://s3.eu-central-1.amazonaws.com/tstlss.tasteless.eu/server_old. This does not affect the game at all. MD5 (server_old) = 20c3924fe9b6be1c662f33805481e781</code></pre><h2 id="write-up">Write up:</h2>
 <h3 id="setting-up-the-decompiler-and-repacker">Setting up the decompiler and repacker</h3>
 <p>For this challenge I saw that the game was compiled with godot engine, after some quick googling I came across the following tool <a href="https://github.com/bruvzg/gdsdecomp/releases">https://github.com/bruvzg/gdsdecomp/releases</a> and downloaded the most recent release.</p>
 <p>I then used the tool to unpack the pck file into a folder using PCK-&gt;Explore PCK Archive, during the unpacking process I saw that the pck was version 3.3.3. In this folder I saw lots of .gdc files, and when I ran file on them I saw that they were version 3.2.</p>
 <p>I then used the tool to decompile player_controller.gd. Using the tool I did GDScript-&gt;Decompile GDC/GDE Script files. I then selected the file, selected bytecode version 3.2 and the destination folder was the same as the source folder.</p>
 <p>At this point I had a player_controller.gd, player_controller.gdc, and player_controller.gdc.remap. I deleted the .gdc and .gdc.remap files for player_controller and then repacked the pck using PCK-&gt;Create PCK Archive. I made sure to select godot engine version 3.3.3.</p>
 <p>At this point when I tried running the program it kept having errors so I decided to run it using the command prompt so I could keep the errors after closing:</p>
-<p><img src="./Photos/Errors.png" alt="" /></p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2021-10-Tasteless//Tasteless-Shores/Photos/Errors.png" alt="" /></p>
 <p>The original was:</p>
-<pre><code>onready  var placeRayCast = $PlaceRayCastas RayCast
-</code></pre>
+<pre><code class="language-text">onready  var placeRayCast = $PlaceRayCastas RayCast</code></pre>
 <p>I was able to see that there was simply an error with not having a space before as.</p>
-<pre><code>onready  var placeRayCast = $PlaceRayCast as RayCast
-</code></pre>
+<pre><code class="language-text">onready  var placeRayCast = $PlaceRayCast as RayCast</code></pre>
 <p>After fixing all syntax errors I was able to change any file in the game and pack it with this setup. The tool seems to have a massive memory leak though so packing slowed down every time it was done and the tool needed to be restarted from time to time.</p>
 <h3 id="skull-island">Skull Island</h3>
 <p>One of the first things I did in the process was to edit the player controller so that I could fly around and to get rid of gravity, so I changed the _physics_process function in player_controller.gd:</p>
-<pre><code>func _physics_process(delta):
+<pre><code class="language-text">func _physics_process(delta):
 	vel.x = 0
 	vel.z = 0
 	
 	var input = Vector3()
 
 
-	if player.health &gt; 0 and not paused and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+	if player.health > 0 and not paused and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		
-		if Input.is_action_pressed(&quot;ui_up&quot;):
+		if Input.is_action_pressed("ui_up"):
 			input.z -= 5
-		if Input.is_action_pressed(&quot;ui_down&quot;):
+		if Input.is_action_pressed("ui_down"):
 			player.transform.origin.y -= 1
-		if Input.is_action_pressed(&quot;ui_left&quot;):
+		if Input.is_action_pressed("ui_left"):
 			input.x -= 5
-		if Input.is_action_pressed(&quot;ui_right&quot;):
+		if Input.is_action_pressed("ui_right"):
 			input.x += 5
 		
-		if Input.is_action_pressed(&quot;jump&quot;):
+		if Input.is_action_pressed("jump"):
 			player.transform.origin.y += 1
 	
 	
@@ -187,62 +184,52 @@ Transparency: we updated the server binary due to a stability bug. Old one is av
 	vel.z = dir.z * currentSpeed * delta * 100
 	
 	vel = player.move_and_slide(vel, Vector3.UP, true)
-	if vel.y &gt; 0:
-		vel.y = 0
-</code></pre>
+	if vel.y > 0:
+		vel.y = 0</code></pre>
 <p>I then flew around the map for a bit and saw a chest in the eye of the skull:</p>
 <p><code>tstlss{do_you_S33_me_now?}</code></p>
 <h3 id="boat">Boat</h3>
 <p>The next challenge was the boat challenge. After having reversed a bit I found the following function in server2.gd:</p>
-<pre><code>func _handleFish(pid):
-	if not has_node(&quot;player_&quot; + str(pid)):
-		prints(&quot;error, unknown player fish&quot;, pid)
+<pre><code class="language-text">func _handleFish(pid):
+	if not has_node("player_" + str(pid)):
+		prints("error, unknown player fish", pid)
 		return 
-	var node = get_node(&quot;player_&quot; + str(pid))
-	spawn_chest(node, &quot;FLAG_BOAT&quot;, flags[&quot;FLAG_BOAT&quot;].global_transform.origin)
-</code></pre>
+	var node = get_node("player_" + str(pid))
+	spawn_chest(node, "FLAG_BOAT", flags["FLAG_BOAT"].global_transform.origin)</code></pre>
 <p>This function was called when the server got a message from the client to fish:</p>
-<pre><code>MsgServerFish:
+<pre><code class="language-text">MsgServerFish:
 	var pid = socket.get_u64()
-	call_deferred(&quot;_handleFish&quot;, pid)
-</code></pre>
+	call_deferred("_handleFish", pid)</code></pre>
 <p>In the client2.gd I found the following function:</p>
-<pre><code>func start_fish(target):
-	socket.put_u8(MsgClientFish)
-</code></pre>
+<pre><code class="language-text">func start_fish(target):
+	socket.put_u8(MsgClientFish)</code></pre>
 <p>However after some testing I saw that this was not called when you cast the fishing rod so I decided to add it to the function call for conch distance since I knew I could reliably activate that:</p>
-<pre><code>func _conch(pid, distance):	
+<pre><code class="language-text">func _conch(pid, distance):	
 	socket.put_u8(MsgClientFish)
-	Conch.conch(distance)
-</code></pre>
+	Conch.conch(distance)</code></pre>
 <p>After pressing the conch the chest on the rock by the boat got a marker and I was able to get the flag:</p>
-<pre><code>tstlss{im_on_a_boat_everybody_look_at_me!}
-</code></pre>
-<h3 id="conch">Conch</h3>
+<pre><code class="language-text">tstlss{im_on_a_boat_everybody_look_at_me!}</code></pre><h3 id="conch">Conch</h3>
 <p>For the conch challenge I first modified the conch.gd file so that rather than getting an arbitrary response for the distance I was able to get the exact distance printed out in the console:</p>
-<pre><code>static func conch(distance):
-    prints(&quot;conch&quot;, distance)
-</code></pre>
+<pre><code class="language-text">static func conch(distance):
+    prints("conch", distance)</code></pre>
 <p>I then added some prints to the conch function in the client2.gd which told me my exact location when pressed:</p>
-<pre><code>func _conch(pid, distance):	
-	prints(&quot;X: &quot;, player.global_transform.origin.x)
-	prints(&quot;Y: &quot;, player.global_transform.origin.y)
-	prints(&quot;Z: &quot;, player.global_transform.origin.z)
-	Conch.conch(distance)
-</code></pre>
+<pre><code class="language-text">func _conch(pid, distance):	
+	prints("X: ", player.global_transform.origin.x)
+	prints("Y: ", player.global_transform.origin.y)
+	prints("Z: ", player.global_transform.origin.z)
+	Conch.conch(distance)</code></pre>
 <p>From here I now had my coordinates and the distance to the point meaning I could do some sort of triangulation. However I would need to get to the exact coordinate so I needed some sort of teleportation function. As I would have to input some numbers I decided to build the teleport directly into the chat.</p>
 <p>I then modified the chat function in client2 with the following:</p>
-<pre><code>func chat(whisper, msg):
-	player.transform.origin.x = msg.split(&quot;,&quot;)[0].to_float()
-	player.transform.origin.y = msg.split(&quot;,&quot;)[1].to_float()
-	player.transform.origin.z = msg.split(&quot;,&quot;)[2].to_float()
+<pre><code class="language-text">func chat(whisper, msg):
+	player.transform.origin.x = msg.split(",")[0].to_float()
+	player.transform.origin.y = msg.split(",")[1].to_float()
+	player.transform.origin.z = msg.split(",")[2].to_float()
 	socket.put_u8(MsgClientChat)
 	socket.put_u64(whisper)
 	socket.put_u8(msg.length())
-	socket.put_data(msg.to_ascii())
-</code></pre>
+	socket.put_data(msg.to_ascii())</code></pre>
 <p>I then also googled some algorithms for doing triangulation and came across some python, after getting 3 points and their distances my python code was:</p>
-<div class="lang-py editor-colors">import numpy                                             
+<pre><code class="language-text">import numpy                                             
 from numpy import sqrt, dot, cross                       
 from numpy.linalg import norm                            
 
@@ -276,23 +263,18 @@ P3 = numpy.array([-200, 0, -150])
 r1 = 305.375458
 r2 = 425.991302
 r3 = 247.64267
-print(trilaterate(P1,P2,P3,r1,r2,r3))
-</div>
+print(trilaterate(P1,P2,P3,r1,r2,r3))</code></pre>
 <p>This output:</p>
-<pre><code>(array([ 15.97898019, -51.70881598, -40.42732791]), array([ 14.79533215, -55.2597601 , -39.83550389]))
-</code></pre>
+<pre><code class="language-text">(array([ 15.97898019, -51.70881598, -40.42732791]), array([ 14.79533215, -55.2597601 , -39.83550389]))</code></pre>
 <p>I then used my chat teleport to teleport to the first value and used the conch and the chest appeared, when interacted with I got the flag:</p>
-<pre><code>tstlss{follow_th3_wh1t3_r4bbit}
-</code></pre>
-<h3 id="thrybrush">Thrybrush</h3>
+<pre><code class="language-text">tstlss{follow_th3_wh1t3_r4bbit}</code></pre><h3 id="thrybrush">Thrybrush</h3>
 <p>This was by far the most annoying challenge, mostly due to having to copy and paste lots of lines.</p>
 <p>In the guybrush gd file I saw a few important things:</p>
 <p>player id was 31337:</p>
-<pre><code>func _ready():
-	Server.enemies[&quot;player_31337&quot;] = self
-</code></pre>
+<pre><code class="language-text">func _ready():
+	Server.enemies["player_31337"] = self</code></pre>
 <p>We needed to get the correct input &quot;distance&quot; amount of times and we would be returning a value based on a key:</p>
-<pre><code>func chat(from, msg):
+<pre><code class="language-text">func chat(from, msg):
 	
 	if not (from.remote_id in players):
 		return 
@@ -305,14 +287,13 @@ print(trilaterate(P1,P2,P3,r1,r2,r3))
 	else :
 		bw.distance += 1
 
-	if bw.distance &lt;= 0:
-		Server.spawn_chest(from, &quot;FLAG_BIGWHOOP&quot;, Server.flags[&quot;FLAG_BIGWHOOP&quot;].global_transform.origin)
-		Server.chat(remote_id, from.remote_id, &quot;you are faster than your shadow it seems!&quot;)
+	if bw.distance <= 0:
+		Server.spawn_chest(from, "FLAG_BIGWHOOP", Server.flags["FLAG_BIGWHOOP"].global_transform.origin)
+		Server.chat(remote_id, from.remote_id, "you are faster than your shadow it seems!")
 	else :
-		Server.chat(remote_id, from.remote_id, insult)
-</code></pre>
+		Server.chat(remote_id, from.remote_id, insult)</code></pre>
 <p>And the logic behind the dig and distance:</p>
-<pre><code>class BigWhoop:
+<pre><code class="language-text">class BigWhoop:
 	var pos = Vector3.ZERO
 	var rotation = 0as int
 	var distance = 10as int
@@ -323,26 +304,24 @@ print(trilaterate(P1,P2,P3,r1,r2,r3))
 		pos.z = randi() % 255
 
 	func dig():
-		var hint = (int(pos.x) ^ ((int(pos.x) &lt;&lt; 4)) &amp; 255) &amp; 255
+		var hint = (int(pos.x) ^ ((int(pos.x) << 4)) & 255) & 255
 		pos.x = pos.y
 		pos.y = pos.z
 		pos.z = rotation
-		rotation = int(pos.z) ^ hint ^ (int(pos.z) &gt;&gt; 1) ^ ((int(hint) &lt;&lt; 1) &amp; 255)
+		rotation = int(pos.z) ^ hint ^ (int(pos.z) >> 1) ^ ((int(hint) << 1) & 255)
 		return rotation % 64
 
 func _on_Area_body_entered(body:Node):
 	if Server.socket != null:
-		players[body.remote_id] = BigWhoop.new()
-</code></pre>
+		players[body.remote_id] = BigWhoop.new()</code></pre>
 <p>In client2 gd file I then saw that whisper is always set to 0 so I hardcoded it to whisper to 31337:</p>
-<pre><code>func chat(whisper, msg):
+<pre><code class="language-text">func chat(whisper, msg):
 	socket.put_u8(MsgClientChat)
 	socket.put_u64(31337)
 	socket.put_u8(msg.length())
-	socket.put_data(msg.to_ascii())
-</code></pre>
+	socket.put_data(msg.to_ascii())</code></pre>
 <p>I decided to write a z3py script that based on the insults the NPC messaged me I would be able to generate the possible seed values for x, y, and z. This would produce false values at first but sometimes I still got the right insult so at least I wasn't wasting guesses:</p>
-<div class="lang-py editor-colors"># import z3
+<pre><code class="language-text"># import z3
 from z3 import *
 
 # insults
@@ -460,10 +439,9 @@ print(s.check())
 m = s.model()
 
 # print out position
-print(m)
-</div>
+print(m)</code></pre>
 <p>I then made a second script to generate the insults I needed to send and what I would receive as a result of the seed. I decided to make a second script mostly because I wanted to make sure I could check things after the z3 script, you can easily modify the scripts to work together though:</p>
-<div class="lang-py editor-colors"># insults
+<pre><code class="language-text"># insults
 insults = {
 "You fight like a dairy Farmer!":"How appropriate. You fight like a cow!", 
 "This is the END for you, you gutter crawling cur!":"And I've got a little TIP for you, get the POINT?", 
@@ -549,12 +527,9 @@ for i in range(40):
     fposZ = rotation
     rotation = fposZ ^ hint ^ (fposZ >> 1) ^ ((hint << 1) & 255)
     print(keys[rotation % 64], "  :  " , list(insults.values())[rotation % 64])
-
-</div>
-<p>After being run the chest with the flag was generated:</p>
-<pre><code>tstlss{I_w4nn4_b3_a_m1ghty_p1rate!}
 </code></pre>
-
+<p>After being run the chest with the flag was generated:</p>
+<pre><code class="language-text">tstlss{I_w4nn4_b3_a_m1ghty_p1rate!}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -567,5 +542,6 @@ for i in range(40):
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

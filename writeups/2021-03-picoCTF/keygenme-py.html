@@ -15,6 +15,7 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
 </head>
 <body class="theme-bg-light">
 
@@ -33,7 +34,7 @@
 
                 <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
                 <ul class="social-list list-inline py-3 mx-auto">
-                    <li class="list-inline-item"><a href="" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
                     <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
                 </ul><!--//social-list-->
@@ -72,15 +73,14 @@
 <p>Category: Reverse Engineering</p>
 <h2 id="write-up">Write up:</h2>
 <p>Looking at the top of the python file we see:</p>
-<div class="lang-python editor-colors">username_trial = "PRITCHARD"
+<pre><code class="language-python">username_trial = "PRITCHARD"
 bUsername_trial = b"PRITCHARD"
 
 key_part_static1_trial = "picoCTF{1n_7h3_|<3y_of_"
 key_part_dynamic1_trial = "xxxxxxxx"
-key_part_static2_trial = "}"
-</div>
+key_part_static2_trial = "}"</code></pre>
 <p>Looking through the file a bit more we trace the path from accepting the key till a function that seems to try to decrypt the key:</p>
-<div class="lang-python editor-colors">def check_key(key, username_trial):
+<pre><code class="language-python">def check_key(key, username_trial):
 
     global key_full_template_trial
 
@@ -137,10 +137,9 @@ key_part_static2_trial = "}"
 
 
 
-        return True
-</div>
+        return True</code></pre>
 <p>From here I wrote a little script to decrypt the missing characters from the flag:</p>
-<div class="lang-python editor-colors"># import hashlib
+<pre><code class="language-python"># import hashlib
 import hashlib
 
 # username
@@ -162,12 +161,9 @@ flag += hashlib.sha256(username_trial.encode()).hexdigest()[8]
 flag += '}'
 
 # print flag
-print(flag)
-</div>
+print(flag)</code></pre>
 <p>Once run we get:</p>
-<pre><code>picoCTF{1n_7h3_|&lt;3y_of_54ef6292}
-</code></pre>
-
+<pre><code class="language-text">picoCTF{1n_7h3_|<3y_of_54ef6292}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">
@@ -180,5 +176,6 @@ print(flag)
     <!-- Javascript -->
     <script src="../../assets/js/popper.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
 </body>
 </html>
