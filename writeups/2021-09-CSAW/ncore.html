@@ -142,7 +142,7 @@ MOVFS</code></pre>
 <p>Since we only had 64 printable bytes we could only display 16 flag characters per connection since the code for each character would be:</p>
 <pre><code class="language-text">0d [index of character in flag] 06 [ram position to write to]</code></pre>
 <p>I then wrote the following solve script:</p>
-<pre><code class="language-text">from pwn import *
+<pre><code class="language-python">from pwn import *
 
 flag = []
 

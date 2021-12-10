@@ -74,9 +74,9 @@
 <p>Comments: Wait, I thought format strings were only in C???</p>
 <h2 id="write-up">Write up:</h2>
 <p>Looking at the file (and description) I could tell that this was a format string vulnerability. Looking at the line with the format string we see:</p>
-<pre><code class="language-text">print(inp.format(a=stonkgenerator()))</code></pre>
+<pre><code class="language-python">print(inp.format(a=stonkgenerator()))</code></pre>
 <p>We are passed an object a which is of type stonkgenerator, from here we can craft the exploit:</p>
-<pre><code class="language-text">{a.__init__.__globals__[flag]}</code></pre>
+<pre><code class="language-python">{a.__init__.__globals__[flag]}</code></pre>
 <p>When run with the nc connection I got:</p>
 <pre><code class="language-text">nc chal.imaginaryctf.org 42014
 

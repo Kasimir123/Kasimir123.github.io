@@ -74,7 +74,7 @@
 <p>What's up with all the zeros and ones? Where are my letters and numbers? (This is a reversing challenge.)</p>
 <h2 id="write-up">Write up:</h2>
 <p>The first thing I did was look at the encode function:</p>
-<pre><code class="language-text">def encode(plain):
+<pre><code class="language-python">def encode(plain):
     d = 24
     x = up(plain)
     x = right(x,d)
@@ -82,7 +82,7 @@
     x = left(x,d)
     return x</code></pre>
 <p>I saw that I would have to do these function calls in reverse to decode the string. So I then started looking into the individual functions to see which ones I could just call and which ones I would have to rewrite.</p>
-<pre><code class="language-text">def right(x,d):
+<pre><code class="language-python">def right(x,d):
     x = x[d:] + x[0:d]
     return x
 
@@ -90,15 +90,15 @@ def left(x,d):
     x = right(x,len(x)-d)
     return x[::-1]</code></pre>
 <p>The functions left and right just reorganized the flag based on the length and the d value so these would not need to be rewritten.</p>
-<pre><code class="language-text">def down(x):
+<pre><code class="language-python">def down(x):
     x = ''.join(['1' if x[i] == '0' else '0' for i in range(len(x))])
     return x</code></pre>
 <p>The down function just reversed the bits so that also would not need to be rewritten.</p>
-<pre><code class="language-text">def up(x):
+<pre><code class="language-python">def up(x):
     x = [f"{ord(x[i]) << 1:08b}" for i in range(len(x))]
     return ''.join(x)</code></pre>
 <p>The up function however converted the flag to bits so I would need to rewrite that. I then added the decode function to the script:</p>
-<pre><code class="language-text">def up(x):
+<pre><code class="language-python">def up(x):
     x = [f"{ord(x[i]) << 1:08b}" for i in range(len(x))]
     return ''.join(x)
 

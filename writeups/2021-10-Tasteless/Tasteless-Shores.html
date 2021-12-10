@@ -229,7 +229,7 @@ Transparency: we updated the server binary due to a stability bug. Old one is av
 	socket.put_u8(msg.length())
 	socket.put_data(msg.to_ascii())</code></pre>
 <p>I then also googled some algorithms for doing triangulation and came across some python, after getting 3 points and their distances my python code was:</p>
-<pre><code class="language-text">import numpy                                             
+<pre><code class="language-python">import numpy                                             
 from numpy import sqrt, dot, cross                       
 from numpy.linalg import norm                            
 
@@ -321,7 +321,7 @@ func _on_Area_body_entered(body:Node):
 	socket.put_u8(msg.length())
 	socket.put_data(msg.to_ascii())</code></pre>
 <p>I decided to write a z3py script that based on the insults the NPC messaged me I would be able to generate the possible seed values for x, y, and z. This would produce false values at first but sometimes I still got the right insult so at least I wasn't wasting guesses:</p>
-<pre><code class="language-text"># import z3
+<pre><code class="language-python"># import z3
 from z3 import *
 
 # insults
@@ -441,7 +441,7 @@ m = s.model()
 # print out position
 print(m)</code></pre>
 <p>I then made a second script to generate the insults I needed to send and what I would receive as a result of the seed. I decided to make a second script mostly because I wanted to make sure I could check things after the z3 script, you can easily modify the scripts to work together though:</p>
-<pre><code class="language-text"># insults
+<pre><code class="language-python"># insults
 insults = {
 "You fight like a dairy Farmer!":"How appropriate. You fight like a cow!", 
 "This is the END for you, you gutter crawling cur!":"And I've got a little TIP for you, get the POINT?", 

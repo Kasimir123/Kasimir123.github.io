@@ -122,7 +122,7 @@ The solution will be in ALL CAPS</code></pre><h2 id="write-up">Write up:</h2>
 <pre><code class="language-text">ABCDEFGH</code></pre>
 <p>Looking at the above function I could tell that it modified the data based on the input name and the previously solved for password character for the second character on and simply subtracted 122 by the first character, modding it, and then adding 65 to make it uppercase for the first character. The program then printed out data as the encrypted password.</p>
 <p>Knowing that our goal was to get the password: AFMWAFPE, I decided to make a z3py script to solve for all the possible usernames that get use that password:</p>
-<pre><code class="language-text"># original data values
+<pre><code class="language-python"># original data values
 og = [0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48]
 
 # end values that we want to get to

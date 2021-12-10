@@ -82,7 +82,7 @@
     char filename[0x8];
 };</code></pre>
 <p>And then I made the following <code>__init__</code>.py:</p>
-<pre><code class="language-text">from binaryninja.architecture import Architecture
+<pre><code class="language-python">from binaryninja.architecture import Architecture
 from binaryninja.binaryview import *
 from binaryninja.function import RegisterInfo, InstructionInfo, InstructionTextToken
 from binaryninja.enums import InstructionTextTokenType, BranchType, SegmentFlag, SymbolType
@@ -499,7 +499,7 @@ x8XPView.register()</code></pre>
 01 1F20: 51 56 57 46 53 56 4C 58 4A 4F 4A 48 43 51 4F 42 4B 52 56 4A 4C 43 50 55 47 4C 4A 4B 4D 4A 00 57 </code></pre>
 <p>0x9F19 starts at 57 and then we have 38 bytes till we reach 00 which I had suspected was the length anyways.</p>
 <p>After getting all this information I went and wrote a python script to solve the challenge:</p>
-<pre><code class="language-text"># values used for the final check
+<pre><code class="language-python"># values used for the final check
 finCheck = [0x57, 0x46, 0x52, 0x53, 0x42, 0x51, 0x41, 0x51, 0x56, 0x57, 0x46, 0x53, 0x56, 0x4C, 0x58, 0x4A, 0x4F, 0x4A, 0x48, 0x43, 0x51, 0x4F, 0x42, 0x4B, 0x52, 0x56, 0x4A, 0x4C, 0x43, 0x50, 0x55, 0x47, 0x4C, 0x4A, 0x4B, 0x4D, 0x4A, 0x00]
 
 # first memory chunk

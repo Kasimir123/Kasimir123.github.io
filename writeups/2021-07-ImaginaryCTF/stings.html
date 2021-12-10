@@ -169,7 +169,7 @@
 <p>We see that we compare the input, v5, with some sort of flag string where we subtract 1 from it, v6. When we look into the code we see that v6 is:</p>
 <pre><code class="language-text">"jdug|tus2oht`5s4ou`i2ee4o`28c32b7:~"</code></pre>
 <p>So I wrote a script that goes through all of these values, subtracts 1, and prints as a char:</p>
-<pre><code class="language-text"># goes through all characters, get the ord for it, subtracts, turns it into a char, then joins the array as a string
+<pre><code class="language-python"># goes through all characters, get the ord for it, subtracts, turns it into a char, then joins the array as a string
 print(''.join([chr(ord(i) - 1) for i in "jdug|tus2oht`5s4ou`i2ee4o`28c32b7:~"]))</code></pre>
 <p>When run I got:</p>
 <pre><code class="language-text">ictf{str1ngs_4r3nt_h1dd3n_17b21a69}</code></pre>

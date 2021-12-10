@@ -598,7 +598,7 @@ CMPJMP
 Reads next 4 bytes, pops 2 values from the stack, if they are equal then set ip to the value of the number we read.</code></pre>
 <p>From this point I needed to make a disassembler, I decided to make a plugin for Binary Ninja to do this step since that way I would be able to have a nice view.</p>
 <p>I first made a disassembly file named <code>recwrapper.py</code>:</p>
-<pre><code class="language-text">from binaryninja.function import RegisterInfo, InstructionInfo, InstructionTextToken
+<pre><code class="language-python">from binaryninja.function import RegisterInfo, InstructionInfo, InstructionTextToken
 from binaryninja.enums import InstructionTextTokenType, BranchType
 from binaryninjaui import UIContext
 
@@ -732,7 +732,7 @@ class Disassembler():
 
         return ([ "empty"], 1)</code></pre>
 <p>What this code does is it takes in a few bytes and figures out what instructions they are supposed to be. I then tied this into a <code>__init__.py</code> which contained a custom view so that I could see the code:</p>
-<pre><code class="language-text">from binaryninja.architecture import Architecture
+<pre><code class="language-python">from binaryninja.architecture import Architecture
 from binaryninja.binaryview import *
 from binaryninja.function import RegisterInfo, InstructionInfo, InstructionTextToken
 from binaryninja.enums import InstructionTextTokenType, BranchType, SegmentFlag, SymbolType
@@ -1736,7 +1736,7 @@ int b = check(a);
 print(b);</code></pre>
 <p>From here we can see that we have a bunch of conditions which means that we can simply write a z3py script.</p>
 <p>pure constriants (no guessing):</p>
-<pre><code class="language-text">from z3 import *
+<pre><code class="language-python">from z3 import *
 
 maina = BitVec('maina', 64)
 
@@ -1839,7 +1839,7 @@ m3
 flac`R3c%.50_3c0mp_3z!_Gu3s5_u_sh0u1d_g37_g08d_71k3_m3}</code></pre>
 <p>R3c..50 makes it fairly obvious that it is Recurso in some form. and that we don't need that initial value in front so it is 4 bytes.</p>
 <p>and you know it should be flag{ so you can add some more constraints:</p>
-<pre><code class="language-text">from z3 import *
+<pre><code class="language-python">from z3 import *
 
 maina = BitVec('maina', 64)
 

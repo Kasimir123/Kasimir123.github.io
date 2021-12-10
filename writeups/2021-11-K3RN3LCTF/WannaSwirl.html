@@ -735,7 +735,7 @@ LABEL_28:
 <p>We then malloc a new byte array and move data from the array we just made into the array. We move the data by first getting a value by dividing the length by 5 and then we move the data starting at that index to the end of the data to the new array. Then we move the data from the start to that index over. So something like abcde would become bcdea.</p>
 <p>After that we loop through all the data and write it out to a file, after writing all the data we write abroly to the file as well, and then close the file.</p>
 <p>From here you can make a python version of the algorithm:</p>
-<pre><code class="language-text"># Imports
+<pre><code class="language-python"># Imports
 import numpy as np
 
 # Factor the length as square-like as possible
@@ -823,10 +823,10 @@ trial = b'flag{}'
 enc = (WannaSwirl(trial,nperm=-1)) + b'abroly'</code></pre>
 <p>This works as a proof of concept and if you only encrypt one directory deep using the binary you can get the same result.</p>
 <p>I then made a python script to undo what the original swirl function had done. We know that everything is already sized correctly if we remove the abroly at the end so we can just reshape the matrix rather than trying to find the correct size. The vortex will be the same as well, so then all we need to do is use the values from the dictionary to undo what the swirl has done:</p>
-<pre><code class="language-text">for i in range(bytmat.size):
+<pre><code class="language-python">for i in range(bytmat.size):
    swirled[perm_dic[i]] = msg[i]</code></pre>
 <p>Writing a full script I got:</p>
-<pre><code class="language-text"># Imports
+<pre><code class="language-python"># Imports
 import numpy as np
 import sys
 
@@ -903,7 +903,7 @@ enc = open(sys.argv[1], "rb").read().rstrip(b'abroly')
 
 dec = unswirl(enc)</code></pre>
 <p>I then added some code at the bottom of the file to search for the flag:</p>
-<pre><code class="language-text">flg = str(dec).index('flag{')
+<pre><code class="language-python">flg = str(dec).index('flag{')
 
 print(str(dec)[flg:flg+100])</code></pre>
 <p>Running this on the original FlagFolder.txt I get:</p>
@@ -912,7 +912,7 @@ print(str(dec)[flg:flg+100])</code></pre>
 <pre><code class="language-text">b'QRSTUVWf\n98765432}00t_n14rb_ym_d31rFGXl1ws_lr1ws4l}aEPONMLKJ{{w4nng_YDCBAzyxwvutsrIZaHqponmlkjihgfedcbabrolyabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ{_}123456789\n'</code></pre>
 <p>We can see that there is another abroly in the output so now we need to consider what the program does. We know how to reverse a single swirl, but the program swirls every single directory starting from the farthest down. Encrypting the directory, moving it up one directory, encrypting again, until all of the subfolders have been encrypted into one single massive file. With the subfolders having been encrypted multiple times.</p>
 <p>Lucily for us, the hacker wasn't very smart and added abroly to the end of each swirl so we basically have a partition that we can look up. So what we need to do it split on that partition and run the unswirl function yet again:</p>
-<pre><code class="language-text"># Imports
+<pre><code class="language-python"># Imports
 import numpy as np
 import sys
 

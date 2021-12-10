@@ -514,7 +514,7 @@ LABEL_14:
 20180212_ is 9df65cc45479c058ef4a600c1e607fec44d83682db732f077817c58bed47a191
 us-aers- is a25981adfb782d04cccfb2ad66ae8e63ead31f62fb898913f1ec99359f2e1c4b</code></pre>
 <p>From here I checked if xor'ing one file with it's encrypted counterpart gave us the same values (could be done because of cipher type and all of the files using the same key and iv). This ended up being the case so I wrote a script that would take the xor'ed values and xor the encrypted flag file to get the flag:</p>
-<pre><code class="language-text">f = open('2020_IC3Report.pdf.backup', "rb").read()
+<pre><code class="language-python">f = open('2020_IC3Report.pdf.backup', "rb").read()
 f2 = open('cad0b75505847a4792a67bb33ece21ec9c7bd21395ca6b158095d92772e01637.pdf.cryptastic', "rb").read()
 
 f3 = open('ea6b505ffded681a256232ed214d4c3b410c8b4f052775eb7e67dcbd5af64e63.pdf.cryptastic', "rb").read()
