@@ -193,7 +193,7 @@ var Prism = (function (_self) {
 					}
 					element = element.parentElement;
 				}
-				return 'bash';
+				return 'none';
 			},
 
 			/**

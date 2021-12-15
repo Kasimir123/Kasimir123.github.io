@@ -79,7 +79,7 @@
 <p>Questy McQuestgiver is too wise to fall for your tricks. Did you think you could just lie to him? Did you think you could just take the scroll without actually killing all those saplings? Think again. That said... he did spill the beans on what the prize is... I wonder if there's another way to obtain it?</p>
 <h2 id="write-up">Write up:</h2>
 <p>This last pwntown hacking was really the only game hacking among these challenges. For this I used the metadata from the game files to create a dummy dll using ill2cpp dumper. I then used dnspy to look through until I found the item mail unlock function. I then hooked that function and bought the monster scroll rather than the potion. Using the scroll got the flag.</p>
-<pre><code class="language-text">#include "Hack.h"
+<pre><code class="language-cpp">#include "Hack.h"
 
 
 typedef int(__fastcall *tItemBuy)(void*, unsigned int, unsigned int);

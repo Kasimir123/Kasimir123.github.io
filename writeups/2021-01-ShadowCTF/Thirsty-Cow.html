@@ -73,7 +73,7 @@
 <p>Category: Reversing</p>
 <h2 id="write-up">Write up:</h2>
 <p>The challenge gave us an ELF 64 bit LSB shared object. I tried running strings and found nothing useful so I opened the file in IDA and got the following pseudocode.</p>
-<pre><code class="language-text">int __cdecl main(int argc, const char **argv, const char **envp)
+<pre><code class="language-cpp">int __cdecl main(int argc, const char **argv, const char **envp)
 {
   __int64 v3; // rax
   __int64 v4; // rax
