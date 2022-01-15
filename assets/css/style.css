@@ -12262,3 +12262,10 @@ a {
     }
 }
 
+article a {
+    color: lightblue;
+}
+
+article summary {
+    color: #5FCB71;
+}
