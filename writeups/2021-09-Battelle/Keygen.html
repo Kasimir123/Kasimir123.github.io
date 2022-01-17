@@ -144,7 +144,7 @@ s = Solver()
 for i in range(0, len(flag)):
 
 	s.add(flag[i] >= 33)
-	s.add(flag[i] <= 122)
+	s.add(flag[i] &#x3C;= 122)
 	s.add(flag[i] != 46)
 	s.add(flag[i] != 44)
 	s.add(flag[i] != 91)

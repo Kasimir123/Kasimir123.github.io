@@ -76,7 +76,7 @@
 <pre><code class="language-python">username_trial = "PRITCHARD"
 bUsername_trial = b"PRITCHARD"
 
-key_part_static1_trial = "picoCTF{1n_7h3_|<3y_of_"
+key_part_static1_trial = "picoCTF{1n_7h3_|&#x3C;3y_of_"
 key_part_dynamic1_trial = "xxxxxxxx"
 key_part_static2_trial = "}"</code></pre>
 <p>Looking through the file a bit more we trace the path from accepting the key till a function that seems to try to decrypt the key:</p>
@@ -146,7 +146,7 @@ import hashlib
 username_trial = "PRITCHARD"
 
 # known flag
-flag = "picoCTF{1n_7h3_|<3y_of_"
+flag = "picoCTF{1n_7h3_|&#x3C;3y_of_"
 
 # decrypt flag
 flag += hashlib.sha256(username_trial.encode()).hexdigest()[4]
@@ -163,7 +163,7 @@ flag += '}'
 # print flag
 print(flag)</code></pre>
 <p>Once run we get:</p>
-<pre><code class="language-text">picoCTF{1n_7h3_|<3y_of_54ef6292}</code></pre>
+<pre><code class="language-text">picoCTF{1n_7h3_|&#x3C;3y_of_54ef6292}</code></pre>
         </article>
 
         <footer class="footer text-left py-2 theme-bg-dark">

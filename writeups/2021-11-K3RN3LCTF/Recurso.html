@@ -131,7 +131,7 @@
   v81 = 0;
   v80 = 64;
   ptr = malloc(0x200uLL);
-  for ( i = 0; i < v80; ++i )
+  for ( i = 0; i &#x3C; v80; ++i )
     *((_QWORD *)ptr + i) = malloc(8uLL);
   while ( 1 )
   {
@@ -237,7 +237,7 @@
         {
           v80 *= 2;
           ptr = realloc(ptr, 8LL * v80);
-          for ( j = v82; j < v80; ++j )
+          for ( j = v82; j &#x3C; v80; ++j )
           {
             v36 = (void **)((char *)ptr + 8 * j);
             *v36 = malloc(8uLL);
@@ -301,7 +301,7 @@
       case 28:
         *((_QWORD *)&v74 + 1) = *(_QWORD *)&v73[8 * --v83 + 8];
         *(_QWORD *)&v74 = *(_QWORD *)&v73[8 * --v83 + 8];
-        if ( *((__int64 *)&v74 + 1) < (__int64)v74 )
+        if ( *((__int64 *)&v74 + 1) &#x3C; (__int64)v74 )
         {
           do
           {
@@ -376,7 +376,7 @@
         v71 = *(_BYTE *)(v58 + a2);
         v59 = v84++;
         v72 = *(_BYTE *)(v59 + a2);
-        v60 = *(unsigned __int8 *)((int)bytesToInt(&v69) + a2) << 8;
+        v60 = *(unsigned __int8 *)((int)bytesToInt(&v69) + a2) &#x3C;&#x3C; 8;
         v61 = v60 + *(unsigned __int8 *)((int)bytesToInt(&v69) + 1LL + a2);
         v62 = v83++;
         *(_QWORD *)&v73[8 * v62 + 8] = v61;
@@ -443,7 +443,7 @@
     *(_DWORD *)(*((_QWORD *)ptr + v24 - 1) + 24LL) = v24 == 1;
     v14 = *((_QWORD *)ptr + v24 - 1);
     *(_QWORD *)(v14 + 8) = malloc(8LL * *(int *)(v14 + 16));
-    for ( j = 0; j < *(_DWORD *)(*((_QWORD *)ptr + v24 - 1) + 16LL); ++j )
+    for ( j = 0; j &#x3C; *(_DWORD *)(*((_QWORD *)ptr + v24 - 1) + 16LL); ++j )
     {
       v15 = (void **)(*(_QWORD *)(*((_QWORD *)ptr + v24 - 1) + 8LL) + 8LL * j);
       *v15 = malloc(0xA0uLL);
@@ -457,7 +457,7 @@
 <p>Then we malloc an object and fill in several of its parts, calling bytesToInt on the two arrays we populated earlier. After that we malloc some more space and then increment a1 yet again.</p>
 <p>Back in the runProgram function we now want to look at the next section:</p>
 <pre><code class="language-c">  ptr = malloc(0x200uLL);
-  for ( i = 0; i < v80; ++i )
+  for ( i = 0; i &#x3C; v80; ++i )
     *((_QWORD *)ptr + i) = malloc(8uLL);</code></pre>
 <p>We malloc an original pointer and then look through and malloc again which means that this is probably a pointer to an array of pointers.</p>
 <p>We now move on to the first part of the while loop:</p>
@@ -642,13 +642,13 @@ CMPJMP = int('24', 16)
 def bytesToInt(data, addr):
     val = 0
     for i in range(4):
-        val += (data[addr + i] << (24 - (8 * i)))
+        val += (data[addr + i] &#x3C;&#x3C; (24 - (8 * i)))
     return val
 
 def bytesToLongLong(data, addr):
     val = 0
     for i in range(8):
-        val += (data[addr + i] << (56 - (8 * i)))
+        val += (data[addr + i] &#x3C;&#x3C; (56 - (8 * i)))
     return val
 
 class Disassembler():
@@ -825,7 +825,7 @@ class RecursoView(BinaryView):
         self.data = data
 
     def defineFunctions(self, data, start, end):
-        while start < end:
+        while start &#x3C; end:
             op = data[start]
             curName = ""
 
@@ -1682,7 +1682,7 @@ int wowzaACheck2(int a)
 }
 
 int wowzaACheck(int a)
-| <269700, 1 |
+| &#x3C;269700, 1 |
 {
     return 0;
 }
@@ -1773,14 +1773,14 @@ s.add(maina == 102)
 
 s.add(checka & 1337 == 1057)
 s.add(checka | 1337 == 28025)
-s.add(checka ^ 1337 < 269700)
+s.add(checka ^ 1337 &#x3C; 269700)
 
 s.add(keepgoinga ^ keepgoingb == 28)
 s.add(keepgoinga & keepgoingb == 99)
 
 s.add(checkthebigsb - checkthebigsa == 489139534831)
 s.add(checkthebigsb & 4294967040 == 892362496)
-s.add(checkthebigsb < checkthebigsa)
+s.add(checkthebigsb &#x3C; checkthebigsa)
 
 s.add(nextNextNextChecka - nextNextNextCheckb == -188178084847)
 s.add(nextNextNextChecka * nextNextNextChecke == 10593957610752)
@@ -1876,7 +1876,7 @@ s.add(maina == 102)
 
 s.add(checka & 1337 == 1057)
 s.add(checka | 1337 == 28025)
-s.add(checka ^ 1337 < 269700)
+s.add(checka ^ 1337 &#x3C; 269700)
 
 s.add(keepgoinga ^ keepgoingb == 28)
 s.add(keepgoinga & keepgoingb == 99)
@@ -1885,7 +1885,7 @@ s.add(keepgoingb == 0x7b)
 
 s.add(checkthebigsb - checkthebigsa == 489139534831)
 s.add(checkthebigsb & 4294967040 == 892362496)
-s.add(checkthebigsb < checkthebigsa)
+s.add(checkthebigsb &#x3C; checkthebigsa)
 s.add((checkthebigsa & 0xFFFFFF00)  == 0x52336300)
 s.add(Or(checkthebigsa & 0xFF == ord('u'), checkthebigsa & 0xFF == ord('U')))
 

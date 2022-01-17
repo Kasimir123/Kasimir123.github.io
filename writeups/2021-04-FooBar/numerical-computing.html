@@ -97,7 +97,7 @@
   _gfortran_st_read(&v1);
   _gfortran_transfer_character(&v1, inp, 18LL);
   _gfortran_st_read_done(&v1);
-  for ( n = 1; n <= 18; ++n )
+  for ( n = 1; n &#x3C;= 18; ++n )
   {
     c1[0] = *(&v10 + n);
     c2[0] = *(&v8 + n);
@@ -105,7 +105,7 @@
     x2 = (unsigned __int8)c2[0];
     num2[n - 1] = (unsigned __int8)c2[0] ^ (unsigned __int8)c1[0];
   }
-  for ( n = 1; n <= 18; ++n )
+  for ( n = 1; n &#x3C;= 18; ++n )
   {
     if ( (n - 1) % 2 == 1 )
       v0 = 4 * num2[n - 1];
@@ -113,7 +113,7 @@
       v0 = 16 * num2[n - 1];
     num1[n - 1] = v0;
   }
-  for ( n = 1; n <= 18; ++n )
+  for ( n = 1; n &#x3C;= 18; ++n )
   {
     if ( num1[n - 1] == num[n - 1] )
       ++f;

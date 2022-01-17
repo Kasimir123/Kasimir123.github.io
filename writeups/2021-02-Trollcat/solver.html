@@ -105,7 +105,7 @@ crackme (2): ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically
 
   for ( i = 0; a2 > i; ++i )
   {
-    if ( a1[i] <= 47 || a1[i] > 122 )
+    if ( a1[i] &#x3C;= 47 || a1[i] > 122 )
       return 0LL;
   }
   if ( *a1 + a1[3] != 100 )
@@ -140,7 +140,7 @@ flag = [BitVec(f"flag_{i}", 8) for i in range(0, 22)]
 # checks that variables are in range
 for i in range(0, 22):
     s.add(flag[i] >= 48)
-    s.add(flag[i] <= 122)
+    s.add(flag[i] &#x3C;= 122)
 
 # adds all the checks
 s.add(flag[0] + flag[3] == 100)
@@ -176,11 +176,11 @@ for i in [BitVec(f"flag_{i}", 8) for i in range(0, 22)]:
 print(s)</code></pre>
 <p>Running the script I got:</p>
 <pre><code class="language-text">sat
-4wj0Hp<9J9ty=qI?iN_gXz</code></pre>
+4wj0Hp&#x3C;9J9ty=qI?iN_gXz</code></pre>
 <p>I then entered this key through netcat and got the flag:</p>
 <pre><code class="language-text">nc 157.230.33.195 4444   
 
-Enter key: 4wj0Hp<9J9ty=qI?iN_gXz
+Enter key: 4wj0Hp&#x3C;9J9ty=qI?iN_gXz
 Congrats here is your flag: Trollcat{z3_b4by}</code></pre>
         </article>
 

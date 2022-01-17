@@ -150,7 +150,7 @@ This challenge will raise 43 euros for a good cause.</code></pre><h2 id="write-u
         ++v5;
         *(v7 - 1) = v7[v8 - 1] ^ byte_140003280[v9 % 0xC];
       }
-      while ( v5 < (unsigned int)v2 );
+      while ( v5 &#x3C; (unsigned int)v2 );
     }
     memset(Buffer, 0, 0x104ui64);
     GetTempPathA(0x104u, Buffer);
@@ -202,7 +202,7 @@ This challenge will raise 43 euros for a good cause.</code></pre><h2 id="write-u
   }
   return 0i64;
 }</code></pre>
-<p>This function seems to go to the path of C:\Users\&lt;current user&gt;\Docs and then loops through and tries to encrypt everything that isn't the . or .. directory. After encrypting it seems to add the .alien component to the file.</p>
+<p>This function seems to go to the path of C:\Users\&amp;#x3C;current user&gt;\Docs and then loops through and tries to encrypt everything that isn't the . or .. directory. After encrypting it seems to add the .alien component to the file.</p>
 <p>It then calls a function for each file which takes the original file name, the new file name, and the string that we created in the main function of the original exe.</p>
 <p>Opening the true encryption function I see:</p>
 <pre><code class="language-c">__int64 __fastcall sub_1800011C0(LPCWSTR lpFileName, LPCWSTR a2, char *Source)
@@ -324,10 +324,10 @@ LABEL_4:
 <p>Turning the hex into ascii I saw that it used:</p>
 <pre><code class="language-text">Microsoft Enhanced RSA and AES Cryptographic Provider</code></pre>
 <p>I then wrote the following c++ program:</p>
-<pre><code class="language-cpp">#include <iostream>
-#include <Windows.h>
-#include <WinBase.h>
-#include <wincrypt.h>
+<pre><code class="language-cpp">#include &#x3C;iostream>
+#include &#x3C;Windows.h>
+#include &#x3C;WinBase.h>
+#include &#x3C;wincrypt.h>
 
 #pragma comment (lib, "advapi32")
 

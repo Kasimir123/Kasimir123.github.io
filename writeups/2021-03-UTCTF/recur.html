@@ -87,7 +87,7 @@ utflag{</code></pre>
   unsigned __int8 v4; // al
   int i; // [rsp+Ch] [rbp-14h]
 
-  for ( i = 0; i <= 27; ++i )
+  for ( i = 0; i &#x3C;= 27; ++i )
   {
     v3 = flag[i];
     v4 = recurrence(i * i);
@@ -125,7 +125,7 @@ nums = [3, 5]
 def recurrence(i):
 
     # if i is in the array then return the found value
-    if i < len(nums):
+    if i &#x3C; len(nums):
         return nums[i]
 
     # otherwise do the normal stuff

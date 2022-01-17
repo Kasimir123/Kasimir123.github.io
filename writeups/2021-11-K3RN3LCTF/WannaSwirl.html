@@ -79,48 +79,48 @@
   {
     sub_2540(path, a2[1], a3);
     sub_24A6(&unk_6180, path);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(path);
   }
   sub_2540(directory, "", a3);
   while ( 1 )
   {
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, &unk_6180);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(path, &unk_6180);
     v3 = sub_2663(path);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
-    if ( v3 <= 0 )
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(path);
+    if ( v3 &#x3C;= 0 )
       break;
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, directory);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(path, directory);
     sub_29E3((unsigned int)path, (unsigned int)directory, v4, v5, v6, v7, directory[0]);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(path);
   }
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, directory);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(path, directory);
   sub_29E3((unsigned int)path, (unsigned int)directory, v8, v9, v10, v11, directory[0]);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(directory);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(path);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(directory);
   return 0LL;
 }</code></pre><pre><code class="language-c"> if ( a1 == 2 )
   {
     sub_2540(path, a2[1], a3);
     sub_24A6(&unk_6180, path);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(path);
   }</code></pre>
 <p>We see that the function checks if a1 is equal to 2, since this is the main function we know that a1 is argc, so this check passes when we pass an argument to the binary. In the if statement we set the path to the command line argument.</p>
 <pre><code class="language-c">  sub_2540(directory, "", a3);
   while ( 1 )
   {
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, &unk_6180);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(path, &unk_6180);
     v3 = sub_2663(path);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
-    if ( v3 <= 0 )
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(path);
+    if ( v3 &#x3C;= 0 )
       break;
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, directory);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(path, directory);
     sub_29E3((unsigned int)path, (unsigned int)directory, v4, v5, v6, v7, directory[0]);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(path);
   }
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(path, directory);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(path, directory);
   sub_29E3((unsigned int)path, (unsigned int)directory, v8, v9, v10, v11, directory[0]);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(path);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(directory);</code></pre>
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(path);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(directory);</code></pre>
 <p>We then set the directory to &quot;&quot; and then enter a while loop. We pass the path to sub_2663 and check for the response, if the value is less than or equal to 0 we break out of the loop. Otherwise we call the other function.</p>
 <p>First we want to analyze sub_2663:</p>
 <pre><code class="language-c">__int64 __fastcall sub_2663(const char **a1)
@@ -143,80 +143,80 @@
 <pre><code class="language-c">__int64 __fastcall sub_29E3(__int64 a1)
 {
 
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(name, &qword_6180);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(name, a1);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(name, &qword_6180);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::append(name, a1);
   v1 = opendir(name[0]);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v8, &qword_6180);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v8, &qword_6180);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, name);
   if ( v10[1] == (const char *)0x3FFFFFFFFFFFFFFFLL )
     std::__throw_length_error("basic_string::append");
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_append(v10, "/", 1LL);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_append(v10, "/", 1LL);
   sub_24A6(&qword_6180, v10, v2, v3);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
   if ( v1 )
   {
     v5 = readdir(v1);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, name);
     v6 = sub_2663(v10);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
     if ( v6 )
     {
       while ( v5 )
       {
-        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
+        std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, name);
         sub_2BE4(v10, v5);
-        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+        std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
         v5 = readdir(v1);
       }
     }
     else
     {
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, a1);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v9, v8);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, a1);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v9, v8);
       sub_2C32(v9, v10, v5, v1);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v9);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v9);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
     }
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::resize(
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::resize(
       &qword_6180,
       qword_6188 - 1 - *(_QWORD *)(a1 + 8));
     closedir(v1);
   }
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v8);
-  return std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(name);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v8);
+  return std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(name);
 }</code></pre><pre><code class="language-c">  v1 = opendir(name[0]);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v8, &qword_6180);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v8, &qword_6180);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, name);
   if ( v10[1] == (const char *)0x3FFFFFFFFFFFFFFFLL )
     std::__throw_length_error("basic_string::append");
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_append(v10, "/", 1LL);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_append(v10, "/", 1LL);
   sub_24A6(&qword_6180, v10, v2, v3);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
   if ( v1 )</code></pre>
 <p>The first that happens in this function is that we open the directory and then check if it is null, if it is not null then we continue to the meat of this function:</p>
 <pre><code class="language-c">    v5 = readdir(v1);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, name);
     v6 = sub_2663(v10);
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
     if ( v6 )
     {
       while ( v5 )
       {
-        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
+        std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, name);
         sub_2BE4(v10, v5);
-        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+        std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
         v5 = readdir(v1);
       }
     }
     else
     {
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, a1);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v9, v8);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, a1);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v9, v8);
       sub_2C32(v9, v10, v5, v1);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v9);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v9);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
     }
-    std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::resize(
+    std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::resize(
       &qword_6180,
       qword_6188 - 1 - *(_QWORD *)(a1 + 8));
     closedir(v1);</code></pre>
@@ -226,9 +226,9 @@
     {
       while ( v5 )
       {
-        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, name);
+        std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, name);
         sub_2BE4(v10, v5);
-        std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+        std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
         v5 = readdir(v1);
       }
     }</code></pre>
@@ -240,7 +240,7 @@
   {
     sub_2540(v3, (const char *)(a2 + 19));
     sub_29E3((__int64)v3);
-    result = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v3);
+    result = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v3);
   }
   return result;
 }</code></pre>
@@ -248,11 +248,11 @@
 <p>Going back out to the function we are in we are now going to take a look at the else, what gets run when the number of directories in the current directory is 0:</p>
 <pre><code class="language-c">    else
     {
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v10, a1);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v9, v8);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v10, a1);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v9, v8);
       sub_2C32(v9, v10, v5, v1);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v9);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v10);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v9);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v10);
     }</code></pre>
 <p>We call some function and pass in the directory path, the entity, and the current diectory as well as one other value which we can reverse to find is the old path before the current directory was added to the path, making it the path one directory up:</p>
 <pre><code class="language-c">__int64 __fastcall sub_2C32(__int64 a1, __int64 a2, struct dirent *a3, DIR *a4)
@@ -278,8 +278,8 @@
   __int64 v25[2]; // [rsp+A8h] [rbp-240h] BYREF
   unsigned __int64 v26; // [rsp+B8h] [rbp-230h] BYREF
 
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v20, a1);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(v20, a2);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v20, a1);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::append(v20, a2);
   v5 = malloc(0x3E8uLL);
   size = 1000LL;
   *v5 = 0;
@@ -291,26 +291,26 @@
     {
       sub_2540(v25, a3->d_name);
       sub_2540(v22, "/");
-      v7 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v22, 0LL, v20);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(command, v7);
+      v7 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::insert(v22, 0LL, v20);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(command, v7);
       v8 = 15LL;
       v9 = &command[1][v25[1]];
       if ( (unsigned __int64 *)command[0] != &v24 )
         v8 = v24;
-      if ( (unsigned __int64)v9 <= v8 )
+      if ( (unsigned __int64)v9 &#x3C;= v8 )
         goto LABEL_13;
       v10 = 15LL;
       if ( (unsigned __int64 *)v25[0] != &v26 )
         v10 = v26;
       if ( (unsigned __int64)v9 > v10 )
 LABEL_13:
-        v11 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(command, v25);
+        v11 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::append(command, v25);
       else
-        v11 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v25, 0LL, command);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v21, v11);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(command);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v22);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+        v11 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::insert(v25, 0LL, command);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v21, v11);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(command);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v22);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v25);
       std::ifstream::basic_ifstream(v25, v21[0], 6LL);
       v12 = std::istream::tellg((std::istream *)v25);
       v13 = (char *)operator new[](v12 + 1);
@@ -327,26 +327,26 @@ LABEL_13:
       v18 += v12;
       free(v13);
       std::ifstream::~ifstream(v25);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v21);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v21);
     }
     a3 = readdir(a4);
   }
   sub_2540(v25, ".txt");
-  v14 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v25, 0LL, v20);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v22, v14);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+  v14 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::insert(v25, 0LL, v20);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v22, v14);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v25);
   sub_2540(v25, "rm -rf ");
-  v15 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(v25, v20);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(command, v15);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+  v15 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::append(v25, v20);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(command, v15);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v25);
   system(command[0]);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v25, v22);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v25, v22);
   sub_26A3(v18, v6, v25);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v25);
   free(v6);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(command);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v22);
-  return std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v20);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(command);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v22);
+  return std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v20);
 }</code></pre>
 <p>This is a pretty meaty function so I decided to split it apart quite a bit, the first thing I did was look at what was at the big while loop:</p>
 <pre><code class="language-c">  while ( a3 )
@@ -355,26 +355,26 @@ LABEL_13:
     {
       sub_2540(v25, a3->d_name);
       sub_2540(v22, "/");
-      v7 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v22, 0LL, v20);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(command, v7);
+      v7 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::insert(v22, 0LL, v20);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(command, v7);
       v8 = 15LL;
       v9 = &command[1][v25[1]];
       if ( (unsigned __int64 *)command[0] != &v24 )
         v8 = v24;
-      if ( (unsigned __int64)v9 <= v8 )
+      if ( (unsigned __int64)v9 &#x3C;= v8 )
         goto LABEL_13;
       v10 = 15LL;
       if ( (unsigned __int64 *)v25[0] != &v26 )
         v10 = v26;
       if ( (unsigned __int64)v9 > v10 )
 LABEL_13:
-        v11 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(command, v25);
+        v11 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::append(command, v25);
       else
-        v11 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v25, 0LL, command);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v21, v11);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(command);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v22);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+        v11 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::insert(v25, 0LL, command);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v21, v11);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(command);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v22);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v25);
       std::ifstream::basic_ifstream(v25, v21[0], 6LL);
       v12 = std::istream::tellg((std::istream *)v25);
       v13 = (char *)operator new[](v12 + 1);
@@ -391,28 +391,28 @@ LABEL_13:
       v18 += v12;
       free(v13);
       std::ifstream::~ifstream(v25);
-      std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v21);
+      std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v21);
     }
     a3 = readdir(a4);
   }</code></pre>
 <p>Again here we seem to be looping through all of the items in the directory. However, this time we compare to a different enum (we can look this up to see it is DT_REG, or just regular files). We then seem to be doing some string work in order get the path to the current file, we know this since we use the current directory string, &quot;/&quot;, and the current entity name. We then get the length of the file using seekg and we read the file into memory. We then reallocate the char array is we are above a certain size and hen we concatenate what we just read to another array.</p>
 <p>After having concatenated all of the file contents into the array we move on the section after the while loop.</p>
 <pre><code class="language-c">  sub_2540(v25, ".txt");
-  v14 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::insert(v25, 0LL, v20);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v22, v14);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+  v14 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::insert(v25, 0LL, v20);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v22, v14);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v25);
   sub_2540(v25, "rm -rf ");
-  v15 = std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::append(v25, v20);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(command, v15);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+  v15 = std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::append(v25, v20);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(command, v15);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v25);
   system(command[0]);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(v25, v22);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::basic_string(v25, v22);
   sub_26A3(v18, v6, v25);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v25);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v25);
   free(v6);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(command);
-  std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v22);
-  return std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_M_dispose(v20);</code></pre>
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(command);
+  std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v22);
+  return std::__cxx11::basic_string&#x3C;char,std::char_traits&#x3C;char>,std::allocator&#x3C;char>>::_M_dispose(v20);</code></pre>
 <p>First we append &quot;.txt&quot; and the directory path to some new string. We then call rm -rf on the directory and then pass the concatenated bytes to another function, sub_26A3:</p>
 <pre><code class="language-c">__int64 __fastcall sub_26A3(__int64 a1, void *a2, _QWORD *a3)
 {
@@ -427,7 +427,7 @@ LABEL_2:
   v7 = (unsigned int)(int)v5;
   while ( 1 )
   {
-    if ( v7 + 1 < v6 )
+    if ( v7 + 1 &#x3C; v6 )
     {
       v47[v3++] = 0;
       goto LABEL_2;
@@ -446,7 +446,7 @@ LABEL_2:
   v14 = (_DWORD **)malloc(v11);
   v15 = 8 * v8;
   v16 = v14;
-  while ( v12 < v46 )
+  while ( v12 &#x3C; v46 )
   {
     v49 = v15;
     v13[v12] = malloc(v15);
@@ -457,9 +457,9 @@ LABEL_2:
   v18 = 0LL;
   v19 = 0;
   v20 = 0LL;
-  while ( v18 < v46 )
+  while ( v18 &#x3C; v46 )
   {
-    for ( i = 0LL; i < v8; ++i )
+    for ( i = 0LL; i &#x3C; v8; ++i )
     {
       *(_BYTE *)(v13[v18] + i) = v47[v20 + i];
       v16[v18][i] = v19 + i;
@@ -475,7 +475,7 @@ LABEL_2:
   v25 = 69;
   v26 = v24;
   *v24 = **v16;
-  while ( v23 < v22 )
+  while ( v23 &#x3C; v22 )
   {
     v27 = v25;
     v50 = v25;
@@ -485,7 +485,7 @@ LABEL_2:
     switch ( v25 )
     {
       case 'N':
-        v33 = v30 >> 2 <= v32;
+        v33 = v30 >> 2 &#x3C;= v32;
         goto LABEL_27;
       case 'E':
         v34 = v29;
@@ -504,7 +504,7 @@ LABEL_30:
         v26[v37] = v16[v32][v29];
         break;
       case 'W':
-        v33 = v30 >> 2 <= v29;
+        v33 = v30 >> 2 &#x3C;= v29;
 LABEL_27:
         if ( v33 )
           goto LABEL_30;
@@ -523,11 +523,11 @@ LABEL_28:
     v38[v10++] = v43;
   }
   v41 = (char *)&v38[v10];
-  if ( v39 < 0 )
+  if ( v39 &#x3C; 0 )
     v39 = 0LL;
   v42 = 0;
   qmemcpy(v41, v26, 4 * v39);
-  while ( v42 < v22 )
+  while ( v42 &#x3C; v22 )
   {
     v44 = sub_2656((__int64)v26, v42);
     sub_2522((__int64)v51, v47[v38[v44]]);
@@ -571,7 +571,7 @@ LABEL_28:
   v7 = (unsigned int)(int)v5;
   while ( 1 )
   {
-    if ( v7 + 1 < v6 )
+    if ( v7 + 1 &#x3C; v6 )
     {
       v47[v3++] = 0;
       goto LABEL_2;
@@ -592,7 +592,7 @@ LABEL_28:
   v14 = (_DWORD **)malloc(v11);
   v15 = 8 * v8;
   v16 = v14;
-  while ( v12 < v46 )
+  while ( v12 &#x3C; v46 )
   {
     v49 = v15;
     v13[v12] = malloc(v15);
@@ -604,9 +604,9 @@ LABEL_28:
 <pre><code class="language-c">  v18 = 0LL;
   v19 = 0;
   v20 = 0LL;
-  while ( v18 < v46 )
+  while ( v18 &#x3C; v46 )
   {
-    for ( i = 0LL; i < v8; ++i )
+    for ( i = 0LL; i &#x3C; v8; ++i )
     {
       *(_BYTE *)(v13[v18] + i) = v47[v20 + i];
       v16[v18][i] = v19 + i;
@@ -623,7 +623,7 @@ LABEL_28:
   v25 = 69;
   v26 = v24;
   *v24 = **v16;
-  while ( v23 < v22 )
+  while ( v23 &#x3C; v22 )
   {
     v27 = v25;
     v50 = v25;
@@ -633,7 +633,7 @@ LABEL_28:
     switch ( v25 )
     {
       case 'N':
-        v33 = v30 >> 2 <= v32;
+        v33 = v30 >> 2 &#x3C;= v32;
         goto LABEL_27;
       case 'E':
         v34 = v29;
@@ -652,7 +652,7 @@ LABEL_30:
         v26[v37] = v16[v32][v29];
         break;
       case 'W':
-        v33 = v30 >> 2 <= v29;
+        v33 = v30 >> 2 &#x3C;= v29;
 LABEL_27:
         if ( v33 )
           goto LABEL_30;
@@ -715,11 +715,11 @@ LABEL_28:
     v38[v10++] = v43;
   }
   v41 = (char *)&v38[v10];
-  if ( v39 < 0 )
+  if ( v39 &#x3C; 0 )
     v39 = 0LL;
   v42 = 0;
   qmemcpy(v41, v26, 4 * v39);
-  while ( v42 < v22 )
+  while ( v42 &#x3C; v22 )
   {
     v44 = sub_2656((__int64)v26, v42);
     sub_2522((__int64)v51, v47[v38[v44]]);
@@ -767,7 +767,7 @@ def WannaSwirl(in_bytes, nperm=-1):
     bytmat = np.array(list(in_bytes)).reshape(arrshape)
     
     # Some standard amount of swirl
-    if nperm < 0:
+    if nperm &#x3C; 0:
         nperm = bytmat.size//5
     
     # Move dictionaries
@@ -784,16 +784,16 @@ def WannaSwirl(in_bytes, nperm=-1):
     vortex = [i_mat[y,x]]
     # Loop time
     i = 1
-    while len(vortex) < i_mat.size:
+    while len(vortex) &#x3C; i_mat.size:
         try:
             # Get new coords
             xnew = x + move_dic[movdir][1]
             ynew = y + move_dic[movdir][0]
             # Check if we hit an edge or a previous path
-            if (movdir=='N') and (ynew < i//4): raise
+            if (movdir=='N') and (ynew &#x3C; i//4): raise
             if (movdir=='E') and (xnew >= w-i//4): raise
             if (movdir=='S') and (ynew >= h-i//4): raise
-            if (movdir=='W') and (xnew < i//4): raise
+            if (movdir=='W') and (xnew &#x3C; i//4): raise
             # Append it to vortex list
             vortex.append(i_mat[ynew,xnew])
         except:
@@ -864,16 +864,16 @@ def unswirl(msg):
     vortex = [i_mat[y,x]]
     # Loop time
     i = 1
-    while len(vortex) < i_mat.size:
+    while len(vortex) &#x3C; i_mat.size:
         try:
             # Get new coords
             xnew = x + move_dic[movdir][1]
             ynew = y + move_dic[movdir][0]
             # Check if we hit an edge or a previous path
-            if (movdir=='N') and (ynew < i//4): raise
+            if (movdir=='N') and (ynew &#x3C; i//4): raise
             if (movdir=='E') and (xnew >= w-i//4): raise
             if (movdir=='S') and (ynew >= h-i//4): raise
-            if (movdir=='W') and (xnew < i//4): raise
+            if (movdir=='W') and (xnew &#x3C; i//4): raise
             # Append it to vortex list
             vortex.append(i_mat[ynew,xnew])
         except:
@@ -950,16 +950,16 @@ def unswirl(msg):
     vortex = [i_mat[y,x]]
     # Loop time
     i = 1
-    while len(vortex) < i_mat.size:
+    while len(vortex) &#x3C; i_mat.size:
         try:
             # Get new coords
             xnew = x + move_dic[movdir][1]
             ynew = y + move_dic[movdir][0]
             # Check if we hit an edge or a previous path
-            if (movdir=='N') and (ynew < i//4): raise
+            if (movdir=='N') and (ynew &#x3C; i//4): raise
             if (movdir=='E') and (xnew >= w-i//4): raise
             if (movdir=='S') and (ynew >= h-i//4): raise
-            if (movdir=='W') and (xnew < i//4): raise
+            if (movdir=='W') and (xnew &#x3C; i//4): raise
             # Append it to vortex list
             vortex.append(i_mat[ynew,xnew])
         except:

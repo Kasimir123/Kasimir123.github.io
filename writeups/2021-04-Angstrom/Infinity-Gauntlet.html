@@ -109,7 +109,7 @@
     {
       printf("=== ROUND %d ===\n", (unsigned int)v10);
       v14 = rand();
-      v15 = v10 > 49 ? (unsigned __int8)s[v14 % v6] | ((unsigned __int8)(v14 % v6 + v10) << 8) : rand() % 0x10000;
+      v15 = v10 > 49 ? (unsigned __int8)s[v14 % v6] | ((unsigned __int8)(v14 % v6 + v10) &#x3C;&#x3C; 8) : rand() % 0x10000;
       if ( (rand() & 1) != 0 )
       {
         v12 = rand() % 3;
@@ -156,7 +156,7 @@
           }
           else
           {
-            v18 = v15 <= 0x539 ? rand() % v15 : rand() % 1337;
+            v18 = v15 &#x3C;= 0x539 ? rand() % v15 : rand() % 1337;
             printf("bar(%u, %u, %u) = ?\n", v15 % v18, v18, v15 / v18 - 1);
           }
         }
@@ -200,7 +200,7 @@ def bar3(a, b, c):
 def bar4(b, c, d):
 	return d-(b*(c+1))</code></pre>
 <p>v15 was the value that we got each time, this value was set on this line:</p>
-<pre><code class="language-c">v15 = v10 > 49 ? (unsigned __int8)s[v14 % v6] | ((unsigned __int8)(v14 % v6 + v10) << 8) : rand() % 0x10000;</code></pre>
+<pre><code class="language-c">v15 = v10 > 49 ? (unsigned __int8)s[v14 % v6] | ((unsigned __int8)(v14 % v6 + v10) &#x3C;&#x3C; 8) : rand() % 0x10000;</code></pre>
 <p>Using this we can get the original value from s as well as the position value. So if we do a bunch of iterations of the problems we can theoretically solve for all the values.</p>
 <p>s is the encrypted flag that gets set here:</p>
 <pre><code class="language-c">    v5 = strcspn(s, "\n");
@@ -303,11 +303,11 @@ while True:
 		a = ((((((ans & 0xFF00) >> 8)))&0xFF)-i)
 
         # if not already in the solved
-		if a > 0 and a < clen and a not in solved:
+		if a > 0 and a &#x3C; clen and a not in solved:
 			solved.append(a)
 
             # get encrypted value
-			b = ((ans | ((a)+i) << 8)&0x00FF)
+			b = ((ans | ((a)+i) &#x3C;&#x3C; 8)&0x00FF)
 
             # decrypt and print
 			solved.append(chr(0xFF&(((a+1)*17)^b)))

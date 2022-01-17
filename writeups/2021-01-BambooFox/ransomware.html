@@ -89,19 +89,19 @@
 </code></pre>
 <p>I noticed that the python referenced the flag.png file however that file was not provided so I knew that I would need to reverse the flag.enc file to produce flag.png.</p>
 <p>The first thing I noticed was that the python was requesting the rules page of the CTF so I opened postman and did the get request, the response was:</p>
-<pre><code class="language-html">&lt;!DOCTYPE html>
-&lt;html>
+<pre><code class="language-html">&#x3C;!DOCTYPE html>
+&#x3C;html>
 
-&lt;head>
-	&lt;title>BambooFox CTF&lt;/title>
-	&lt;meta charset="utf-8">
-	&lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
-	&lt;link rel="shortcut icon"
+&#x3C;head>
+	&#x3C;title>BambooFox CTF&#x3C;/title>
+	&#x3C;meta charset="utf-8">
+	&#x3C;meta name="viewport" content="width=device-width, initial-scale=1.0">
+	&#x3C;link rel="shortcut icon"
 		href="/files/626f05557db4b8f323a06e0dfc7676d8/favicon-32x32-a56b8e05e1d057431bef7fd212f394a18049e895a4db003909e9448478b8167d.png"
 		type="image/x-icon">
-	&lt;link rel="stylesheet" href="/themes/core/static/css/fonts.min.css?d=aa35138e">
-	&lt;link rel="stylesheet" href="/themes/core/static/css/main.min.css?d=aa35138e">
-	&lt;link rel="stylesheet" href="/themes/core/static/css/core.min.css?d=aa35138e">
+	&#x3C;link rel="stylesheet" href="/themes/core/static/css/fonts.min.css?d=aa35138e">
+	&#x3C;link rel="stylesheet" href="/themes/core/static/css/main.min.css?d=aa35138e">
+	&#x3C;link rel="stylesheet" href="/themes/core/static/css/core.min.css?d=aa35138e">
 
 
 ...</code></pre>
@@ -117,7 +117,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 <pre><code class="language-bash">>>> data[key:key+16]
 b'ewport" content='
 >>> data[iv:iv+16]
-b'">\n\t<link rel="s'
+b'">\n\t&#x3C;link rel="s'
 </code></pre>
 <p>Both of these values were getting passed to another lambda and were then being used in order to create an AES (Advanced Encryption System) object which is from python's crypto module. After some research and refreshing my knowledge on AES I saw that as long as I had the key and iv I would be able to decrypt anything encrypted with AES. At this point I just put everything in a script and read in the flag.enc file and wrote the decrypted bytes into flag.png. Which resulted in the following code:</p>
 <pre><code class="language-python"># Gets the data from the webpage

@@ -89,9 +89,9 @@ def validateLaunchcode(launchcode):
     else:
         enc = []
         for i in range(len(cc)):
-            val1 = cc[i][0] << 1
+            val1 = cc[i][0] &#x3C;&#x3C; 1
             val1 ^= 69
-            val2 = cc[i][1] << 2
+            val2 = cc[i][1] &#x3C;&#x3C; 2
             val2 ^= 10
             enc.append(val1)
             enc.append(val2)

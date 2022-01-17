@@ -84,7 +84,7 @@ sub_7FF6BB101FF0(std::cin, keyinput);</code></pre>
 <p>The next component I looked at was where the program read in the flag:</p>
 <pre><code class="language-c">  if ( v40 >= 0 )
   {
-    for ( j = 0i64; j <= v40; ++j )
+    for ( j = 0i64; j &#x3C;= v40; ++j )
       v41[j] = rand() % 13371337;  // author has a sense of humor
   }
   v43 = 0;
@@ -97,7 +97,7 @@ sub_7FF6BB101FF0(std::cin, keyinput);</code></pre>
       ++v43;
       ++v23;
     }
-    while ( v43 < v37 );
+    while ( v43 &#x3C; v37 );
     if ( v44 == 773558 )
     {
       v45 = fopen("./flag.txt", "r");
@@ -110,7 +110,7 @@ sub_7FF6BB101FF0(std::cin, keyinput);</code></pre>
 <pre><code class="language-c"> if ( (v54 & 1) != 0 )
   {
     v21 = sub_7FF6BB101BF0(std::cout, (__int64)":(");
-    std::ostream::operator<<(v21, sub_7FF6BB101DC0);
+    std::ostream::operator&#x3C;&#x3C;(v21, sub_7FF6BB101DC0);
     exit(0);
   }</code></pre>
 <p>The key had to be an even number of characters but could be any length, this makes sense since it parses as hex values.</p>

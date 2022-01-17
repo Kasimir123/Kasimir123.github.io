@@ -78,16 +78,16 @@
 <p>Looking at the url I saw the following webpage:</p>
 <p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2021-02-Tenable/netrunner-encryption/Photos/webpage.PNG" alt="" /></p>
 <p>Clicking on the source code I saw:</p>
-<pre><code class="language-php"><html>
-<body>
-  <h1>Netrunner Encryption Tool</h1>
-  <a href="netrun.txt">Source Code</a>
-  <form method=post action="crypto.php">
-  <input type=text name="text_to_encrypt">
-  <input type="submit" name="do_encrypt" value="Encrypt">
-  </form>
+<pre><code class="language-php">&#x3C;html>
+&#x3C;body>
+  &#x3C;h1>Netrunner Encryption Tool&#x3C;/h1>
+  &#x3C;a href="netrun.txt">Source Code&#x3C;/a>
+  &#x3C;form method=post action="crypto.php">
+  &#x3C;input type=text name="text_to_encrypt">
+  &#x3C;input type="submit" name="do_encrypt" value="Encrypt">
+  &#x3C;/form>
 
-<?php
+&#x3C;?php
 
 function pad_data($data)
 {
@@ -102,15 +102,15 @@ if(isset($_POST["do_encrypt"]))
   $cipher = "aes-128-ecb";
   $iv  = hex2bin('00000000000000000000000000000000');
   $key = hex2bin('74657374696E676B6579313233343536');
-  echo "</br><br><h2>Encrypted Data:</h2>";
+  echo "&#x3C;/br>&#x3C;br>&#x3C;h2>Encrypted Data:&#x3C;/h2>";
   $ciphertext = openssl_encrypt(pad_data($_POST['text_to_encrypt']), $cipher, $key, 0, $iv); 
 
-  echo "<br/>";
-  echo "<b>$ciphertext</b>";
+  echo "&#x3C;br/>";
+  echo "&#x3C;b>$ciphertext&#x3C;/b>";
 }
 ?>
-</body>
-</html></code></pre>
+&#x3C;/body>
+&#x3C;/html></code></pre>
 <p>I noticed that any text you input got encrypted and then the encrypted flag and padding were appended to it afterwards. My teammate and I then made the following script to decrypt one letter at a time by block width. This works because we could set the first block to anything we wanted and thus knew what it was:</p>
 <p>OURDATA|FLAG|PADDING</p>
 <pre><code class="language-python">from Crypto.Cipher import AES
@@ -137,7 +137,7 @@ i_len = 15-len(FLAG)
 def func(expected, d, c):
     x = {'text_to_encrypt': d+FLAG+c, 'do_encrypt': 'Encrypt'}
     res = requests.post(url, data=x)
-    z = res.text.split('Encrypted Data:</h2><br/><b>')[-1].split('</b>')[0]
+    z = res.text.split('Encrypted Data:&#x3C;/h2>&#x3C;br/>&#x3C;b>')[-1].split('&#x3C;/b>')[0]
     z = base64.b64decode(z).hex()[:32]
     if expected == z:
         print(c)
@@ -152,7 +152,7 @@ payload = {'text_to_encrypt': data, 'do_encrypt': 'Encrypt'}
 response = requests.post(url, data=payload)
 
 # gets encrypted data
-x = response.text.split('Encrypted Data:</h2><br/><b>')[-1].split('</b>')[0]
+x = response.text.split('Encrypted Data:&#x3C;/h2>&#x3C;br/>&#x3C;b>')[-1].split('&#x3C;/b>')[0]
 
 # gets first 2 blocks
 x = base64.b64decode(x).hex()[:32]
@@ -172,7 +172,7 @@ i_len = 15+16-len(FLAG)
 def func(expected, d, c):
     x = {'text_to_encrypt': d+FLAG+c, 'do_encrypt': 'Encrypt'}
     res = requests.post(url, data=x)
-    z = res.text.split('Encrypted Data:</h2><br/><b>')[-1].split('</b>')[0]
+    z = res.text.split('Encrypted Data:&#x3C;/h2>&#x3C;br/>&#x3C;b>')[-1].split('&#x3C;/b>')[0]
     z = base64.b64decode(z).hex()[32:64]
     if expected == z:
         print(c)
@@ -181,7 +181,7 @@ def func(expected, d, c):
 data = 'a'*i_len
 payload = {'text_to_encrypt': data, 'do_encrypt': 'Encrypt'}
 response = requests.post(url, data=payload)
-x = response.text.split('Encrypted Data:</h2><br/><b>')[-1].split('</b>')[0]
+x = response.text.split('Encrypted Data:&#x3C;/h2>&#x3C;br/>&#x3C;b>')[-1].split('&#x3C;/b>')[0]
 x = base64.b64decode(x).hex()[32:64]
 threads = []
 for i in chars:

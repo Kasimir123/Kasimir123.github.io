@@ -120,7 +120,7 @@ This is the only message--------> ae385c6f1dd72132b2afcd4c25b9d35e00000000000000
   int v20[4]; // [esp+4Ch] [ebp-10h] BYREF
   void *retaddr; // [esp+5Ch] [ebp+0h] BYREF
 
-  while ( (unsigned int)&retaddr <= *(_DWORD *)(*(_DWORD *)(__readgsdword(0) - 4) + 8) )
+  while ( (unsigned int)&retaddr &#x3C;= *(_DWORD *)(*(_DWORD *)(__readgsdword(0) - 4) + 8) )
     runtime_morestack_noctxt();
   main_Encryptfinal();
   *(_DWORD *)name = "encryptedmessage.txt";
@@ -157,7 +157,7 @@ This is the only message--------> ae385c6f1dd72132b2afcd4c25b9d35e00000000000000
   int v14; // [esp+7Ch] [ebp-8h]
   int v15; // [esp+80h] [ebp-4h] BYREF
 
-  while ( (unsigned int)&v15 <= *(_DWORD *)(*(_DWORD *)(__readgsdword(0) - 4) + 8) )
+  while ( (unsigned int)&v15 &#x3C;= *(_DWORD *)(*(_DWORD *)(__readgsdword(0) - 4) + 8) )
     runtime_morestack_noctxt();
   pt.str = (uint8 *)"321174068998067 98980909";
   pt.len = 24;

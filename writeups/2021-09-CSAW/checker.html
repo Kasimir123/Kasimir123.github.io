@@ -95,11 +95,11 @@ def left(x,d):
     return x</code></pre>
 <p>The down function just reversed the bits so that also would not need to be rewritten.</p>
 <pre><code class="language-python">def up(x):
-    x = [f"{ord(x[i]) << 1:08b}" for i in range(len(x))]
+    x = [f"{ord(x[i]) &#x3C;&#x3C; 1:08b}" for i in range(len(x))]
     return ''.join(x)</code></pre>
 <p>The up function however converted the flag to bits so I would need to rewrite that. I then added the decode function to the script:</p>
 <pre><code class="language-python">def up(x):
-    x = [f"{ord(x[i]) << 1:08b}" for i in range(len(x))]
+    x = [f"{ord(x[i]) &#x3C;&#x3C; 1:08b}" for i in range(len(x))]
     return ''.join(x)
 
 def down(x):

@@ -100,7 +100,7 @@
   v28 = 0;
   if ( a2 == -2 )
     goto LABEL_10;
-  if ( a2 <= -2 && a2 != -4 && a2 == -3 )
+  if ( a2 &#x3C;= -2 && a2 != -4 && a2 == -3 )
   {
     v4 = gtk_entry_get_text(v15);
     v5 = *(_QWORD *)(v4 + 8);
@@ -145,7 +145,7 @@ LABEL_10:
 {
   int i; 
 
-  for ( i = 0; i <= 6; ++i )
+  for ( i = 0; i &#x3C;= 6; ++i )
     crcout[i] = crccheck[(unsigned __int8)crc8(6 * i + a1, 6LL)];
   return memcmp(crcout, "w1nR4rs", 7uLL) == 0;
 }</code></pre><pre><code class="language-c">__int64 __fastcall crc8(unsigned __int8 *a1, int a2)
@@ -156,7 +156,7 @@ LABEL_10:
   v3 = 0;
   while ( a2 )
   {
-    v3 ^= *a1 << 8;
+    v3 ^= *a1 &#x3C;&#x3C; 8;
     for ( i = 8; i; --i )
     {
       if ( (v3 & 0x8000) != 0 )
@@ -174,7 +174,7 @@ LABEL_10:
 {
   int i;
 
-  for ( i = 0; i <= 5; ++i )
+  for ( i = 0; i &#x3C;= 5; ++i )
     xor_block(6 * i + a1, 6 * (i + 1) + a1, (char *)&xorout + 6 * i, 6LL);
   return memcmp(&xorout, &xorcheck, 0x24uLL) == 0;
 }</code></pre><pre><code class="language-c">__int64 __fastcall xor_block(__int64 a1, __int64 a2, __int64 a3, int a4)
@@ -220,7 +220,7 @@ def crc8(a1, a2):
 	v3 = 0
 	c = 0
 	while a2 != 0:
-		v3 ^= (a1[c] << 8)
+		v3 ^= (a1[c] &#x3C;&#x3C; 8)
 		for i in range(8, 0, -1):
 			v3 = If((v3 & 0x8000) != 0, v3 ^ 0x8380, v3)
 			v3 *= 2
@@ -249,7 +249,7 @@ s = Solver()
 # add contraint for characters
 for i in range(0, len(flag)):
 	s.add(flag[i] >= 32)
-	s.add(flag[i] <= 127)
+	s.add(flag[i] &#x3C;= 127)
 
 # add do_crc_check function constraints
 for i in range(0, 7):

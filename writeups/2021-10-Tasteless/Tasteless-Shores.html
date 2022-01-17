@@ -249,7 +249,7 @@ def trilaterate(P1,P2,P3,r1,r2,r3):
     x = (r1*r1 - r2*r2 + d*d) / (2*d)                    
     y = (r1*r1 - r3*r3 -2*i*x + i*i + j*j) / (2*j)       
     temp4 = r1*r1 - x*x - y*y                            
-    if temp4<0:                                          
+    if temp4&#x3C;0:                                          
         raise Exception("The three spheres do not intersect!");
     z = sqrt(temp4)                                      
     p_12_a = P1 + x*e_x + y*e_y + z*e_z                  
@@ -287,7 +287,7 @@ print(trilaterate(P1,P2,P3,r1,r2,r3))</code></pre>
 	else :
 		bw.distance += 1
 
-	if bw.distance <= 0:
+	if bw.distance &#x3C;= 0:
 		Server.spawn_chest(from, "FLAG_BIGWHOOP", Server.flags["FLAG_BIGWHOOP"].global_transform.origin)
 		Server.chat(remote_id, from.remote_id, "you are faster than your shadow it seems!")
 	else :
@@ -304,11 +304,11 @@ print(trilaterate(P1,P2,P3,r1,r2,r3))</code></pre>
 		pos.z = randi() % 255
 
 	func dig():
-		var hint = (int(pos.x) ^ ((int(pos.x) << 4)) & 255) & 255
+		var hint = (int(pos.x) ^ ((int(pos.x) &#x3C;&#x3C; 4)) & 255) & 255
 		pos.x = pos.y
 		pos.y = pos.z
 		pos.z = rotation
-		rotation = int(pos.z) ^ hint ^ (int(pos.z) >> 1) ^ ((int(hint) << 1) & 255)
+		rotation = int(pos.z) ^ hint ^ (int(pos.z) >> 1) ^ ((int(hint) &#x3C;&#x3C; 1) & 255)
 		return rotation % 64
 
 func _on_Area_body_entered(body:Node):
@@ -420,19 +420,19 @@ rotation = 0
 
 # add size constraints
 s.add(posX > 0)
-s.add(posX <= 255)
+s.add(posX &#x3C;= 255)
 s.add(posY > 0)
-s.add(posY <= 255)
+s.add(posY &#x3C;= 255)
 s.add(posZ > 0)
-s.add(posZ <= 255)
+s.add(posZ &#x3C;= 255)
 
 # add logic to check dig response
 for i in insultsRecv:
-    hint = (posX ^ ((posX << 4) & 255) & 255)
+    hint = (posX ^ ((posX &#x3C;&#x3C; 4) & 255) & 255)
     posX = posY
     posY = posZ
     posZ = rotation
-    rotation = posZ ^ hint ^ (posZ >> 1) ^ ((hint << 1) & 255)
+    rotation = posZ ^ hint ^ (posZ >> 1) ^ ((hint &#x3C;&#x3C; 1) & 255)
     s.add(keys.index(i) == (rotation % 64))
 
 print(s.check())
@@ -521,11 +521,11 @@ rotation = 0
 
 # generate next 40 insults
 for i in range(40):
-    hint = (fposX ^ ((fposX << 4) & 255) & 255)
+    hint = (fposX ^ ((fposX &#x3C;&#x3C; 4) & 255) & 255)
     fposX = fposY
     fposY = fposZ
     fposZ = rotation
-    rotation = fposZ ^ hint ^ (fposZ >> 1) ^ ((hint << 1) & 255)
+    rotation = fposZ ^ hint ^ (fposZ >> 1) ^ ((hint &#x3C;&#x3C; 1) & 255)
     print(keys[rotation % 64], "  :  " , list(insults.values())[rotation % 64])
 </code></pre>
 <p>After being run the chest with the flag was generated:</p>

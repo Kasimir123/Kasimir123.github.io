@@ -101,7 +101,7 @@ The flag will be revealed when you pass in the correct input</code></pre><h2 id=
   v6(v11);
   printf("Serial: ");
   fgets(Buffer, 100, (FILE *)__iob[0]._ptr);
-  if ( debugged() != 1 && getRetAddress() < (unsigned int)v16 + 0x4000 )
+  if ( debugged() != 1 && getRetAddress() &#x3C; (unsigned int)v16 + 0x4000 )
   {
     printf("Checking serial...\n");
     *(_DWORD *)(findPointer(checkPass) + 83) = 42468652;
@@ -150,7 +150,7 @@ The flag will be revealed when you pass in the correct input</code></pre><h2 id=
   v5 = dword_403117;
   v6 = word_40311B;
   v7 = byte_40311D;
-  for ( i = 0; i < strlen(Str); ++i )
+  for ( i = 0; i &#x3C; strlen(Str); ++i )
   {
     Str[i] -= 5;
     Str[i] ^= 0x6Eu;

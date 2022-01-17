@@ -90,7 +90,7 @@ Choose an option: </code></pre>
 {
 ...
 
-  while ( (unsigned int)&retaddr <= *(_DWORD *)(*(_DWORD *)(__readgsdword(0) - 4) + 8) )
+  while ( (unsigned int)&retaddr &#x3C;= *(_DWORD *)(*(_DWORD *)(__readgsdword(0) - 4) + 8) )
     runtime_morestack_noctxt();
   filename.str = (uint8 *)&str.buf.cap;
   filename.len = 8;
@@ -122,9 +122,9 @@ fmt_Scanf(ak, (error_0)0x100000001LL, *((string *)&tc + 1), v53);
       runtime_panicindex();
     v11 = *_choice;
     v12 = inv.array[v11].count;
-    if ( v9 <= v12 ) // check that number wanted is less than number they have
+    if ( v9 &#x3C;= v12 ) // check that number wanted is less than number they have
     {
-      if ( wallet < inv.array[v11].price )
+      if ( wallet &#x3C; inv.array[v11].price )
       {
         v58.array = (interface_{} *)&e;
         v58.len = (__int32)&main_statictmp_7;
@@ -143,7 +143,7 @@ fmt_Scanf(ak, (error_0)0x100000001LL, *((string *)&tc + 1), v53);
         if ( (unsigned int)*v10 >= user.len )
           runtime_panicindex();
         user.array[v14].count += *_num;
-        if ( inv.len <= 2u )
+        if ( inv.len &#x3C;= 2u )
           runtime_panicindex();
         if ( inv.array[2].count != 1 )          // if fruitful flag is not 1 count
           main_get_flag();

@@ -123,7 +123,7 @@ namespace win
 				2391
 			};
 			int result = 0;
-			for (int i = 0; i < array.Length; i++)
+			for (int i = 0; i &#x3C; array.Length; i++)
 			{
 				bool flag = array[i] == values[i];
 				if (!flag)
@@ -150,12 +150,12 @@ namespace win
 			}
 			else
 			{
-				for (int i = 0; i < text.Length; i++)
+				for (int i = 0; i &#x3C; text.Length; i++)
 				{
 					array[i] = (int)text[i];
 				}
 				int[] array2 = new int[26];
-				for (int j = 0; j < 26; j++)
+				for (int j = 0; j &#x3C; 26; j++)
 				{
 					array2[j] = (array[j] - (j % 2 * 2 + j % 3) ^ Program.sum_all(text));
 				}

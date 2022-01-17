@@ -174,7 +174,7 @@ def checkDiagonal(chess_match):
     # check top right
     i = x + 1
     j = y - 1
-    while i < 8 and j > 0:
+    while i &#x3C; 8 and j > 0:
         pos = board[i][j]
         if pos is not None:
             if pos == "bb" or pos == "bq":
@@ -200,7 +200,7 @@ def checkDiagonal(chess_match):
 
     i = x - 1
     j = y + 1
-    while i > 0 and j < 8:
+    while i > 0 and j &#x3C; 8:
         pos = board[i][j]
         if pos is not None:
             if pos == "bb" or pos == "bq":
@@ -215,7 +215,7 @@ def checkDiagonal(chess_match):
 
     i = x + 1
     j = y + 1
-    while i < 8 and j < 8:
+    while i &#x3C; 8 and j &#x3C; 8:
         pos = board[i][j]
         if pos is not None:
             if pos == "bb" or pos == "bq":
@@ -235,7 +235,7 @@ def checkDiagonal(chess_match):
     # check top right
     i = x + 1
     j = y - 1
-    while i < 8 and j > 0:
+    while i &#x3C; 8 and j > 0:
         pos = board[i][j]
         if pos is not None:
             if pos == "wb" or pos == "wq":
@@ -265,7 +265,7 @@ def checkDiagonal(chess_match):
 
     i = x - 1
     j = y + 1
-    while i > 0 and j < 8:
+    while i > 0 and j &#x3C; 8:
         pos = board[i][j]
         if pos is not None:
             if pos == "wb" or pos == "wq":
@@ -278,7 +278,7 @@ def checkDiagonal(chess_match):
 
     i = x + 1
     j = y + 1
-    while i < 8 and j < 8:
+    while i &#x3C; 8 and j &#x3C; 8:
         pos = board[i][j]
         if pos is not None:
             if pos == "wb" or pos == "wq":
@@ -321,7 +321,7 @@ def checkHorizontal(chess_match):
         i -= 1
     #right
     i = x+1
-    while i < 8:
+    while i &#x3C; 8:
         pos = board[i][y]
         if pos is not None:
             if pos == "br" or pos == "bq":
@@ -331,7 +331,7 @@ def checkHorizontal(chess_match):
         i += 1
     #bottom
     j = y+1
-    while j < 8:
+    while j &#x3C; 8:
         pos = board[x][j]
         if pos is not None:
             if pos == "br" or pos == "bq":
@@ -371,7 +371,7 @@ def checkHorizontal(chess_match):
         i -= 1
     #right
     i = x+1
-    while i < 8:
+    while i &#x3C; 8:
         pos = board[i][y]
         if pos is not None:
             if pos == "wr" or pos == "wq":
@@ -381,7 +381,7 @@ def checkHorizontal(chess_match):
         i += 1
     #bottom
     j = y+1
-    while j < 8:
+    while j &#x3C; 8:
         pos = board[x][j]
         if pos is not None:
             if pos == "wr" or pos == "wq":
@@ -400,11 +400,11 @@ def checkKnight(chess_match):
     y = int(split(wkPos)[1])
 
     # top right1
-    if x+2 <= 8 and y-1 > 0:
+    if x+2 &#x3C;= 8 and y-1 > 0:
         if board[x+2][y-1] == 'wn':
             return True
     # top right2
-    if x+1 <= 8 and y-2 > 0:
+    if x+1 &#x3C;= 8 and y-2 > 0:
         if board[x+1][y-2] == 'wn':
             return True
     # top left1
@@ -416,19 +416,19 @@ def checkKnight(chess_match):
         if board[x-1][y-2] == 'wn':
             return True
     #bottom left1
-    if x-2 > 0 and y+1 <= 8:
+    if x-2 > 0 and y+1 &#x3C;= 8:
         if board[x-2][y+1] == 'wn':
             return True
     #bottom left2
-    if x-1 > 0 and y+2 <= 8:
+    if x-1 > 0 and y+2 &#x3C;= 8:
         if board[x-1][y+2] == 'wn':
             return True
     #bottom right1
-    if x+2 <= 8 and y+1 <= 8:
+    if x+2 &#x3C;= 8 and y+1 &#x3C;= 8:
         if board[x+2][y+1] == 'wn':
             return True
     #bottom right2
-    if x+1 <= 8 and y+2 <= 8:
+    if x+1 &#x3C;= 8 and y+2 &#x3C;= 8:
         if board[x+1][y+2] == 'wn':
             return True
 
@@ -438,11 +438,11 @@ def checkKnight(chess_match):
     y = int(split(bkPos)[1])
 
     # top right1
-    if x+2 <= 8 and y-1 > 0:
+    if x+2 &#x3C;= 8 and y-1 > 0:
         if board[x+2][y-1] == 'wn':
             return True
     # top right2
-    if x+1 <= 8 and y-2 > 0:
+    if x+1 &#x3C;= 8 and y-2 > 0:
         if board[x+1][y-2] == 'wn':
             return True
     # top left1
@@ -454,19 +454,19 @@ def checkKnight(chess_match):
         if board[x-1][y-2] == 'wn':
             return True
     #bottom left1
-    if x-2 > 0 and y+1 <= 8:
+    if x-2 > 0 and y+1 &#x3C;= 8:
         if board[x-2][y+1] == 'wn':
             return True
     #bottom left2
-    if x-1 > 0 and y+2 <= 8:
+    if x-1 > 0 and y+2 &#x3C;= 8:
         if board[x-1][y+2] == 'wn':
             return True
     #bottom right1
-    if x+2 <= 8 and y+1 <= 8:
+    if x+2 &#x3C;= 8 and y+1 &#x3C;= 8:
         if board[x+2][y+1] == 'wn':
             return True
     #bottom right2
-    if x+1 <= 8 and y+2 <= 8:
+    if x+1 &#x3C;= 8 and y+2 &#x3C;= 8:
         if board[x+1][y+2] == 'wn':
             return True
 

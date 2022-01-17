@@ -111,7 +111,7 @@ flag: </code></pre>
   {
     if ( (unsigned int)check(s) )
     {
-      for ( i = 0; i < strlen(s); ++i )
+      for ( i = 0; i &#x3C; strlen(s); ++i )
       {
         v5 = s[i];
         s[i] = secret[i % strlen(secret)] ^ v5;
@@ -119,7 +119,7 @@ flag: </code></pre>
     }
     else
     {
-      for ( j = 0; j < strlen(s); ++j )
+      for ( j = 0; j &#x3C; strlen(s); ++j )
       {
         v4 = flag[j];
         s[j] = secret[j % strlen(secret)] ^ v4;
@@ -141,7 +141,7 @@ flag: </code></pre>
 
 secret = b'B\x0A|_\x22\x06\x1Bg7#\x5CF\x0A)\x090Q8_{Y\x13\x18\x0DP\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
 
-flag = b'\x1DU#hJ7.8\x06\x16\x03rUO=[bg9JmtGt`7U\x0BnNjD\x01\x03\x120\x19;OVIaM\x00\x08,qu<g\x1D;K\x00}Y\x00\x00\x00\x00\x00\x00\x00\x00'
+flag = b'\x1DU#hJ7.8\x06\x16\x03rUO=[bg9JmtGt`7U\x0BnNjD\x01\x03\x120\x19;OVIaM\x00\x08,qu&#x3C;g\x1D;K\x00}Y\x00\x00\x00\x00\x00\x00\x00\x00'
 
 format = b'\x0A\xF0\x9F\x98\x82\xF0\x9F\x91\x8C\xF0\x9F\x98\x82\xF0\x9F\x91\x8C\xF0\x9F\x98\x82\xF0\x9F\x91\x8C flag{%s} \xF0\x9F\x91\x8C\xF0\x9F\x98\x82\xF0\x9F\x91\x8C\xF0\x9F\x98\x82\xF0\x9F\x91\x8C\xF0\x9F\x98\x82\x0A\x0A\x00\x00\x00'
 
@@ -162,7 +162,7 @@ print(newStr)</code></pre>
   unsigned int v4; // [rsp+2Ch] [rbp-Ch]
 
   v4 = 1;
-  for ( i = 0; i < strlen(what); ++i )
+  for ( i = 0; i &#x3C; strlen(what); ++i )
   {
     v2 = *(char *)(a1 + i);
     v4 = (unsigned __int8)v4 & ((*(char *)(a1 + (i + 1) % strlen(what)) ^ v2) == what[i]);
@@ -171,7 +171,7 @@ print(newStr)</code></pre>
 }</code></pre>
 <p>This code goes through what and checks to see if each ith character in what is equal to the ith character in the input string xor'd with the ith + 1 character in the input string with the mod allowing the string to wrap back around to the start.</p>
 <p>I sadly went down a rabbithole here for a bit of trying to brute force combinations since I realized that if I was able to solve for one character I would be able to solve for the entire key. Then I realized I could just generate the 90 (127 - 30, writable characters) keys possible since the rest of the key would be based on the first character.</p>
-<p>From here I created a script that iterated through the possible writeable characters and then went through each value in what and appended the ith value xor'd with the ith value in what to generate the ith + 1 value since <code>A ^ B = C &lt;==&gt; A ^ C = B</code>. The script then went through and xor'd each ith value with the ith value of secret to generate a list of potential flags. I also went ahead and removed all of the end of line characters from the strings.</p>
+<p>From here I created a script that iterated through the possible writeable characters and then went through each value in what and appended the ith value xor'd with the ith value in what to generate the ith + 1 value since <code>A ^ B = C &amp;#x3C;==&gt; A ^ C = B</code>. The script then went through and xor'd each ith value with the ith value of secret to generate a list of potential flags. I also went ahead and removed all of the end of line characters from the strings.</p>
 <pre><code class="language-python">what = b"\x17/'\x17\x1DJy\x03,\x11\x1E&\x0AexjONacA-&\x01LANH'.&\x12>#'Z\x0FO\x0B%:(&HI\x0CJylL'\x1EmtdC\x00\x00\x00\x00\x00\x00\x00\x00"
 secret = b'B\x0A|_\x22\x06\x1Bg7#\x5CF\x0A)\x090Q8_{Y\x13\x18\x0DP\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
 

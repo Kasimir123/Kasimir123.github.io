@@ -136,7 +136,7 @@ crackme: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically lin
   setvbuf(stderr, 0LL, 2, 0LL);
   alarm(0x30u);
   result = ptrace(PTRACE_TRACEME, 0LL, 0LL, 0LL);
-  if ( result < 0 )
+  if ( result &#x3C; 0 )
   {
     sub_55DD312E91E5();
     exit(0);

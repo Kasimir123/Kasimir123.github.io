@@ -147,7 +147,7 @@ for i in x.split('-'):
 		a = bytearray.fromhex(i)
 
 		for b in reversed(a):
-			if b > 32 and b < 128:
+			if b > 32 and b &#x3C; 128:
 				s += chr(b)
 
 # print string

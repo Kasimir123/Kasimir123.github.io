@@ -96,7 +96,7 @@ Flag format: the flag will be the sequence of actions you enter to win the game<
     "=======================================================================\n"
     "                Mike Tyson's Puch-Out! (pre-alpha build)!              \n"
     "                (imagine this is flashing and looks cool)              \n"
-    "                        >> graphics go here <<                         \n"
+    "                        >> graphics go here &#x3C;&#x3C;                         \n"
     "=======================================================================");
   printf(
     "Choose your opponent: \n0:  %s\n1:  %s\n2:  %s\n3:  %s\n4:  %s\n5:  %s\n6:  %s\n7:  %s\n8:  %s\n9:  %s\n>> ",
@@ -112,7 +112,7 @@ Flag format: the flag will be the sequence of actions you enter to win the game<
     off_4068);
   *(_DWORD *)v6 = (unsigned __int8)getchar();
   v3 = v6[0] - 48;
-  if ( v3 <= 9 )
+  if ( v3 &#x3C;= 9 )
     __asm { jmp     rax }
   v4 = strlen(src);
   memcpy(dest, src, v4);
@@ -128,7 +128,7 @@ Flag format: the flag will be the sequence of actions you enter to win the game<
     "\n"
     "%s's so fast, you need to pick your action before he does!\n",
     (const char *)dest);
-  for ( i = 0; i <= 23; ++i )
+  for ( i = 0; i &#x3C;= 23; ++i )
   {
     printf("Action: ");
     fgets(s, 32, _bss_start);
@@ -147,7 +147,7 @@ Flag format: the flag will be the sequence of actions you enter to win the game<
   return 0;
 }</code></pre>
 <p>I noticed two things here, the first was that to get the right combination we would need to loop through 24 times return 1 from the combatAction function each time:</p>
-<pre><code class="language-c">  for ( i = 0; i <= 23; ++i )
+<pre><code class="language-c">  for ( i = 0; i &#x3C;= 23; ++i )
   {
     printf("Action: ");
     fgets(s, 32, _bss_start);
@@ -177,7 +177,7 @@ Flag format: the flag will be the sequence of actions you enter to win the game<
 <pre><code class="language-c">int main()
 {
 	srand(1337);
-	for (int i = 0; i <= 23; i++) {
+	for (int i = 0; i &#x3C;= 23; i++) {
 		printf("%d", rand() % 4);
 	}
 }</code></pre>

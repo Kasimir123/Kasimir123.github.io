@@ -115,7 +115,7 @@ def ParseNamesByGroup(blob, group_name):
 
     i = 1
     # Loop through the selected and if the username is the one I was given add it to the printable list
-    while i < len(sploot2):
+    while i &#x3C; len(sploot2):
         if group_name in sploot2[i]:
             printable.append(sploot2[i-1].replace('"user_name":', '').replace('"', '').strip())
         i += 2

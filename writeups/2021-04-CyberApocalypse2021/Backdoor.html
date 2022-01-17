@@ -149,7 +149,7 @@ while True:
             output = check_output(command, shell=True)
             client.send(output)
             client.close()</code></pre>
-<p>We see that we need to connect, then send the md5, then the length of whatever command, then &quot;command:&lt;command to send&gt;&quot;.</p>
+<p>We see that we need to connect, then send the md5, then the length of whatever command, then &quot;command:&amp;#x3C;command to send&gt;&quot;.</p>
 <p>So the first script we send ls to see what is on the system:</p>
 <pre><code class="language-python"># import pwntools
 from pwn import *

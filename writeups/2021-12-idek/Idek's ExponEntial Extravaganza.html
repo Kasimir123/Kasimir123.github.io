@@ -72,9 +72,9 @@
 <p>Category: Reverse Engineering</p>
 <p>Comments: Wrap password with idek</p>
 <h2 id="write-up">Write up:</h2>
-<pre><code class="language-c">#include <stdio.h>
-#include <string.h>
-#include <math.h>
+<pre><code class="language-c">#include &#x3C;stdio.h>
+#include &#x3C;string.h>
+#include &#x3C;math.h>
 
 int main(int argc, char** argv) {
   if(argc != 2){
@@ -90,9 +90,9 @@ int main(int argc, char** argv) {
     return 1;
   }
   double magic_numbers[7] ={-68822144.50341525673866271972656250000000000000000000000000, 56777293.39031631499528884887695312500000000000000000000000, -3274524.75536667229607701301574707031250000000000000000000, -85761.51255339206545613706111907958984375000000000000000, 8443.33244327564352715853601694107055664062500000000000, -166.67369627952575683593750000000000000000000000000000, 1.00000000000000000000000000000000000000000000000000, };
-  for(int i = 0; i < 6;i++){
+  for(int i = 0; i &#x3C; 6;i++){
     double foo=1.0,bar=0.0;
-    for(int j=0;j<7;j++){
+    for(int j=0;j&#x3C;7;j++){
       bar += magic_numbers[j] * foo;
       foo *= (float)log(*(float*)((unsigned long)argv[1]+2*i));
     }
@@ -118,9 +118,9 @@ int main(int argc, char** argv) {
   }</code></pre>
 <p>The first character of the password is equal to 112 which is the ascii character 'p'.</p>
 <p>I then finally decided to look at the main logic in the program:</p>
-<pre><code class="language-c">  for(int i = 0; i < 6;i++){
+<pre><code class="language-c">  for(int i = 0; i &#x3C; 6;i++){
     double foo=1.0,bar=0.0;
-    for(int j=0;j<7;j++){
+    for(int j=0;j&#x3C;7;j++){
       bar += magic_numbers[j] * foo;
       foo *= (float)log(*(float*)((unsigned long)argv[1]+2*i));
     }
@@ -134,10 +134,10 @@ int main(int argc, char** argv) {
 <p>Where i is 0, 1, 2, 3, 4, and 5. Meaning that we get the 0th, 2nd, 4th, 6th, 8th, and 10th character.</p>
 <p>We also know that unsigned long is 8 bytes so we get the first 8 characters from the current character, however, we then convert it to a float so we only use the first 4 bytes (e.g. if we enter password, only pass will be used to generate the first value, and sswo would be used the second time and so on). This means that the last 2 characters of one section will be the first 2 characters of the second section.</p>
 <p>Since we only need sets of 4 characters and they are in ascii range we can brute force the possible values so I modified the program:</p>
-<pre><code class="language-c">#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
+<pre><code class="language-c">#include &#x3C;stdio.h>
+#include &#x3C;string.h>
+#include &#x3C;math.h>
+#include &#x3C;stdlib.h>
 
 int main(int argc, char **argv)
 {
@@ -145,20 +145,20 @@ int main(int argc, char **argv)
 
 	char *nums = (char*) malloc(sizeof(unsigned long));
 
-	for (char a = 32; a < 126; a++)
+	for (char a = 32; a &#x3C; 126; a++)
 	{
 		nums[0] = a;
-		for (char b = 32; b < 126; b++)
+		for (char b = 32; b &#x3C; 126; b++)
 		{
 			nums[1] = b;
-			for (char c = 32; c < 126; c++)
+			for (char c = 32; c &#x3C; 126; c++)
 			{
 				nums[2] = c;
-				for (char d = 32; d < 126; d++)
+				for (char d = 32; d &#x3C; 126; d++)
 				{
 					nums[3] = d;
 					double foo = 1.0, bar = 0.0;
-					for (int j = 0; j < 7; j++)
+					for (int j = 0; j &#x3C; 7; j++)
 					{
 						bar += magic_numbers[j] *foo;
 
@@ -204,8 +204,8 @@ int main(int argc, char **argv)
 :fTw
 ;1aL
 ;fTw
-<1aL
-<fTw
+&#x3C;1aL
+&#x3C;fTw
 =1aL
 =fTw
 >1aL

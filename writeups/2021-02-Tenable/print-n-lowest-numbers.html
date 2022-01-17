@@ -73,7 +73,7 @@
 <p>Category: Code</p>
 <p>Comment:</p>
 <p>Below is some C/C++ code that reads a list of integers from stdin and calls &quot;PrintNLowestNumbers&quot;. Implement PrintNLowestNumbers, which takes an int array of these integers, an int representing the length of that integer array , and an unsigned short &quot;nLowest,&quot; which indicates how many of the lowest numbers in the integer array are to be printed to stdout. The printed integers must be printed in order (lowest to highest) and should each be seperated by a space character and nothing else.</p>
-<pre><code class="language-c">#include <iostream>
+<pre><code class="language-c">#include &#x3C;iostream>
 
 void PrintNLowestNumbers(int arr[], unsigned int length, unsigned short nLowest)
 {
@@ -88,7 +88,7 @@ int main()
 	unsigned short nLowest;
 	std::cin >> nLowest;
 	std::cin >> length;
-	for (int i=0;i<length;i++)
+	for (int i=0;i&#x3C;length;i++)
 		 std::cin >> integerList[i];
 	PrintNLowestNumbers(integerList, length, nLowest);
 }</code></pre>
@@ -99,18 +99,18 @@ int main()
 <p>You can ignore the default code below and instead use code above. Once function is implemented, simply copy/paste into box and run. Ensure not to print anything else besides your answer during your code execution!</p>
 <h2 id="write-up">Write up:</h2>
 <p>This challenge said we could use C or C++, I chose c++ but sadly the challenge did not allow the use of vector. Rather than attempting to mess with memory management I just wrote this ugly program to print out the smallest number while replacing it with the largest number. This destroyed the list but functioned as needed.</p>
-<pre><code class="language-cpp">#include <iostream>
+<pre><code class="language-cpp">#include &#x3C;iostream>
 
 void PrintNLowestNumbers(int arr[], unsigned int length, unsigned short nLowest)
 {
     int x = arr[0];
     int max = arr[0];
     int index = 0;
- 	for (int i = 0; i < nLowest; i++)
+ 	for (int i = 0; i &#x3C; nLowest; i++)
  	{
-     	for (int j = 0; j < length; j++)
+     	for (int j = 0; j &#x3C; length; j++)
     	{
-         	if (arr[j] < x)
+         	if (arr[j] &#x3C; x)
          	{
              	x = arr[j];
              	index = j;
@@ -121,13 +121,13 @@ void PrintNLowestNumbers(int arr[], unsigned int length, unsigned short nLowest)
          	}
      	}
 
-     	std::cout << x;
-     	std::cout << " ";
+     	std::cout &#x3C;&#x3C; x;
+     	std::cout &#x3C;&#x3C; " ";
      	arr[index] = max;
      	x = max;
  }
 
-std::cout << std::endl;
+std::cout &#x3C;&#x3C; std::endl;
 }
 
 int main()
@@ -138,7 +138,7 @@ int main()
     unsigned short nLowest;
     std::cin >> nLowest;
     std::cin >> length;
-    for (int i=0;i<length;i++)
+    for (int i=0;i&#x3C;length;i++)
          std::cin >> integerList[i];
     PrintNLowestNumbers(integerList, length, nLowest);
 }</code></pre>

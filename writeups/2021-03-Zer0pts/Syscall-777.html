@@ -655,16 +655,16 @@ args = [BitVec(f'args[{i}]', 32) for i in range(0,14)]
 for i in range(0, len(args)):
       
   # last character
-  s.add(((args[i]) & 0xff) <= 126)
+  s.add(((args[i]) & 0xff) &#x3C;= 126)
 
   # second to last character
-  s.add(((args[i] >> 8) & 0xff) <= 126)
+  s.add(((args[i] >> 8) & 0xff) &#x3C;= 126)
 
   # third from last character
-  s.add(((args[i] >> 16) & 0xff) <= 126)
+  s.add(((args[i] >> 16) & 0xff) &#x3C;= 126)
 
   # fourth from last character
-  s.add(((args[i] >> 24) & 0xff) <= 126)
+  s.add(((args[i] >> 24) & 0xff) &#x3C;= 126)
 
 # add constraints
 def solve(j):
@@ -703,8 +703,8 @@ def solve(j):
       
 # swaps characters around
 def swap32(x):
-    return (((x << 24) & 0xFF000000) |
-            ((x <<  8) & 0x00FF0000) |
+    return (((x &#x3C;&#x3C; 24) & 0xFF000000) |
+            ((x &#x3C;&#x3C;  8) & 0x00FF0000) |
             ((x >>  8) & 0x0000FF00) |
             ((x >> 24) & 0x000000FF))
 

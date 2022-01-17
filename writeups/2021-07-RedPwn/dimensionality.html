@@ -178,7 +178,7 @@
           break;
       }
       a3 += v8;                                 // adds the value of v8 to a3 (a3 starts at 0)
-      result = a3 < 0 || a3 > v3;               // if a3 is less than 0 or greater than 1331 set to true
+      result = a3 &#x3C; 0 || a3 > v3;               // if a3 is less than 0 or greater than 1331 set to true
       if ( result )                             // if true then exit the loop and sets return to false
         break;
       v10 = byte_55B4ED0E3080[a3];              // use a3 to look up an array and set v10 to that value

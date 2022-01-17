@@ -107,7 +107,7 @@
 <p>What was printed at the end of the program:</p>
 <pre><code class="language-verilog"> task print_res();
     integer i;
-    for( i=0; i<64; i = i + 1) begin
+    for( i=0; i&#x3C;64; i = i + 1) begin
       $write("%h ",ram[255-i]);
     end
     $write("\n");
@@ -115,18 +115,18 @@
 <p>The opcode that moved memory from the flag.hex file into memory we can print:</p>
 <pre><code class="language-verilog">     `MOVFS: begin
        if(emode) begin 
-        regfile[ram[pc][5:4]] <= safe_rom[ram[pc+1]];
+        regfile[ram[pc][5:4]] &#x3C;= safe_rom[ram[pc+1]];
        end
        increment_pc();</code></pre>
 <p>And the condition and opcode we needed to meet in order for us to be able to call the previous opcode:</p>
 <pre><code class="language-verilog">      `ENT: begin
         // $display("%d | %d",regfile[0],key[0][13:0]);
        if(key[0][13:0]==regfile[0]) begin
-         emode <= 1;
-         regfile[3] <= 0;
+         emode &#x3C;= 1;
+         regfile[3] &#x3C;= 0;
           $display("ENT");
        end else begin
-         regfile[3] <= 1;
+         regfile[3] &#x3C;= 1;
        end
        increment_pc();</code></pre>
 <p>Based on this information we saw that we would need to do the following:</p>
@@ -164,7 +164,7 @@ for i in range(2):
         # get the character index in the flag 
 		count = str(hex(j + (i * 16)))[2:]
 
-        # if the hex is small (< 0x10) we need to prepend 0
+        # if the hex is small (&#x3C; 0x10) we need to prepend 0
 		if len(count) == 1:
 			count = '0'+ count
 

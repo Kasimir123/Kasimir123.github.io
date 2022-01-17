@@ -73,7 +73,7 @@
 <p>Category: Reverse Engineering</p>
 <p>Comments:</p>
 <p>I wonder what this really is... enc</p>
-<pre><code class="language-python">''.join([chr((ord(flag[i]) << 8) + ord(flag[i + 1])) for i in range(0, len(flag), 2)])</code></pre><h2 id="write-up">Write up:</h2>
+<pre><code class="language-python">''.join([chr((ord(flag[i]) &#x3C;&#x3C; 8) + ord(flag[i + 1])) for i in range(0, len(flag), 2)])</code></pre><h2 id="write-up">Write up:</h2>
 <p>Looking at the &quot;encryption&quot; used on the flag I noticed a few things.</p>
 <ul>
 <li>The script loops through 2 characters at a time</li>

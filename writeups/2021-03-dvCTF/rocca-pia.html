@@ -88,7 +88,7 @@
   }
   else
   {
-    printf("Usage: %s <password>\n", *argv);
+    printf("Usage: %s &#x3C;password>\n", *argv);
     result = 1;
   }
   return result;
@@ -99,7 +99,7 @@
   int i; // [rsp+14h] [rbp-1Ch]
   char *s2; // [rsp+18h] [rbp-18h]
 
-  for ( i = 0; i < strlen(PASSWD); ++i )
+  for ( i = 0; i &#x3C; strlen(PASSWD); ++i )
   {
     if ( (i & 1) != 0 )
       s2[i] = *(_BYTE *)(i + a1) ^ 0x37;

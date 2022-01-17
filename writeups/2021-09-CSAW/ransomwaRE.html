@@ -410,7 +410,7 @@ LABEL_14:
   basePathLen2 = wcslen(basePath);
   wcsncpy_s(outfileName, outfileNameLength, basePath, basePathLen2);// copy the new filename
   i = 0;
-  for ( i_0 = 0; i_0 <= 31; ++i_0 )             // make the filename encrypted
+  for ( i_0 = 0; i_0 &#x3C;= 31; ++i_0 )             // make the filename encrypted
   {
     wcsncat(outfileName, &hashDigits[sha256Hash[i_0] >> 4], 1ui64);
     wcsncat(outfileName, &hashDigits[sha256Hash[i_0] & 0xF], 1ui64);
@@ -453,7 +453,7 @@ LABEL_14:
             fwrite(p_out_buf, 1ui64, out_len, (FILE *)outfile);
             if ( ferror((FILE *)outfile) )
               break;
-            if ( num_bytes_read <= 1023 )
+            if ( num_bytes_read &#x3C;= 1023 )
             {
               if ( (unsigned int)EVP_CipherFinal_ex(ctx, p_out_buf, &out_len) )
               {

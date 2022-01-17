@@ -159,9 +159,9 @@ if __name__ == '__main__':
 
     flag_str = "justCTF{"
 
-    while len(flag_str) < 57:
+    while len(flag_str) &#x3C; 57:
         i = 32
-        while i < 127:
+        while i &#x3C; 127:
             print(flag_str + chr(i))
             flag = make_correct_array(flag_str + chr(i))
             if (validate(a, flag)):

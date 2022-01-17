@@ -109,7 +109,7 @@ public final class Buttons extends JFrame implements ActionListener
     private final int endRow;
     private final int endCol;
     private static final int MAX_MOVES = 139;
-    private ArrayList<Integer> moveHistory;
+    private ArrayList&#x3C;Integer> moveHistory;
     
     public static void main(final String[] array) throws Exception {
         new Buttons();
@@ -127,8 +127,8 @@ public final class Buttons extends JFrame implements ActionListener
         final JPanel comp = new JPanel(new GridLayout(this.rows, this.cols));
         final JPanel comp2 = new JPanel();
         this.buttons = new JButton[this.rows][this.cols];
-        for (int i = 0; i < this.rows; ++i) {
-            for (int j = 0; j < this.cols; ++j) {
+        for (int i = 0; i &#x3C; this.rows; ++i) {
+            for (int j = 0; j &#x3C; this.cols; ++j) {
                 (this.buttons[i][j] = new JButton("?")).addActionListener(this);
                 this.buttons[i][j].setActionCommand(Integer.toString(j + i * this.cols));
                 comp.add(this.buttons[i][j]);
@@ -152,7 +152,7 @@ public final class Buttons extends JFrame implements ActionListener
     private void resetValues() {
         this.posRow = 0;
         this.posCol = 1;
-        (this.moveHistory = new ArrayList<Integer>()).add(this.posCol + this.posRow * this.cols);
+        (this.moveHistory = new ArrayList&#x3C;Integer>()).add(this.posCol + this.posRow * this.cols);
     }
     
     private void updateMovesLeft() {
@@ -160,8 +160,8 @@ public final class Buttons extends JFrame implements ActionListener
     }
     
     private void resetGUI() {
-        for (int i = 0; i < this.rows; ++i) {
-            for (int j = 0; j < this.cols; ++j) {
+        for (int i = 0; i &#x3C; this.rows; ++i) {
+            for (int j = 0; j &#x3C; this.cols; ++j) {
                 this.buttons[i][j].setEnabled(true);
             }
         }
@@ -183,12 +183,12 @@ public final class Buttons extends JFrame implements ActionListener
     private void printFlag() {
         final BigInteger[] array = new BigInteger[this.moveHistory.size()];
         array[0] = BigInteger.valueOf(2L);
-        for (int i = 1; i < array.length; ++i) {
+        for (int i = 1; i &#x3C; array.length; ++i) {
             array[i] = array[i - 1].nextProbablePrime();
         }
         BigInteger val = BigInteger.valueOf(1L);
         final BigInteger m = new BigInteger("1430313837704837266267655033918654049072573502772041995300810633148485540425442305963378206448908414865491202671058946396326575688430628383447817933039379");
-        for (int j = 0; j < this.moveHistory.size(); ++j) {
+        for (int j = 0; j &#x3C; this.moveHistory.size(); ++j) {
             val = val.multiply(array[j].modPow(BigInteger.valueOf(this.moveHistory.get(j)), m)).mod(m);
         }
         final String x = new String(new BigInteger("1181624346478884506978387685027501257422054115549381320819711748725513305918055802813085700551988448885328987653245675378090761255233757606571908411691314").multiply(val).mod(m).toByteArray(), StandardCharsets.UTF_8);
@@ -235,12 +235,12 @@ public final class Buttons extends JFrame implements ActionListener
 <pre><code class="language-java">private void printFlag() {
         final BigInteger[] array = new BigInteger[this.moveHistory.size()];
         array[0] = BigInteger.valueOf(2L);
-        for (int i = 1; i < array.length; ++i) {
+        for (int i = 1; i &#x3C; array.length; ++i) {
             array[i] = array[i - 1].nextProbablePrime();
         }
         BigInteger val = BigInteger.valueOf(1L);
         final BigInteger m = new BigInteger("1430313837704837266267655033918654049072573502772041995300810633148485540425442305963378206448908414865491202671058946396326575688430628383447817933039379");
-        for (int j = 0; j < this.moveHistory.size(); ++j) {
+        for (int j = 0; j &#x3C; this.moveHistory.size(); ++j) {
             val = val.multiply(array[j].modPow(BigInteger.valueOf(this.moveHistory.get(j)), m)).mod(m);
         }
         final String x = new String(new BigInteger("1181624346478884506978387685027501257422054115549381320819711748725513305918055802813085700551988448885328987653245675378090761255233757606571908411691314").multiply(val).mod(m).toByteArray(), StandardCharsets.UTF_8);
@@ -376,7 +376,7 @@ public class run
     private static final int endRow = rows - 1;
     private static final int endCol = cols - 2;
     private static final int MAX_MOVES = 139;
-    private static ArrayList<Integer> moveHistory = new ArrayList<Integer>();
+    private static ArrayList&#x3C;Integer> moveHistory = new ArrayList&#x3C;Integer>();
 
 private static boolean isLegalMove(final int n, final int n2) {
         return 139 - moveHistory.size() > 0 && grid[n][n2] == 0 && Math.abs(n - gPosRow) + Math.abs(n2 - gPosCol) == 1;
@@ -385,12 +385,12 @@ private static boolean isLegalMove(final int n, final int n2) {
     private static void printFlag() {
         final BigInteger[] array = new BigInteger[moveHistory.size()];
         array[0] = BigInteger.valueOf(2L);
-        for (int i = 1; i < array.length; ++i) {
+        for (int i = 1; i &#x3C; array.length; ++i) {
             array[i] = array[i - 1].nextProbablePrime();
         }
         BigInteger val = BigInteger.valueOf(1L);
         final BigInteger m = new BigInteger("1430313837704837266267655033918654049072573502772041995300810633148485540425442305963378206448908414865491202671058946396326575688430628383447817933039379");
-        for (int j = 0; j < moveHistory.size(); ++j) {
+        for (int j = 0; j &#x3C; moveHistory.size(); ++j) {
             val = val.multiply(array[j].modPow(BigInteger.valueOf(moveHistory.get(j)), m)).mod(m);
         }
         final String x = new String(new BigInteger("1181624346478884506978387685027501257422054115549381320819711748725513305918055802813085700551988448885328987653245675378090761255233757606571908411691314").multiply(val).mod(m).toByteArray(), StandardCharsets.UTF_8);

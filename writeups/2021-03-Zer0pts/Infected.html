@@ -112,8 +112,8 @@
 }</code></pre>
 <p>This seemed to compare some string to the format :b4ckd00r:file:value. File was then checked to see if it was a file with stat64, and was then passed the chmod, and the value was passed as the second parameter to chmod meaning it was the value for which permissions to set. After setting a value the program would call fuse error, if the write was not correct then the function would call the standard fuse write.</p>
 <p>After connecting to the server again I tested this by trying to change the permissions on /init. I did this by trying echo &quot;:b4ckd00r:/init:4095&quot; &gt; /dev/backdoor. with 4095 being full permissions. This ended up changing the permissions as expected. From here I needed to find a way to gain shell access. We then set up the following c program:</p>
-<pre><code class="language-c">#include <stdlib.h>
-#include <unistd.h>
+<pre><code class="language-c">#include &#x3C;stdlib.h>
+#include &#x3C;unistd.h>
 
 int main()
 {
