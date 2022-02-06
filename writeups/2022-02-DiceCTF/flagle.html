@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2022-02-DiceCTF - flagle</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-90D3KJBRDM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-90D3KJBRDM');
+    </script>
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="dicectf-flagle-write-up">DiceCTF flagle Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<h2 id="write-up">Write up:</h2>
+<p>When we open the link that they provided we can see that the website is a game similar to the popular game wordle. Messing with the page a bit you can see that each of the 6 blocks takes in a maximum of 5 characters:</p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2022-02-DiceCTF/flagle/Photos/flagle.PNG" alt="Flagle" /></p>
+<p>Looking at the code of the index.html we see the following script:</p>
+<pre><code class="language-text">&#x3C;script>
+    const guess = Module.cwrap('guess', 'number', ['number', 'string']);
+    const CORRECT = 0;
+    const WRONG_LOCATION = 1;
+    const INCORRECT = 2;
+
+    const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&()*+,-./:;&#x3C;=>?@[]^_{|}~";
+
+    const get_input = (guess_idx, letter_idx) => {
+        return document.querySelector(`[data-guess="${guess_idx}"][data-letter="${letter_idx}"]`)
+    };
+
+    const keydown_listener = (e) => {
+        const target = e.target;
+        const guess_idx = +target.dataset.guess;
+        const letter_idx = +target.dataset.letter;
+
+        if (e.modifiers?.length > 0) {
+            return;
+        }
+
+        if (e.key.length === 1 && !alphabet.includes(e.key)) {
+            e.preventDefault();
+            return false;
+        }
+
+        if (e.key === "Backspace" && target.value.length === 0 && letter_idx > 1) {
+            get_input(guess_idx, letter_idx - 1).focus();
+        } else if (e.key === "Delete" && target.value.length === 0 && letter_idx &#x3C; 6) {
+            const elem = get_input(guess_idx, letter_idx + 1);
+            elem.focus();
+            elem.setSelectionRange(0, 0);
+            e.preventDefault();
+            return false;
+        } else if (e.key.length === 1 && target.value.length === 5 && letter_idx &#x3C; 6) {
+            get_input(guess_idx, letter_idx + 1).focus();
+        } else if (e.key === "Enter") {
+            submit_guess();
+        }
+    };
+
+    let current_guess = 1;
+    const guess_button = document.getElementById('guess-button');
+
+    const submit_guess = () => {
+        let correct = 0;
+        let input_text = '';
+        for (let i = 1; i &#x3C;= 6; ++i) {
+            const el = get_input(current_guess, i);
+
+            const guess_val = el.value;
+            input_text += guess_val;
+
+            const result = guess(i, guess_val);
+            console.log(result, guess_val, i, guess_val);
+            if (result === CORRECT) {
+                el.classList.add('correct');
+                if (current_guess &#x3C; 6) {
+                    const next = get_input(current_guess + 1, i);
+                    next.value = guess_val;
+                    next.classList.add('correct');
+                }
+                correct++;
+            } else if (result === WRONG_LOCATION) {
+                el.classList.add('partial');
+            } else if (result === INCORRECT) {
+                el.classList.add('incorrect');
+            }
+
+            el.disabled = true;
+            el.removeEventListener('keydown', keydown_listener);
+        }
+        current_guess++;
+
+        if (correct === 6) {
+            prompt('Congrats! Here\'s your flag:', input_text);
+        }
+
+        if (current_guess > 6) {
+            guess_button.disabled = true;
+        } else {
+            init_guess();
+        }
+    };
+    guess_button.onclick = submit_guess;
+
+    const init_guess = () => {
+        for (let i = 1; i &#x3C;= 6; ++i) {
+            const el = get_input(current_guess, i);
+            if (!el.classList.contains('correct'))
+                el.disabled = false;
+            el.addEventListener('keydown', keydown_listener);
+        }
+    };
+    init_guess();
+&#x3C;/script></code></pre>
+<p>From this we know that we need to find a function named guess and we need to start reversing that function. In the flag-checker.js we can see <code>var _guess = Module[&quot;_guess&quot;] = createExportWrapper(&quot;guess&quot;);</code> and right below that we can also see that this was compiled by <a href="https://emscripten.org/">emscripten</a>. This means that we need to look at the wasm file.</p>
+<p>After downloading the .wasm file we need to decompile it, I chose to do this using <a href="https://github.com/WebAssembly/wabt">wabt</a>. The first step for this was to decode from base64 which it was downloaded to:</p>
+<pre><code class="language-text">cat flag-checker.wasm | base64 -d >> b64-flag-checker.wasm</code></pre>
+<p>Then after that I ran the decompiler:</p>
+<pre><code class="language-text">./wasm-decompile b64-flag-checker.wasm -o out.wasm</code></pre>
+<p>Opening out.wasm I see the following:</p>
+<pre><code class="language-wasm">export memory memory(initial: 256, max: 256);
+
+global g_a:int = 5244000;
+global g_b:int = 0;
+global g_c:int = 0;
+
+export table indirect_function_table:funcref(min: 1, max: 1);
+
+data d_a(offset: 1024) = "dice{\00";
+data d_b(offset: 1030) = "";
+
+import function env_validate_4(a:int):int;
+
+export function wasm_call_ctors() {
+  emscripten_stack_init()
+}
+
+export function a():int {
+  return 1684628325
+}
+
+export function streq(a:ubyte_ptr, b:ubyte_ptr):int {
+  var c:int;
+  return loop L_a {
+           c = a[0];
+           if (c) goto B_b;
+           if (b[0]) goto B_b;
+           return 1;
+           label B_b:
+           if (c == b[0]) goto B_c;
+           return 0;
+           label B_c:
+           b = b + 1;
+           a = a + 1;
+           continue L_a;
+         }
+}
+
+export function validate_1(a:int):int {
+  return streq(a, 1024)
+}
+
+function validate(a:int, b:int, c:int, d:int, e:int):int {
+  var f:int = g_a - 16;
+  f[15]:byte = a;
+  f[14]:byte = b;
+  f[13]:byte = c;
+  f[12]:byte = d;
+  d = f[14]:ubyte;
+  f[14]:byte = f[13]:ubyte;
+  f[13]:byte = d;
+  d = f[13]:ubyte;
+  f[13]:byte = f[12]:ubyte;
+  f[12]:byte = d;
+  d = f[13]:ubyte;
+  f[13]:byte = f[15]:ubyte;
+  f[15]:byte = d;
+  d = f[13]:ubyte;
+  f[13]:byte = f[12]:ubyte;
+  f[12]:byte = d;
+  d = f[15]:ubyte;
+  f[15]:byte = f[14]:ubyte;
+  f[14]:byte = d;
+  d = 0;
+  if (f[15]:ubyte != 51) goto B_a;
+  if (f[14]:ubyte != 108) goto B_a;
+  if (f[13]:ubyte != 33) goto B_a;
+  d = e == 68 & f[12]:ubyte == 70;
+  label B_a:
+  return d;
+}
+
+export function validate_3(a:int, b:int, c:int, d:int, e:int):int {
+  var f:int = 0;
+  if (b * a != 4800) goto B_a;
+  if (c + a != 178) goto B_a;
+  if (c + b != 126) goto B_a;
+  if (d * c != 9126) goto B_a;
+  if (d - e != 62) goto B_a;
+  f = c * 4800 - e * d == 367965;
+  label B_a:
+  return f;
+}
+
+export function validate_5(a:int, b:int, c:int, d:int, e:int):int {
+  var f:int = g_a - 16;
+  f[15]:byte = a;
+  f[14]:byte = b;
+  f[13]:byte = c;
+  f[12]:byte = d;
+  f[15]:byte = f[15]:ubyte + 12;
+  f[14]:byte = f[14]:ubyte + 4;
+  f[13]:byte = f[13]:ubyte + 6;
+  f[12]:byte = f[12]:ubyte + 2;
+  d = 0;
+  if (f[15]:ubyte != 121) goto B_a;
+  if (f[14]:ubyte != 68) goto B_a;
+  if (f[13]:ubyte != 126) goto B_a;
+  d = e == 77 & f[12]:ubyte == 35;
+  label B_a:
+  return d;
+}
+
+export function validate_6(a:int, b:int, c:int, d:int, e:int):int {
+  var f:int = 0;
+  if ((b + 2933) * (a + 1763) != 5483743) goto B_a;
+  f = e == 125 & (d + 1546) * (c + 3913) == 6431119;
+  label B_a:
+  return f;
+}
+
+export function guess(a:int, b:int):int {
+  var c:int = g_a - 16;
+  g_a = c;
+  var d:int = 2;
+  if (f_k(b) != 5) goto B_a;
+  if (eqz(streq(b, 1024))) goto B_b;
+  d = a != 1;
+  goto B_a;
+  label B_b:
+  var e:int = b[4]:ubyte;
+  d = b[3]:ubyte;
+  var f:int = b[2]:ubyte;
+  var g:int = b[1]:ubyte;
+  c[11]:byte = b[0]:ubyte;
+  c[10]:byte = g;
+  c[9]:byte = f;
+  c[8]:byte = d;
+  d = c[10]:ubyte;
+  c[10]:byte = c[9]:ubyte;
+  c[9]:byte = d;
+  d = c[9]:ubyte;
+  c[9]:byte = c[8]:ubyte;
+  c[8]:byte = d;
+  d = c[9]:ubyte;
+  c[9]:byte = c[11]:ubyte;
+  c[11]:byte = d;
+  d = c[9]:ubyte;
+  c[9]:byte = c[8]:ubyte;
+  c[8]:byte = d;
+  d = c[11]:ubyte;
+  c[11]:byte = c[10]:ubyte;
+  c[10]:byte = d;
+  if (c[11]:ubyte != 51) goto B_c;
+  if (c[10]:ubyte != 108) goto B_c;
+  if (c[9]:ubyte != 33) goto B_c;
+  d = c[8]:ubyte;
+  if ((e & 255) != 68) goto B_c;
+  if ((d & 255) != 70) goto B_c;
+  d = a != 2;
+  goto B_a;
+  label B_c:
+  f = b[1]:byte;
+  if (f * (d = b[0]:byte) != 4800) goto B_d;
+  g = b[2]:byte;
+  if (g + d != 178) goto B_d;
+  if (g + f != 126) goto B_d;
+  if (g * (d = b[3]:byte) != 9126) goto B_d;
+  if (d - (f = b[4]:byte) != 62) goto B_d;
+  if (g * 4800 - f * d != 367965) goto B_d;
+  d = a != 3;
+  goto B_a;
+  label B_d:
+  if (eqz(env_validate_4(b))) goto B_e;
+  d = a != 4;
+  goto B_a;
+  label B_e:
+  var h:int = b[4]:ubyte;
+  g = b[3]:byte;
+  e = b[2]:byte;
+  f = b[1]:byte;
+  c[15]:byte = (b = b[0]:byte);
+  c[14]:byte = f;
+  c[13]:byte = e;
+  c[12]:byte = g;
+  c[15]:byte = c[15]:ubyte + 12;
+  c[14]:byte = c[14]:ubyte + 4;
+  c[13]:byte = c[13]:ubyte + 6;
+  c[12]:byte = c[12]:ubyte + 2;
+  if (c[15]:ubyte != 121) goto B_f;
+  if (c[14]:ubyte != 68) goto B_f;
+  if (c[13]:ubyte != 126) goto B_f;
+  d = c[12]:ubyte;
+  if ((h & 255) != 77) goto B_f;
+  if ((d & 255) != 35) goto B_f;
+  d = a != 5;
+  goto B_a;
+  label B_f:
+  d = 2;
+  if ((f + 2933) * (b + 1763) != 5483743) goto B_a;
+  if ((h & 255) != 125) goto B_a;
+  if ((g + 1546) * (e + 3913) != 6431119) goto B_a;
+  d = a != 6;
+  label B_a:
+  g_a = c + 16;
+  return d;
+}
+
+function f_k(a:int):int {
+  var d:int;
+  var c:int;
+  var b:ubyte_ptr = a;
+  if (eqz(a & 3)) goto B_b;
+  b = a;
+  loop L_c {
+    if (eqz(b[0])) goto B_a;
+    b = b + 1;
+    if (b & 3) continue L_c;
+  }
+  label B_b:
+  loop L_d {
+    c = b;
+    b = c + 4;
+    d = c[0]:int;
+    if (eqz(((d ^ -1) & d + -16843009) & -2139062144)) continue L_d;
+  }
+  if (d & 255) goto B_e;
+  return c - a;
+  label B_e:
+  loop L_f {
+    d = c[1]:ubyte;
+    b = c + 1;
+    c = b;
+    if (d) continue L_f;
+  }
+  label B_a:
+  return b - a;
+}
+
+export function stackSave():int {
+  return g_a
+}
+
+export function stackRestore(a:int) {
+  g_a = a
+}
+
+export function stackAlloc(a:int):int {
+  var b:int = g_a - a & -16;
+  g_a = b;
+  return b;
+}
+
+export function emscripten_stack_init() {
+  g_c = 5244000;
+  g_b = 1112 + 15 & -16;
+}
+
+export function emscripten_stack_get_free():int {
+  return g_a - g_b
+}
+
+export function emscripten_stack_get_end():int {
+  return g_b
+}
+
+export function errno_location():int {
+  return 1096
+}
+
+function f_s(a:int) {
+}
+
+function f(a:int) {
+}
+
+function f_u():int {
+  f_s(1100);
+  return 1104;
+}
+
+function f_v() {
+  f(1100)
+}
+
+function f_w(a:int):int {
+  return 1
+}
+
+function f_x(a:int) {
+}
+
+export function fflush(a:int):int {
+  var c:int;
+  var b:int;
+  var d:int;
+  if (a) goto B_a;
+  b = 0;
+  if (eqz(0[277]:int)) goto B_b;
+  b = fflush(0[277]:int);
+  label B_b:
+  if (eqz(0[277]:int)) goto B_c;
+  b = fflush(0[277]:int) | b;
+  label B_c:
+  a = f_u()[0]:int;
+  if (eqz(a)) goto B_d;
+  loop L_e {
+    c = 0;
+    if (a[19]:int &#x3C; 0) goto B_f;
+    c = f_w(a);
+    label B_f:
+    if (a[5]:int == a[7]:int) goto B_g;
+    b = fflush(a) | b;
+    label B_g:
+    if (eqz(c)) goto B_h;
+    f_x(a);
+    label B_h:
+    a = a[14]:int;
+    if (a) continue L_e;
+  }
+  label B_d:
+  f_v();
+  return b;
+  label B_a:
+  c = 0;
+  if (a[19]:int &#x3C; 0) goto B_i;
+  c = f_w(a);
+  label B_i:
+  if (a[5]:int == a[7]:int) goto B_l;
+  call_indirect(a, 0, 0, a[9]:int);
+  if (a[5]:int) goto B_l;
+  b = -1;
+  if (c) goto B_k;
+  goto B_j;
+  label B_l:
+  b = a[1]:int;
+  if (b == (d = a[2]:int)) goto B_m;
+  call_indirect(a, i64_extend_i32_s(b - d), 1, a[10]:int);
+  label B_m:
+  b = 0;
+  a[7]:int = 0;
+  a[2]:long = 0L;
+  a[1]:long@4 = 0L;
+  if (eqz(c)) goto B_j;
+  label B_k:
+  f_x(a);
+  label B_j:
+  return b;
+}</code></pre>
+<p>Here we see a lot of functions as well as guess, I decided to focus on the 6 validation functions:</p>
+<pre><code class="language-text">export function validate_1(a:int):int {
+  return streq(a, 1024)
+}</code></pre>
+<p>The first validation function seems to do some string equals function with what we are given and the data at offset 1024 which we can see is equal to &quot;dice{&quot;</p>
+<pre><code class="language-text">data d_a(offset: 1024) = "dice{\00";</code></pre>
+<p>After that it was time to move to the second validation function:</p>
+<pre><code class="language-text">function validate(a:int, b:int, c:int, d:int, e:int):int {
+  var f:int = g_a - 16;
+  f[15]:byte = a;
+  f[14]:byte = b;
+  f[13]:byte = c;
+  f[12]:byte = d;
+  d = f[14]:ubyte;
+  f[14]:byte = f[13]:ubyte;
+  f[13]:byte = d;
+  d = f[13]:ubyte;
+  f[13]:byte = f[12]:ubyte;
+  f[12]:byte = d;
+  d = f[13]:ubyte;
+  f[13]:byte = f[15]:ubyte;
+  f[15]:byte = d;
+  d = f[13]:ubyte;
+  f[13]:byte = f[12]:ubyte;
+  f[12]:byte = d;
+  d = f[15]:ubyte;
+  f[15]:byte = f[14]:ubyte;
+  f[14]:byte = d;
+  d = 0;
+  if (f[15]:ubyte != 51) goto B_a;
+  if (f[14]:ubyte != 108) goto B_a;
+  if (f[13]:ubyte != 33) goto B_a;
+  d = e == 68 & f[12]:ubyte == 70;
+  label B_a:
+  return d;
+}</code></pre>
+<p>This function takes in the 5 characters, shuffles them around a bit, and then compares them against several values. We know that e is the last character so we know that the last value in our 5 character array is 68. Following all the assignments we can figure out that the other values, in order, are: <code>[70, 33, 51, 108, 68]</code> or as ascii characters, <code>F!3lD</code>.</p>
+<p>Now we can move on to the third validation function:</p>
+<pre><code class="language-text">export function validate_3(a:int, b:int, c:int, d:int, e:int):int {
+  var f:int = 0;
+  if (b * a != 4800) goto B_a;
+  if (c + a != 178) goto B_a;
+  if (c + b != 126) goto B_a;
+  if (d * c != 9126) goto B_a;
+  if (d - e != 62) goto B_a;
+  f = c * 4800 - e * d == 367965;
+  label B_a:
+  return f;
+}</code></pre>
+<p>This function also takes in 5 characters and performs some checks based on operations with each other. This makes this function a perfect candidate for using Z3py so I started setting up a script with the constraints for this function and the values I found in the earlier validation functions:</p>
+<pre><code class="language-python">from z3 import *
+
+v1 = "dice{"
+
+v2 = [70, 33, 51, 108, 68]
+
+a3 = Int("a3")
+b3 = Int("b3")
+c3 = Int("c3")
+d3 = Int("e3")
+e3 = Int("d3")
+
+s = Solver()
+
+s.add(b3 * a3 == 4800)
+s.add(c3 + a3 == 178)
+s.add(c3 + b3 == 126)
+s.add(d3 * c3 == 9126)
+s.add(d3 - e3 == 62)
+s.add((c3 * 4800) - (e3 * d3) == 367965)</code></pre>
+<p>I then decided to continue on to the next validation function:</p>
+<pre><code class="language-text">import function env_validate_4(a:int):int;</code></pre>
+<p>This function seemed to call a function that wasn't in the wasm so I looked around and found it in the flag-checker.js which then called a function called c from script.js:</p>
+<pre><code class="language-text">function validate_4(a){ return c(UTF8ToString(a)) == 0 ? 0 : 1; }</code></pre><pre><code class="language-text">function c(b) {
+    var e = {
+            'HLPDd': function(g, h) {
+                return g === h;
+            },
+            'tIDVT': function(g, h) {
+                return g(h);
+            },
+            'QIMdf': function(g, h) {
+                return g - h;
+            },
+            'FIzyt': 'int',
+            'oRXGA': function(g, h) {
+                return g &#x3C;&#x3C; h;
+            },
+            'AMINk': function(g, h) {
+                return g & h;
+            }
+        },
+        f = current_guess;
+    try {
+        let g = e['HLPDd'](btoa(e['tIDVT'](intArrayToString, window[b](b[e['QIMdf'](f, 0x26f4 + 0x1014 + -0x3707 * 0x1)], e['FIzyt'])()['toString'](e['oRXGA'](e['AMINk'](f, -0x1a3 * -0x15 + 0x82e * -0x1 + -0x1a2d), 0x124d + -0x1aca + 0x87f))['match'](/.{2}/g)['map'](h => parseInt(h, f * f)))), 'ZGljZQ==') ? -0x1 * 0x1d45 + 0x2110 + -0x3ca : -0x9 * 0x295 + -0x15 * -0x3 + 0x36 * 0x6d;
+    } catch {
+        return 0x1b3c + -0xc9 * 0x2f + -0x19 * -0x63;
+    }
+}</code></pre>
+<p>This function was pretty ugly so I started off by cleaning up the function. I did this by first taking all of the long calculations and simplifying them, then I renamed the array access to be &quot;functions&quot;:</p>
+<pre><code class="language-text">function Func(b) {
+    var e = {
+            'HLPDd': functionA(g, h) {
+                return g === h;
+            },
+            'tIDVT': functionB(g, h) {
+                return g(h);
+            },
+            'QIMdf': functionC(g, h) {
+                return g - h;
+            },
+            'FIzyt': 'int',
+            'oRXGA': functionD(g, h) {
+                return g &#x3C;&#x3C; h;
+            },
+            'AMINk': functionE(g, h) {
+                return g & h;
+            }
+        },
+        f = current_guess;
+    try {
+        let g = functionA(btoa(functionB(intArrayToString, window[b](b[functionC(f, 1)], 'int')()['toString'](functionD(functionE(f, 4), 2))['match'](/.{2}/g)['map'](h => parseInt(h, f * f)))), 'ZGljZQ==') ? 1 : 0;
+    } catch {
+        return 0;
+    }
+}</code></pre>
+<p>I then cleaned this up by evaluating some of the functions:</p>
+<ul>
+<li>I knew that 'ZGljZQ==' was base64 for dice so I knew our f*f would need to equal 16 since we want to evaulate hex values.</li>
+<li>From here I could then evaluate <code>functionE(f, 4)</code> to equal 4, <code>functionD(4, 2)</code> to 16, and <code>functionC(f, 1)</code> to 3.</li>
+<li>Followed functionB to have it call the function with the correct value.</li>
+<li>And evaluated the two values in functionA to compare the two values.</li>
+</ul>
+<p>This cleaned up the code to:</p>
+<pre><code class="language-text">btoa(intArrayToString(window[b](b[3], 'int')()['toString'](16)['match'](/.{2}/g)['map'](h => parseInt(h, 16)))) === 'ZGljZQ=='</code></pre>
+<p>Earlier when I was looking through the wasm I had noticed a function named a that returned dice:</p>
+<pre><code class="language-text">export function a():int {
+  return 1684628325
+}</code></pre>
+<p>This meant that I would need to call this function somehow so whatever b was needed to have 'a' as its 4th character. b also needed to be a function in window that only had 5 characters. I then wrote the following snippet to find all the possible values:</p>
+<pre><code class="language-text">Object.getOwnPropertyNames(window).filter(x=> {if (x.length == 5 && x[3] == 'a') console.log(x)})</code></pre>
+<p>When run in the browser this gave me the following options:</p>
+<pre><code class="language-text">Array
+isNaN
+XRRay
+cwrap
+clear</code></pre>
+<p>The only function that took two parameters from the above was <code>cwrap</code>. I then tried checking if this was right in the flag checker, but since it was dependent on what guess it only showed as correct on the fourth guess:</p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2022-02-DiceCTF/flagle/Photos/FourthGuess.PNG" alt="Fourth Guess" /></p>
+<p>After this I moved on to the 5th validation function:</p>
+<pre><code class="language-text">export function validate_5(a:int, b:int, c:int, d:int, e:int):int {
+  var f:int = g_a - 16;
+  f[15]:byte = a;
+  f[14]:byte = b;
+  f[13]:byte = c;
+  f[12]:byte = d;
+  f[15]:byte = f[15]:ubyte + 12;
+  f[14]:byte = f[14]:ubyte + 4;
+  f[13]:byte = f[13]:ubyte + 6;
+  f[12]:byte = f[12]:ubyte + 2;
+  d = 0;
+  if (f[15]:ubyte != 121) goto B_a;
+  if (f[14]:ubyte != 68) goto B_a;
+  if (f[13]:ubyte != 126) goto B_a;
+  d = e == 77 & f[12]:ubyte == 35;
+  label B_a:
+  return d;
+}</code></pre>
+<p>This was like the second validation function so we just needed to get the values once again, for this part of the flag it was <code>m@x!M</code>.</p>
+<p>And finally I moved to the final validation function:</p>
+<pre><code class="language-text">export function validate_6(a:int, b:int, c:int, d:int, e:int):int {
+  var f:int = 0;
+  if ((b + 2933) * (a + 1763) != 5483743) goto B_a;
+  f = e == 125 & (d + 1546) * (c + 3913) == 6431119;
+  label B_a:
+  return f;
+}</code></pre>
+<p>For this I once again had to make some Z3 constraints:</p>
+<pre><code class="language-python">s.add((b6 + 2933) * (a6 + 1763) == 5483743)
+s.add((d6 + 1546) * (c6 + 3913) == 6431119)
+s.add(e6 == 125)
+
+s.add(a6 > 32)
+s.add(a6 &#x3C; 127)
+s.add(b6 > 32)
+s.add(b6 &#x3C; 127)
+s.add(c6 > 32)
+s.add(c6 &#x3C; 127)
+s.add(d6 > 32)
+s.add(d6 &#x3C; 127)
+s.add(e6 > 32)
+s.add(e6 &#x3C; 127)</code></pre>
+<p>Once I had all the components I finished my script:</p>
+<pre><code class="language-python">from z3 import *
+
+# v1 
+v1 = "dice{"
+
+# v2
+v2 = [70, 33, 51, 108, 68]
+
+# initialize solver
+s = Solver()
+
+# v3 values
+a3 = Int("a3")
+b3 = Int("b3")
+c3 = Int("c3")
+d3 = Int("e3")
+e3 = Int("d3")
+
+# v3 constraints
+s.add(b3 * a3 == 4800)
+s.add(c3 + a3 == 178)
+s.add(c3 + b3 == 126)
+s.add(d3 * c3 == 9126)
+s.add(d3 - e3 == 62)
+s.add((c3 * 4800) - (e3 * d3) == 367965)
+
+# v4
+v4 = 'cwrap'
+
+# v5
+v5 = "m@x!M"
+
+# v6 values
+a6 = Int("a6")
+b6 = Int("b6")
+c6 = Int("c6")
+d6 = Int("e6")
+e6 = Int("d6")
+
+# v6 constraints
+s.add((b6 + 2933) * (a6 + 1763) == 5483743)
+s.add((d6 + 1546) * (c6 + 3913) == 6431119)
+s.add(e6 == 125)
+
+# v6 character bounds check
+s.add(a6 > 32)
+s.add(a6 &#x3C; 127)
+s.add(b6 > 32)
+s.add(b6 &#x3C; 127)
+s.add(c6 > 32)
+s.add(c6 &#x3C; 127)
+s.add(d6 > 32)
+s.add(d6 &#x3C; 127)
+s.add(e6 > 32)
+s.add(e6 &#x3C; 127)
+
+# check our contraints
+s.check()
+
+# get the model
+m = s.model()
+
+# Get the v3 values
+v3 = ''
+for i in [a3, b3, c3, d3, e3]:
+    v3 += chr(int(str(m[i])))
+
+
+# Get the v6 values
+v6 = ''
+for i in [a6, b6, c6, d6, e6]:
+    v6 += chr(int(str(m[i])))
+
+# Add all of the flag parts together
+flag = v1 + ''.join([chr(i) for i in v2]) + v3 + v4 + v5 + v6
+
+# print the flag
+print(flag)</code></pre>
+<p>When run I got:</p>
+<pre><code class="language-text">dice{F!3lDd0Nu7cwrapm@x!MT$r3}</code></pre>
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
+</body>
+</html>
