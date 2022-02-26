@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2022-02-Trellix - Linux Houdini</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-90D3KJBRDM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-90D3KJBRDM');
+    </script>
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="trellix-linux-houdini-write-up">Trellix Linux Houdini Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Linux</p>
+<p>Comments:</p>
+<pre><code class="language-text">Catmen has discovered that the dogs are keeping information regarding the pieces of Anubis on a tightly-controlled Linux server. One of your fellow agents has automatically generated an account for you on this server, which you can access at 0.cloud.chals.io:34661. The rest is up to you, agent!</code></pre><h2 id="write-up">Write up:</h2>
+<p>Connecting to the nc I got the following:</p>
+<pre><code class="language-text">Welcome the flag can be printed using /usr/bin/echo_flag
+Good luck!</code></pre>
+<p>My first step here was to base64 the file and then I loaded the file into binja:</p>
+<pre><code class="language-text">lJCACWY4dps7D@2d14c2a26738:~$ base64 /usr/bin/echo_flag</code></pre>
+<p>This gave me the following main function:</p>
+<pre><code class="language-c">000007fa  int32_t main(int32_t argc, char** argv, char** envp)
+00000802      int32_t var_1c = argc
+00000821      int32_t rax_10
+00000821      if (strcmp(*argv, "/private/echo_flag") != 0)
+000008a7          printf(format: "This program is being ran from t…", *argv)
+000008ac          rax_10 = 1
+0000082a      else
+0000082a          puts(str: "Congrats!")
+0000083d          FILE* rax_3 = fopen(filename: "/private/flag", mode: &data_965)
+0000084b          if (rax_3 != 0)
+0000087c              for (char var_11_1 = fgetc(fp: rax_3); var_11_1 != 0xff; var_11_1 = fgetc(fp: rax_3))
+00000864                  putchar(c: sx.d(var_11_1))
+00000885              fclose(fp: rax_3)
+0000088a          rax_10 = 0
+000008b2      return rax_10</code></pre>
+<p>I saw that I would need to set the first argument to <code>/private/echo_flag</code>. So I reconnected to the server and used exec to set the argument:</p>
+<pre><code class="language-text">Welcome the flag can be printed using /usr/bin/echo_flag
+Good luck!
+k4Y2LznJ9o720@2d14c2a26738:~$ exec -a /private/echo_flag /usr/bin/echo_flag
+exec -a /private/echo_flag /usr/bin/echo_flag
+Congrats!
+ATR[7H3-11NUX-15-57r0N6-W17H-7H15-0N3]</code></pre>
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
+</body>
+</html>

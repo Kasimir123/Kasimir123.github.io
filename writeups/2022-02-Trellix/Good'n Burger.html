@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2022-02-Trellix - Good'n Burger</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-90D3KJBRDM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-90D3KJBRDM');
+    </script>
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="trellix-goodn-burger-write-up">Trellix Good'n Burger Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Network</p>
+<p>Comments:</p>
+<pre><code class="language-text">The K9's are trading passwords in plain sight. By using excerpts of publicly available books as their passwords, they can pass around credentials completely incognito! Catmen Sanfrancisco has provided you a SHA256 hash of their password and books she suspects they are using. Discover the sentence that pertains to the hash AAEEA96DD86D6ECBFE21755151B00266C79368584289D15B0BFE58D6B3498A36 to help thwart their nefurious plans!
+
+NOTE: Insert the entire discovered sentence in the flag format before submitting, e.g. ATR[Every good dog does fine!]</code></pre><h2 id="write-up">Write up:</h2>
+<p>This challenge was pretty straightforward. I needed to make a python script that would go through and try to hash every single sentence and see if it was the right one:</p>
+<pre><code class="language-python"># import os and hashlib
+import os, hashlib
+
+# get our hash
+hash = "AAEEA96DD86D6ECBFE21755151B00266C79368584289D15B0BFE58D6B3498A36".lower()
+
+# get all of the files in the path
+files = [f for f in os.listdir('.') if os.path.isfile(f)]
+
+# loop through all files
+for file in files:
+    print(file)
+
+    # open the file
+    with open(file, "r") as f:
+        sentence = b''
+        f = f.read()
+
+        # loop through all characters
+        for char in f:
+
+            # if we end the sentence then try hashing it
+            if char == "?" or char == "!" or char == ".":
+                sentence += char.encode()
+                if hash == hashlib.sha256(sentence.strip()).hexdigest():
+                    print(sentence.strip())
+                sentence = b''
+            elif char == "\n":
+                sentence += b' '
+            else:
+                sentence += char.encode()</code></pre>
+<p>Once run we got:</p>
+<pre><code class="language-text">902-0.txt
+42108-0.txt
+84-0.txt
+1250-0.txt
+6130-0.txt
+1184-0.txt
+58585-0.txt
+74-0.txt
+158-0.txt
+run.py
+2591-0.txt
+58975-0.txt
+1342-0.txt
+2554-0.txt
+408-0.txt
+1400-0.txt
+43-0.txt
+203-0.txt
+1661-0.txt
+4300-0.txt
+46-0.txt
+219-0.txt
+2701-0.txt
+25344-0.txt
+45-0.txt
+113-0.txt
+45858-0.txt
+16-0.txt
+1952-0.txt
+76-0.txt
+205-0.txt
+2600-0.txt
+120-0.txt
+98-0.txt
+11-0.txt
+b'The Cat only grinned when it saw Alice.'
+1080-0.txt</code></pre>
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Blog - 2022-02-Trellix - Killer-App</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abraxus">
+    <!-- FontAwesome JS-->
+    <script defer src="../../assets/js/fontawesome.min.js"></script>
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../assets/css/prism.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-90D3KJBRDM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-90D3KJBRDM');
+    </script>
+</head>
+<body class="theme-bg-light">
+
+    <header class="header text-center">
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Abraxus's Blog</a></h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navigation" class="collapse navbar-collapse flex-column">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image mb-3 rounded-circle mx-auto" src="../../assets/images/profile.png" alt="image">
+
+                <div class="bio mb-3">Student<br>REV @ K3RN3L4RMY</div><!--//bio-->
+                <ul class="social-list list-inline py-3 mx-auto">
+                    <li class="list-inline-item"><a href="https://twitter.com/Abraxus7331" target="_blank"><i class="fab fa-twitter fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://github.com/Kasimir123" target="_blank"><i class="fab fa-github-alt fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/kasimir-schulz" target="_blank"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
+                </ul><!--//social-list-->
+                <hr>
+            </div><!--//profile-section-->
+
+            <ul class="navbar-nav flex-column text-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html"><i class="fas fa-home fa-fw me-2"></i>Blog Home <i class="fas fa-home fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../about.html"><i class="fas fa-user fa-fw me-2"></i>About Me <i class="fas fa-user fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../blog-posts.html"><i class="fas fa-bookmark fa-fw me-2"></i>Blog Posts <i class="fas fa-bookmark fa-fw me-2"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../writeups.html"><i class="fas fa-flag fa-fw me-2"></i>Writeups <i class="fas fa-flag fa-fw me-2"></i></a>
+                </li>
+            </ul>
+
+            <div class="my-2 my-md-3 text-center">
+                <a class="btn btn-primary" href="https://github.com/Kasimir123" target="_blank">Get in Touch</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <div class="main-wrapper">
+
+        <article class="markdown-section my-5 mx-5">
+            <h1 id="trellix-killer-app-write-up">Trellix Killer App Write Up</h1>
+<h2 id="details">Details:</h2>
+<p>Jeopardy style CTF</p>
+<p>Category: Reverse Engineering</p>
+<p>Comments:</p>
+<pre><code class="language-text">After some recon and social engineering, Catmen has discovered an app that all the K9's have on their phones, that on the surface appears to be a harmless "fitness app" - undoubtedly a coverup for something more nefurious. Catmen managed to get her claws on the app, but seems to be having trouble actually running it. Go here to respond to her email ASAP!
+
+NOTE: Your browser may warn you about a certificate error when trying to access the page, this is to be expected until we resolve the issue on our end. Hacking this page is not part of the challenge.</code></pre><h2 id="write-up">Write up:</h2>
+<p>From the description it seemed like we would need to somehow fix this apk so that it would run, so my first step was to open the apk in nox to see what currently made it fail:</p>
+<p><img src="https://raw.githubusercontent.com/Kasimir123/CTFWriteUps/main/2022-02-Trellix/Killer-App/Photos/app.png" alt="APK" /></p>
+<p>At this point I needed to find where that window was created so I used an <a href="http://www.javadecompilers.com/">online decompiler</a> and looked for the string. This string BUNGUS was referenced in HomeActivity.java where it was used to create a new popup:</p>
+<pre><code class="language-java">        aVar.f564a.f532d = getString(R.string.title_activity_home);
+        aVar.mo727b(getString(R.string.label_text_button), new C0621b(this));
+        aVar.f564a.f539k = false;
+        aVar.mo726a().show();</code></pre>
+<p>My next step from here was to take apart the apk, I did this using apktools. I used the -r option so that it would not decode the resources so I could recompile the apk afterwards:</p>
+<pre><code class="language-text">apktool d -f -r Fit32.apk</code></pre>
+<p>I then went into the smali file for HomeActivity to remove the line that showed the popup:</p>
+<pre><code class="language-text">    invoke-virtual {v0, v1, v3}, La/a/c/a/h$a;->b(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)La/a/c/a/h$a;
+
+    .line 54
+    iget-object v1, v0, La/a/c/a/h$a;->a:La/a/c/a/b$b;
+
+    const/4 v3, 0x0
+
+    iput-boolean v3, v1, La/a/c/a/b$b;->k:Z
+
+    .line 55
+    invoke-virtual {v0}, La/a/c/a/h$a;->a()La/a/c/a/h;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Landroid/app/Dialog;->show()V
+
+    return-void
+.end method</code></pre>
+<p>I then removed all of the lines that corresponded to line 55, recompiled the application, and signed it using apksigner:</p>
+<pre><code class="language-text">apktool d Fit32/
+java -jar apksigner sign -ks key.jks Fit32.apk</code></pre>
+<p>Once signed I uploaded the apk to the website and got the flag:</p>
+<pre><code class="language-text">ATR[0K_C0MPUT3R_PARAN01D_ANDR01D]</code></pre>
+        </article>
+
+        <footer class="footer text-left py-2 theme-bg-dark">
+
+    <small class="copyright">&nbsp;Generated by <a href="https://github.com/Kasimir123/Blog-Generator" target="_blank">Blog Generator</a> from Kasimir123</small>
+
+</footer>
+
+    </div><!--//main-wrapper-->
+    <!-- Javascript -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/prism.js"></script>
+</body>
+</html>
