@@ -12267,6 +12267,10 @@ article a {
     color: lightblue;
 }
 
+.intro a {
+    color: lightblue;
+}
+
 article summary {
     color: #5FCB71;
 }
