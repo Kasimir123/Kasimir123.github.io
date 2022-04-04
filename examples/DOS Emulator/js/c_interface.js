@@ -143,7 +143,7 @@ window.XMLHttpRequest = (function (xhr) {
                                 );
                             }
                             else if (payload[1] == 'get_char') {
-                                console.log("get_char");
+                                // console.log("get_char");
                                 get_char(
                                     function (text) {
                                         props.responseText = text + '\0';
@@ -152,7 +152,6 @@ window.XMLHttpRequest = (function (xhr) {
                                 );
                             }
                             else if (payload[1] == 'get_char_now') {
-                                console.log("get_char_now");
                                 get_char_now(
                                     function (text) {
                                         props.responseText = text + '\0';
@@ -173,44 +172,49 @@ window.XMLHttpRequest = (function (xhr) {
                             }
                             else if (payload[1] == 'activate_video_mode') {
                                 video_mode = true;
-                                console.log("video mode enabled");
                                 $("#viewport").show();
                                 $("#program_output").hide();
+                                // context.save();
 
                             }
                             else if (payload[1] == 'start') {
                                 video_mode = false;
-                                console.log("program started");
+                                // console.log("program started");
                                 $("#program_output").val("Program Output:\n");
                                 $("#viewport").hide();
                                 $("#program_output").show();
 
-                                for (let i = 0; i < w; i++) {
-                                    for (let j = 0; j < h; j++) {
-                                        drawPixel(imagedata, i, j, colors[0xf]);
-                                    }
-                                }
-                                context.putImageData(imagedata, 0, 0);
+                                // for (let i = 0; i < w; i++) {
+                                //     for (let j = 0; j < h; j++) {
+                                //         drawPixel(imagedata, i, j, colors[0xf]);
+                                //     }
+                                // }
+                                // context.putImageData(imagedata, 0, 0);
+
+                                
 
                             }
                             else if (payload[1] == 'set_background_color') {
-                                for (let i = 0; i < w; i++) {
-                                    for (let j = 0; j < h; j++) {
-                                        drawPixel(imagedata, i, j, colors[Number(payload[2])]);
-                                    }
-                                }
-                                context.putImageData(imagedata, 0, 0);
+                                // for (let i = 0; i < w; i++) {
+                                //     for (let j = 0; j < h; j++) {
+                                //         drawPixel(imagedata, i, j, colors[Number(payload[2])]);
+                                //     }
+                                // }
+                                context = canvas.getContext("2d");
+                                context.fillStyle = "black";
+                                context.fillRect(0, 0, w, h);
+                                context.fill();
 
                             }
                             else if (payload[1] == 'draw_pixel') {
                                 let col = Number(payload[3]) * 2;
                                 let row = Number(payload[4]) * 2;
 
-                                for (let i = 0; i < 2; i++)
-                                    for (let j = 0; j < 2; j++)
-                                        drawPixel(imagedata, col + i, row + j, colors[Number(payload[2])]);
+                                // for (let i = 0; i < 2; i++)
+                                //     for (let j = 0; j < 2; j++)
+                                        drawPixel(context, col, row, colors[Number(payload[2])]);
 
-                                context.putImageData(imagedata, 0, 0);
+                                // context.putImageData(imagedata, 0, 0);
                             }
 
                         } else {
