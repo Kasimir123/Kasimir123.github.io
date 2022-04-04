@@ -4764,7 +4764,7 @@ var ASM_CONSTS = {
       var isMainThread = true;
   
       var onsuccess = function(db) {
-        Fetch.dbInstance = db;
+        db.close();
   
         if (isMainThread) {
           removeRunDependency('library_fetch_init');
